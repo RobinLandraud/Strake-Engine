@@ -14,7 +14,7 @@ namespace ECS {
             [[nodiscard]] static float getFixedDeltaTime();
             [[nodiscard]] static float getTickDeltaTime();
 
-            //prevent copying
+            //prevent copying and moving
             Time(const Time&) = delete;
             Time& operator=(const Time&) = delete;
             Time& operator=(Time&&) = delete;
@@ -23,6 +23,9 @@ namespace ECS {
             ~Time();
 
         private:
+            static Time& getInstance();
+            static std::unique_ptr<Time> m_instance;
+
             std::chrono::high_resolution_clock::time_point m_time;
             std::chrono::duration<float> m_deltaTime;
             std::chrono::high_resolution_clock::time_point m_lastTime;
@@ -33,7 +36,6 @@ namespace ECS {
             std::chrono::duration<float> m_fixedDeltaTime;
             std::chrono::high_resolution_clock::time_point m_fixedLastTime;
 
-            static Time& getInstance();
 
             [[nodiscard]] float getDeltaTimeInternal() const;
             [[nodiscard]] float getFixedDeltaTimeInternal() const;
@@ -41,7 +43,5 @@ namespace ECS {
 
             //private constructor to prevent instantiation
             Time();
-
-            static std::unique_ptr<Time> m_instance;
     };
 }
