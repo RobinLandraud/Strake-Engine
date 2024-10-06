@@ -1,4 +1,4 @@
-# Install script for directory: /home/strake/perso/engines/c++/ECS
+# Install script for directory: /home/strake/perso/engines/c++/SFML_ECS/ECS
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,13 +35,5 @@ endif()
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for each subdirectory.
-  include("/home/strake/perso/engines/c++/build/ECS/Time/cmake_install.cmake")
-  include("/home/strake/perso/engines/c++/build/ECS/Window/cmake_install.cmake")
-  include("/home/strake/perso/engines/c++/build/ECS/Loop/cmake_install.cmake")
-
 endif()
 

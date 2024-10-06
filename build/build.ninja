@@ -34,7 +34,7 @@ include rules.ninja
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build && /usr/bin/cmake -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
+  COMMAND = cd /home/strake/perso/engines/c++/SFML_ECS/build && /usr/bin/cmake -S/home/strake/perso/engines/c++/SFML_ECS -B/home/strake/perso/engines/c++/SFML_ECS/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -46,7 +46,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build && /usr/bin/cmake-gui -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
+  COMMAND = cd /home/strake/perso/engines/c++/SFML_ECS/build && /usr/bin/cmake-gui -S/home/strake/perso/engines/c++/SFML_ECS -B/home/strake/perso/engines/c++/SFML_ECS/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -65,7 +65,7 @@ build cmake_object_order_depends_target_Ghost: phony || cmake_object_order_depen
 build CMakeFiles/Ghost.dir/main.cpp.o: CXX_COMPILER__Ghost ../main.cpp || cmake_object_order_depends_target_Ghost
   DEP_FILE = CMakeFiles/Ghost.dir/main.cpp.o.d
   FLAGS = -std=c++2a
-  INCLUDES = -I../ECS
+  INCLUDES = -I../ECS/include
   OBJECT_DIR = CMakeFiles/Ghost.dir
   OBJECT_FILE_DIR = CMakeFiles/Ghost.dir
   TARGET_COMPILE_PDB = CMakeFiles/Ghost.dir/
@@ -79,8 +79,8 @@ build CMakeFiles/Ghost.dir/main.cpp.o: CXX_COMPILER__Ghost ../main.cpp || cmake_
 #############################################
 # Link the executable ../Ghost
 
-build ../Ghost: CXX_EXECUTABLE_LINKER__Ghost CMakeFiles/Ghost.dir/main.cpp.o | ECS/libECS.a ECS/Window/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1 ECS/Loop/libLoop.a ECS/Time/libTime.a || ECS/Loop/libLoop.a ECS/Time/libTime.a ECS/Window/libWindow.a ECS/libECS.a
-  LINK_LIBRARIES = ECS/libECS.a  ECS/Window/libWindow.a  /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1  ECS/Loop/libLoop.a  ECS/Time/libTime.a
+build ../Ghost: CXX_EXECUTABLE_LINKER__Ghost CMakeFiles/Ghost.dir/main.cpp.o | ECS/libECS.a /usr/lib/x86_64-linux-gnu/libsfml-network.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1 ECS/libLoop.a ECS/libTime.a ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1 || ECS/libECS.a ECS/libLoop.a ECS/libTime.a ECS/libWindow.a
+  LINK_LIBRARIES = ECS/libECS.a  /usr/lib/x86_64-linux-gnu/libsfml-network.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1  ECS/libLoop.a  ECS/libTime.a  ECS/libWindow.a  /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
   OBJECT_DIR = CMakeFiles/Ghost.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -90,7 +90,7 @@ build ../Ghost: CXX_EXECUTABLE_LINKER__Ghost CMakeFiles/Ghost.dir/main.cpp.o | E
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/strake/perso/engines/c++/CMakeLists.txt
+# /home/strake/perso/engines/c++/SFML_ECS/CMakeLists.txt
 # =============================================================================
 
 
@@ -98,7 +98,7 @@ build ../Ghost: CXX_EXECUTABLE_LINKER__Ghost CMakeFiles/Ghost.dir/main.cpp.o | E
 # Utility command for rebuild_cache
 
 build ECS/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS && /usr/bin/cmake -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
+  COMMAND = cd /home/strake/perso/engines/c++/SFML_ECS/build/ECS && /usr/bin/cmake -S/home/strake/perso/engines/c++/SFML_ECS -B/home/strake/perso/engines/c++/SFML_ECS/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -110,7 +110,7 @@ build ECS/rebuild_cache: phony ECS/CMakeFiles/rebuild_cache.util
 # Utility command for edit_cache
 
 build ECS/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS && /usr/bin/cmake-gui -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
+  COMMAND = cd /home/strake/perso/engines/c++/SFML_ECS/build/ECS && /usr/bin/cmake-gui -S/home/strake/perso/engines/c++/SFML_ECS -B/home/strake/perso/engines/c++/SFML_ECS/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -126,12 +126,12 @@ build ECS/edit_cache: phony ECS/CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_ECS: phony || cmake_object_order_depends_target_Loop cmake_object_order_depends_target_Time cmake_object_order_depends_target_Window
 
-build ECS/CMakeFiles/ECS.dir/config.cpp.o: CXX_COMPILER__ECS ../ECS/config.cpp || cmake_object_order_depends_target_ECS
-  DEP_FILE = ECS/CMakeFiles/ECS.dir/config.cpp.o.d
+build ECS/CMakeFiles/ECS.dir/src/Config.cpp.o: CXX_COMPILER__ECS ../ECS/src/Config.cpp || cmake_object_order_depends_target_ECS
+  DEP_FILE = ECS/CMakeFiles/ECS.dir/src/Config.cpp.o.d
   FLAGS = -std=c++2a
-  INCLUDES = -I../ECS
+  INCLUDES = -I../ECS/include
   OBJECT_DIR = ECS/CMakeFiles/ECS.dir
-  OBJECT_FILE_DIR = ECS/CMakeFiles/ECS.dir
+  OBJECT_FILE_DIR = ECS/CMakeFiles/ECS.dir/src
   TARGET_COMPILE_PDB = ECS/CMakeFiles/ECS.dir/ECS.pdb
   TARGET_PDB = ECS/libECS.pdb
 
@@ -143,7 +143,7 @@ build ECS/CMakeFiles/ECS.dir/config.cpp.o: CXX_COMPILER__ECS ../ECS/config.cpp |
 #############################################
 # Link the static library ECS/libECS.a
 
-build ECS/libECS.a: CXX_STATIC_LIBRARY_LINKER__ECS ECS/CMakeFiles/ECS.dir/config.cpp.o || ECS/Loop/libLoop.a ECS/Time/libTime.a ECS/Window/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+build ECS/libECS.a: CXX_STATIC_LIBRARY_LINKER__ECS ECS/CMakeFiles/ECS.dir/src/Config.cpp.o || ECS/libLoop.a ECS/libTime.a ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
   OBJECT_DIR = ECS/CMakeFiles/ECS.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -152,112 +152,22 @@ build ECS/libECS.a: CXX_STATIC_LIBRARY_LINKER__ECS ECS/CMakeFiles/ECS.dir/config
   TARGET_PDB = ECS/libECS.pdb
 
 # =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /home/strake/perso/engines/c++/ECS/CMakeLists.txt
-# =============================================================================
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build ECS/Time/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS/Time && /usr/bin/cmake -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build ECS/Time/rebuild_cache: phony ECS/Time/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for edit_cache
-
-build ECS/Time/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS/Time && /usr/bin/cmake-gui -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
-  DESC = Running CMake cache editor...
-  pool = console
-  restat = 1
-
-build ECS/Time/edit_cache: phony ECS/Time/CMakeFiles/edit_cache.util
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target Time
-
-
-#############################################
-# Order-only phony target for Time
-
-build cmake_object_order_depends_target_Time: phony || ECS/Time/CMakeFiles/Time.dir
-
-build ECS/Time/CMakeFiles/Time.dir/time.cpp.o: CXX_COMPILER__Time ../ECS/Time/time.cpp || cmake_object_order_depends_target_Time
-  DEP_FILE = ECS/Time/CMakeFiles/Time.dir/time.cpp.o.d
-  FLAGS = -std=c++2a
-  OBJECT_DIR = ECS/Time/CMakeFiles/Time.dir
-  OBJECT_FILE_DIR = ECS/Time/CMakeFiles/Time.dir
-  TARGET_COMPILE_PDB = ECS/Time/CMakeFiles/Time.dir/Time.pdb
-  TARGET_PDB = ECS/Time/libTime.pdb
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target Time
-
-
-#############################################
-# Link the static library ECS/Time/libTime.a
-
-build ECS/Time/libTime.a: CXX_STATIC_LIBRARY_LINKER__Time ECS/Time/CMakeFiles/Time.dir/time.cpp.o
-  OBJECT_DIR = ECS/Time/CMakeFiles/Time.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_COMPILE_PDB = ECS/Time/CMakeFiles/Time.dir/Time.pdb
-  TARGET_FILE = ECS/Time/libTime.a
-  TARGET_PDB = ECS/Time/libTime.pdb
-
-# =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /home/strake/perso/engines/c++/ECS/CMakeLists.txt
-# =============================================================================
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build ECS/Window/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS/Window && /usr/bin/cmake -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build ECS/Window/rebuild_cache: phony ECS/Window/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for edit_cache
-
-build ECS/Window/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS/Window && /usr/bin/cmake-gui -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
-  DESC = Running CMake cache editor...
-  pool = console
-  restat = 1
-
-build ECS/Window/edit_cache: phony ECS/Window/CMakeFiles/edit_cache.util
-
-# =============================================================================
 # Object build statements for STATIC_LIBRARY target Window
 
 
 #############################################
 # Order-only phony target for Window
 
-build cmake_object_order_depends_target_Window: phony || ECS/Window/CMakeFiles/Window.dir
+build cmake_object_order_depends_target_Window: phony || ECS/CMakeFiles/Window.dir
 
-build ECS/Window/CMakeFiles/Window.dir/window.cpp.o: CXX_COMPILER__Window ../ECS/Window/window.cpp || cmake_object_order_depends_target_Window
-  DEP_FILE = ECS/Window/CMakeFiles/Window.dir/window.cpp.o.d
+build ECS/CMakeFiles/Window.dir/src/Window/Window.cpp.o: CXX_COMPILER__Window ../ECS/src/Window/Window.cpp || cmake_object_order_depends_target_Window
+  DEP_FILE = ECS/CMakeFiles/Window.dir/src/Window/Window.cpp.o.d
   FLAGS = -std=c++2a
-  OBJECT_DIR = ECS/Window/CMakeFiles/Window.dir
-  OBJECT_FILE_DIR = ECS/Window/CMakeFiles/Window.dir
-  TARGET_COMPILE_PDB = ECS/Window/CMakeFiles/Window.dir/Window.pdb
-  TARGET_PDB = ECS/Window/libWindow.pdb
+  INCLUDES = -I../ECS/include
+  OBJECT_DIR = ECS/CMakeFiles/Window.dir
+  OBJECT_FILE_DIR = ECS/CMakeFiles/Window.dir/src/Window
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/Window.dir/Window.pdb
+  TARGET_PDB = ECS/libWindow.pdb
 
 
 # =============================================================================
@@ -265,44 +175,15 @@ build ECS/Window/CMakeFiles/Window.dir/window.cpp.o: CXX_COMPILER__Window ../ECS
 
 
 #############################################
-# Link the static library ECS/Window/libWindow.a
+# Link the static library ECS/libWindow.a
 
-build ECS/Window/libWindow.a: CXX_STATIC_LIBRARY_LINKER__Window ECS/Window/CMakeFiles/Window.dir/window.cpp.o || /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
-  OBJECT_DIR = ECS/Window/CMakeFiles/Window.dir
+build ECS/libWindow.a: CXX_STATIC_LIBRARY_LINKER__Window ECS/CMakeFiles/Window.dir/src/Window/Window.cpp.o || /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+  OBJECT_DIR = ECS/CMakeFiles/Window.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = ECS/Window/CMakeFiles/Window.dir/Window.pdb
-  TARGET_FILE = ECS/Window/libWindow.a
-  TARGET_PDB = ECS/Window/libWindow.pdb
-
-# =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /home/strake/perso/engines/c++/ECS/CMakeLists.txt
-# =============================================================================
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build ECS/Loop/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS/Loop && /usr/bin/cmake -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build ECS/Loop/rebuild_cache: phony ECS/Loop/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for edit_cache
-
-build ECS/Loop/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/strake/perso/engines/c++/build/ECS/Loop && /usr/bin/cmake-gui -S/home/strake/perso/engines/c++ -B/home/strake/perso/engines/c++/build
-  DESC = Running CMake cache editor...
-  pool = console
-  restat = 1
-
-build ECS/Loop/edit_cache: phony ECS/Loop/CMakeFiles/edit_cache.util
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/Window.dir/Window.pdb
+  TARGET_FILE = ECS/libWindow.a
+  TARGET_PDB = ECS/libWindow.pdb
 
 # =============================================================================
 # Object build statements for STATIC_LIBRARY target Loop
@@ -311,15 +192,16 @@ build ECS/Loop/edit_cache: phony ECS/Loop/CMakeFiles/edit_cache.util
 #############################################
 # Order-only phony target for Loop
 
-build cmake_object_order_depends_target_Loop: phony || cmake_object_order_depends_target_Time
+build cmake_object_order_depends_target_Loop: phony || cmake_object_order_depends_target_Time cmake_object_order_depends_target_Window
 
-build ECS/Loop/CMakeFiles/Loop.dir/loop.cpp.o: CXX_COMPILER__Loop ../ECS/Loop/loop.cpp || cmake_object_order_depends_target_Loop
-  DEP_FILE = ECS/Loop/CMakeFiles/Loop.dir/loop.cpp.o.d
+build ECS/CMakeFiles/Loop.dir/src/Loop/Loop.cpp.o: CXX_COMPILER__Loop ../ECS/src/Loop/Loop.cpp || cmake_object_order_depends_target_Loop
+  DEP_FILE = ECS/CMakeFiles/Loop.dir/src/Loop/Loop.cpp.o.d
   FLAGS = -std=c++2a
-  OBJECT_DIR = ECS/Loop/CMakeFiles/Loop.dir
-  OBJECT_FILE_DIR = ECS/Loop/CMakeFiles/Loop.dir
-  TARGET_COMPILE_PDB = ECS/Loop/CMakeFiles/Loop.dir/Loop.pdb
-  TARGET_PDB = ECS/Loop/libLoop.pdb
+  INCLUDES = -I../ECS/include
+  OBJECT_DIR = ECS/CMakeFiles/Loop.dir
+  OBJECT_FILE_DIR = ECS/CMakeFiles/Loop.dir/src/Loop
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/Loop.dir/Loop.pdb
+  TARGET_PDB = ECS/libLoop.pdb
 
 
 # =============================================================================
@@ -327,15 +209,49 @@ build ECS/Loop/CMakeFiles/Loop.dir/loop.cpp.o: CXX_COMPILER__Loop ../ECS/Loop/lo
 
 
 #############################################
-# Link the static library ECS/Loop/libLoop.a
+# Link the static library ECS/libLoop.a
 
-build ECS/Loop/libLoop.a: CXX_STATIC_LIBRARY_LINKER__Loop ECS/Loop/CMakeFiles/Loop.dir/loop.cpp.o || ECS/Time/libTime.a
-  OBJECT_DIR = ECS/Loop/CMakeFiles/Loop.dir
+build ECS/libLoop.a: CXX_STATIC_LIBRARY_LINKER__Loop ECS/CMakeFiles/Loop.dir/src/Loop/Loop.cpp.o || ECS/libTime.a ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+  OBJECT_DIR = ECS/CMakeFiles/Loop.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = ECS/Loop/CMakeFiles/Loop.dir/Loop.pdb
-  TARGET_FILE = ECS/Loop/libLoop.a
-  TARGET_PDB = ECS/Loop/libLoop.pdb
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/Loop.dir/Loop.pdb
+  TARGET_FILE = ECS/libLoop.a
+  TARGET_PDB = ECS/libLoop.pdb
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target Time
+
+
+#############################################
+# Order-only phony target for Time
+
+build cmake_object_order_depends_target_Time: phony || ECS/CMakeFiles/Time.dir
+
+build ECS/CMakeFiles/Time.dir/src/Time/Time.cpp.o: CXX_COMPILER__Time ../ECS/src/Time/Time.cpp || cmake_object_order_depends_target_Time
+  DEP_FILE = ECS/CMakeFiles/Time.dir/src/Time/Time.cpp.o.d
+  FLAGS = -std=c++2a
+  INCLUDES = -I../ECS/include
+  OBJECT_DIR = ECS/CMakeFiles/Time.dir
+  OBJECT_FILE_DIR = ECS/CMakeFiles/Time.dir/src/Time
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/Time.dir/Time.pdb
+  TARGET_PDB = ECS/libTime.pdb
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target Time
+
+
+#############################################
+# Link the static library ECS/libTime.a
+
+build ECS/libTime.a: CXX_STATIC_LIBRARY_LINKER__Time ECS/CMakeFiles/Time.dir/src/Time/Time.cpp.o
+  OBJECT_DIR = ECS/CMakeFiles/Time.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/Time.dir/Time.pdb
+  TARGET_FILE = ECS/libTime.a
+  TARGET_PDB = ECS/libTime.pdb
 
 # =============================================================================
 # Target aliases.
@@ -344,19 +260,19 @@ build ECS: phony ECS/libECS.a
 
 build Ghost: phony ../Ghost
 
-build Loop: phony ECS/Loop/libLoop.a
+build Loop: phony ECS/libLoop.a
 
-build Time: phony ECS/Time/libTime.a
+build Time: phony ECS/libTime.a
 
-build Window: phony ECS/Window/libWindow.a
+build Window: phony ECS/libWindow.a
 
 build libECS.a: phony ECS/libECS.a
 
-build libLoop.a: phony ECS/Loop/libLoop.a
+build libLoop.a: phony ECS/libLoop.a
 
-build libTime.a: phony ECS/Time/libTime.a
+build libTime.a: phony ECS/libTime.a
 
-build libWindow.a: phony ECS/Window/libWindow.a
+build libWindow.a: phony ECS/libWindow.a
 
 # =============================================================================
 # Folder targets.
@@ -364,37 +280,16 @@ build libWindow.a: phony ECS/Window/libWindow.a
 # =============================================================================
 
 #############################################
-# Folder: /home/strake/perso/engines/c++/build
+# Folder: /home/strake/perso/engines/c++/SFML_ECS/build
 
 build all: phony ../Ghost ECS/all
 
 # =============================================================================
 
 #############################################
-# Folder: /home/strake/perso/engines/c++/build/ECS
+# Folder: /home/strake/perso/engines/c++/SFML_ECS/build/ECS
 
-build ECS/all: phony ECS/libECS.a ECS/Time/all ECS/Window/all ECS/Loop/all
-
-# =============================================================================
-
-#############################################
-# Folder: /home/strake/perso/engines/c++/build/ECS/Loop
-
-build ECS/Loop/all: phony ECS/Loop/libLoop.a
-
-# =============================================================================
-
-#############################################
-# Folder: /home/strake/perso/engines/c++/build/ECS/Time
-
-build ECS/Time/all: phony ECS/Time/libTime.a
-
-# =============================================================================
-
-#############################################
-# Folder: /home/strake/perso/engines/c++/build/ECS/Window
-
-build ECS/Window/all: phony ECS/Window/libWindow.a
+build ECS/all: phony ECS/libECS.a ECS/libWindow.a ECS/libLoop.a ECS/libTime.a
 
 # =============================================================================
 # Built-in targets
@@ -408,14 +303,14 @@ default all
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../ECS/CMakeLists.txt ../ECS/Loop/CMakeLists.txt ../ECS/Time/CMakeLists.txt ../ECS/Window/CMakeLists.txt /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfig.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigDependencies.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigVersion.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets-none.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets.cmake /usr/share/cmake-3.16/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.16/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeNinjaFindMake.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.16/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.16/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../ECS/CMakeLists.txt /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfig.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigDependencies.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigVersion.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets-none.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets.cmake /usr/share/cmake-3.16/Modules/CMakeCCompiler.cmake.in /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c /usr/share/cmake-3.16/Modules/CMakeCInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.16/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeNinjaFindMake.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.16/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/CMakeTestCCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.16/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Compiler/HP-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XL-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/zOS-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCCompiler.cmake CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ../CMakeLists.txt ../ECS/CMakeLists.txt ../ECS/Loop/CMakeLists.txt ../ECS/Time/CMakeLists.txt ../ECS/Window/CMakeLists.txt /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfig.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigDependencies.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigVersion.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets-none.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets.cmake /usr/share/cmake-3.16/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.16/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeNinjaFindMake.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.16/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.16/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake: phony
+build ../CMakeLists.txt ../ECS/CMakeLists.txt /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfig.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigDependencies.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLConfigVersion.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets-none.cmake /usr/lib/x86_64-linux-gnu/cmake/SFML/SFMLSharedTargets.cmake /usr/share/cmake-3.16/Modules/CMakeCCompiler.cmake.in /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c /usr/share/cmake-3.16/Modules/CMakeCInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompileFeatures.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake-3.16/Modules/CMakeDetermineSystem.cmake /usr/share/cmake-3.16/Modules/CMakeFindBinUtils.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeNinjaFindMake.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake-3.16/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake-3.16/Modules/CMakeSystem.cmake.in /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/CMakeTestCCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake-3.16/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake-3.16/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-FindBinUtils.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Compiler/HP-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake-3.16/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XL-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/zOS-C-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Internal/FeatureTesting.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCCompiler.cmake CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake: phony
 
 
 #############################################

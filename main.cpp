@@ -1,5 +1,5 @@
-#include "Loop/loop.hpp"
-#include "ECS/config.cpp"
+#include <ECS/Config.hpp>
+#include <ECS/Loop.hpp>
 #include <iostream>
 
 // f() const means that the function does not modify any member variables.
@@ -18,8 +18,8 @@
 
 int main()
 {
-    std::cout << "ECS version: " << ECS::Config::getVersion() << std::endl;
-    std::cout << "SFML version: " << ECS::Config::getSFMLVersion() << std::endl;
+    //std::cout << "ECS version: " << ECS::Config::getVersion() << std::endl;
+    //std::cout << "SFML version: " << ECS::Config::getSFMLVersion() << std::endl;
     ECS::Window window(800, 600, "Window");
     ECS::Loop loop(60);
     loop.run(window);

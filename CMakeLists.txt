@@ -21,16 +21,24 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
+# Add include directory for ECS
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ECS/include)
+
+find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+
+add_subdirectory(ECS)
+
 # Add executable target with source files listed in SOURCE_FILES variable
 ADD_EXECUTABLE(
     ${PROJECT_NAME}
     main.cpp
 )
 
-#find sfml
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
-# add subdirectories and packages here
-add_subdirectory(ECS)
-
-#link sfml
-target_link_libraries(${PROJECT_NAME} ECS)
+target_link_libraries(Ghost PUBLIC
+    ECS
+    sfml-system
+    sfml-window
+    sfml-graphics
+    sfml-network
+    sfml-audio
+)

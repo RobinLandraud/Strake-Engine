@@ -1,31 +1,31 @@
 [
 {
-  "directory": "/home/strake/perso/engines/c++/build",
-  "command": "/usr/bin/c++   -I../ECS    -std=c++2a -o CMakeFiles/Ghost.dir/main.cpp.o -c /home/strake/perso/engines/c++/main.cpp",
-  "file": "/home/strake/perso/engines/c++/main.cpp"
+  "directory": "/home/strake/perso/engines/c++/SFML_ECS/build",
+  "command": "/usr/bin/c++   -I../ECS/include    -std=c++2a -o CMakeFiles/Ghost.dir/main.cpp.o -c /home/strake/perso/engines/c++/SFML_ECS/main.cpp",
+  "file": "/home/strake/perso/engines/c++/SFML_ECS/main.cpp"
 },
 
 {
-  "directory": "/home/strake/perso/engines/c++/build",
-  "command": "/usr/bin/c++   -I../ECS    -std=c++2a -o ECS/CMakeFiles/ECS.dir/config.cpp.o -c /home/strake/perso/engines/c++/ECS/config.cpp",
-  "file": "/home/strake/perso/engines/c++/ECS/config.cpp"
+  "directory": "/home/strake/perso/engines/c++/SFML_ECS/build",
+  "command": "/usr/bin/c++   -I../ECS/include    -std=c++2a -o ECS/CMakeFiles/ECS.dir/src/Config.cpp.o -c /home/strake/perso/engines/c++/SFML_ECS/ECS/src/Config.cpp",
+  "file": "/home/strake/perso/engines/c++/SFML_ECS/ECS/src/Config.cpp"
 },
 
 {
-  "directory": "/home/strake/perso/engines/c++/build",
-  "command": "/usr/bin/c++      -std=c++2a -o ECS/Time/CMakeFiles/Time.dir/time.cpp.o -c /home/strake/perso/engines/c++/ECS/Time/time.cpp",
-  "file": "/home/strake/perso/engines/c++/ECS/Time/time.cpp"
+  "directory": "/home/strake/perso/engines/c++/SFML_ECS/build",
+  "command": "/usr/bin/c++   -I../ECS/include    -std=c++2a -o ECS/CMakeFiles/Window.dir/src/Window/Window.cpp.o -c /home/strake/perso/engines/c++/SFML_ECS/ECS/src/Window/Window.cpp",
+  "file": "/home/strake/perso/engines/c++/SFML_ECS/ECS/src/Window/Window.cpp"
 },
 
 {
-  "directory": "/home/strake/perso/engines/c++/build",
-  "command": "/usr/bin/c++      -std=c++2a -o ECS/Window/CMakeFiles/Window.dir/window.cpp.o -c /home/strake/perso/engines/c++/ECS/Window/window.cpp",
-  "file": "/home/strake/perso/engines/c++/ECS/Window/window.cpp"
+  "directory": "/home/strake/perso/engines/c++/SFML_ECS/build",
+  "command": "/usr/bin/c++   -I../ECS/include    -std=c++2a -o ECS/CMakeFiles/Loop.dir/src/Loop/Loop.cpp.o -c /home/strake/perso/engines/c++/SFML_ECS/ECS/src/Loop/Loop.cpp",
+  "file": "/home/strake/perso/engines/c++/SFML_ECS/ECS/src/Loop/Loop.cpp"
 },
 
 {
-  "directory": "/home/strake/perso/engines/c++/build",
-  "command": "/usr/bin/c++      -std=c++2a -o ECS/Loop/CMakeFiles/Loop.dir/loop.cpp.o -c /home/strake/perso/engines/c++/ECS/Loop/loop.cpp",
-  "file": "/home/strake/perso/engines/c++/ECS/Loop/loop.cpp"
+  "directory": "/home/strake/perso/engines/c++/SFML_ECS/build",
+  "command": "/usr/bin/c++   -I../ECS/include    -std=c++2a -o ECS/CMakeFiles/Time.dir/src/Time/Time.cpp.o -c /home/strake/perso/engines/c++/SFML_ECS/ECS/src/Time/Time.cpp",
+  "file": "/home/strake/perso/engines/c++/SFML_ECS/ECS/src/Time/Time.cpp"
 }
 ]
