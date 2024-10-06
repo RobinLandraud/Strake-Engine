@@ -1,0 +1,3 @@
+/home/strake/perso/engines/c++/CMakeFiles/edit_cache.dir
+/home/strake/perso/engines/c++/CMakeFiles/rebuild_cache.dir
+/home/strake/perso/engines/c++/CMakeFiles/HelloWorld.dir

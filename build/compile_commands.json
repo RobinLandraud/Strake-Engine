@@ -1,0 +1,31 @@
+[
+{
+  "directory": "/home/strake/perso/engines/c++/build",
+  "command": "/usr/bin/c++   -I../ECS    -std=c++2a -o CMakeFiles/Ghost.dir/main.cpp.o -c /home/strake/perso/engines/c++/main.cpp",
+  "file": "/home/strake/perso/engines/c++/main.cpp"
+},
+
+{
+  "directory": "/home/strake/perso/engines/c++/build",
+  "command": "/usr/bin/c++   -I../ECS    -std=c++2a -o ECS/CMakeFiles/ECS.dir/config.cpp.o -c /home/strake/perso/engines/c++/ECS/config.cpp",
+  "file": "/home/strake/perso/engines/c++/ECS/config.cpp"
+},
+
+{
+  "directory": "/home/strake/perso/engines/c++/build",
+  "command": "/usr/bin/c++      -std=c++2a -o ECS/Time/CMakeFiles/Time.dir/time.cpp.o -c /home/strake/perso/engines/c++/ECS/Time/time.cpp",
+  "file": "/home/strake/perso/engines/c++/ECS/Time/time.cpp"
+},
+
+{
+  "directory": "/home/strake/perso/engines/c++/build",
+  "command": "/usr/bin/c++      -std=c++2a -o ECS/Window/CMakeFiles/Window.dir/window.cpp.o -c /home/strake/perso/engines/c++/ECS/Window/window.cpp",
+  "file": "/home/strake/perso/engines/c++/ECS/Window/window.cpp"
+},
+
+{
+  "directory": "/home/strake/perso/engines/c++/build",
+  "command": "/usr/bin/c++      -std=c++2a -o ECS/Loop/CMakeFiles/Loop.dir/loop.cpp.o -c /home/strake/perso/engines/c++/ECS/Loop/loop.cpp",
+  "file": "/home/strake/perso/engines/c++/ECS/Loop/loop.cpp"
+}
+]
