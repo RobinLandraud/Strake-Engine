@@ -184,7 +184,7 @@ namespace ECS {
             std::vector<Key> m_keyHeld;
             mouse_t m_mouse;
 
-            const std::map<sf::Keyboard::Key, Key> m_keys = {
+            const std::unordered_map<sf::Keyboard::Key, Key> m_keys = {
                 {sf::Keyboard::Unknown, Unknown},
                 {sf::Keyboard::A, Key::A},
                 {sf::Keyboard::B, Key::B},
@@ -289,7 +289,7 @@ namespace ECS {
                 {sf::Keyboard::Pause, Key::Pause}
             };  /*!< The keys */
 
-            const std::map<sf::Event::EventType, EventType> m_eventTypes = {
+            const std::unordered_map<sf::Event::EventType, EventType> m_eventTypes = {
                 {sf::Event::Closed, Closed},
                 {sf::Event::Resized, Resized},
                 {sf::Event::LostFocus, LostFocus},
