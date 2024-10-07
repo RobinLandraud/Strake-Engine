@@ -60,7 +60,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 #############################################
 # Order-only phony target for Ghost
 
-build cmake_object_order_depends_target_Ghost: phony || cmake_object_order_depends_target_ECS cmake_object_order_depends_target_Loop cmake_object_order_depends_target_Time cmake_object_order_depends_target_Window
+build cmake_object_order_depends_target_Ghost: phony || cmake_object_order_depends_target_ECS cmake_object_order_depends_target_EventHandler cmake_object_order_depends_target_Loop cmake_object_order_depends_target_Time cmake_object_order_depends_target_Window
 
 build CMakeFiles/Ghost.dir/main.cpp.o: CXX_COMPILER__Ghost ../main.cpp || cmake_object_order_depends_target_Ghost
   DEP_FILE = CMakeFiles/Ghost.dir/main.cpp.o.d
@@ -79,8 +79,8 @@ build CMakeFiles/Ghost.dir/main.cpp.o: CXX_COMPILER__Ghost ../main.cpp || cmake_
 #############################################
 # Link the executable ../Ghost
 
-build ../Ghost: CXX_EXECUTABLE_LINKER__Ghost CMakeFiles/Ghost.dir/main.cpp.o | ECS/libECS.a /usr/lib/x86_64-linux-gnu/libsfml-network.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1 ECS/libLoop.a ECS/libTime.a ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1 || ECS/libECS.a ECS/libLoop.a ECS/libTime.a ECS/libWindow.a
-  LINK_LIBRARIES = ECS/libECS.a  /usr/lib/x86_64-linux-gnu/libsfml-network.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1  ECS/libLoop.a  ECS/libTime.a  ECS/libWindow.a  /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+build ../Ghost: CXX_EXECUTABLE_LINKER__Ghost CMakeFiles/Ghost.dir/main.cpp.o | ECS/libECS.a /usr/lib/x86_64-linux-gnu/libsfml-network.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1 ECS/libLoop.a ECS/libTime.a ECS/libEventHandler.a ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1 || ECS/libECS.a ECS/libEventHandler.a ECS/libLoop.a ECS/libTime.a ECS/libWindow.a
+  LINK_LIBRARIES = ECS/libECS.a  /usr/lib/x86_64-linux-gnu/libsfml-network.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-audio.so.2.5.1  ECS/libLoop.a  ECS/libTime.a  ECS/libEventHandler.a  ECS/libWindow.a  /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
   OBJECT_DIR = CMakeFiles/Ghost.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -124,7 +124,7 @@ build ECS/edit_cache: phony ECS/CMakeFiles/edit_cache.util
 #############################################
 # Order-only phony target for ECS
 
-build cmake_object_order_depends_target_ECS: phony || cmake_object_order_depends_target_Loop cmake_object_order_depends_target_Time cmake_object_order_depends_target_Window
+build cmake_object_order_depends_target_ECS: phony || cmake_object_order_depends_target_EventHandler cmake_object_order_depends_target_Loop cmake_object_order_depends_target_Time cmake_object_order_depends_target_Window
 
 build ECS/CMakeFiles/ECS.dir/src/Config.cpp.o: CXX_COMPILER__ECS ../ECS/src/Config.cpp || cmake_object_order_depends_target_ECS
   DEP_FILE = ECS/CMakeFiles/ECS.dir/src/Config.cpp.o.d
@@ -143,13 +143,47 @@ build ECS/CMakeFiles/ECS.dir/src/Config.cpp.o: CXX_COMPILER__ECS ../ECS/src/Conf
 #############################################
 # Link the static library ECS/libECS.a
 
-build ECS/libECS.a: CXX_STATIC_LIBRARY_LINKER__ECS ECS/CMakeFiles/ECS.dir/src/Config.cpp.o || ECS/libLoop.a ECS/libTime.a ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+build ECS/libECS.a: CXX_STATIC_LIBRARY_LINKER__ECS ECS/CMakeFiles/ECS.dir/src/Config.cpp.o || ECS/libEventHandler.a ECS/libLoop.a ECS/libTime.a ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
   OBJECT_DIR = ECS/CMakeFiles/ECS.dir
   POST_BUILD = :
   PRE_LINK = :
   TARGET_COMPILE_PDB = ECS/CMakeFiles/ECS.dir/ECS.pdb
   TARGET_FILE = ECS/libECS.a
   TARGET_PDB = ECS/libECS.pdb
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target EventHandler
+
+
+#############################################
+# Order-only phony target for EventHandler
+
+build cmake_object_order_depends_target_EventHandler: phony || cmake_object_order_depends_target_Window
+
+build ECS/CMakeFiles/EventHandler.dir/src/Window/EventHandler.cpp.o: CXX_COMPILER__EventHandler ../ECS/src/Window/EventHandler.cpp || cmake_object_order_depends_target_EventHandler
+  DEP_FILE = ECS/CMakeFiles/EventHandler.dir/src/Window/EventHandler.cpp.o.d
+  FLAGS = -std=c++2a
+  INCLUDES = -I../ECS/include
+  OBJECT_DIR = ECS/CMakeFiles/EventHandler.dir
+  OBJECT_FILE_DIR = ECS/CMakeFiles/EventHandler.dir/src/Window
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/EventHandler.dir/EventHandler.pdb
+  TARGET_PDB = ECS/libEventHandler.pdb
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target EventHandler
+
+
+#############################################
+# Link the static library ECS/libEventHandler.a
+
+build ECS/libEventHandler.a: CXX_STATIC_LIBRARY_LINKER__EventHandler ECS/CMakeFiles/EventHandler.dir/src/Window/EventHandler.cpp.o || ECS/libWindow.a /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+  OBJECT_DIR = ECS/CMakeFiles/EventHandler.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = ECS/CMakeFiles/EventHandler.dir/EventHandler.pdb
+  TARGET_FILE = ECS/libEventHandler.a
+  TARGET_PDB = ECS/libEventHandler.pdb
 
 # =============================================================================
 # Object build statements for STATIC_LIBRARY target Window
@@ -258,6 +292,8 @@ build ECS/libTime.a: CXX_STATIC_LIBRARY_LINKER__Time ECS/CMakeFiles/Time.dir/src
 
 build ECS: phony ECS/libECS.a
 
+build EventHandler: phony ECS/libEventHandler.a
+
 build Ghost: phony ../Ghost
 
 build Loop: phony ECS/libLoop.a
@@ -267,6 +303,8 @@ build Time: phony ECS/libTime.a
 build Window: phony ECS/libWindow.a
 
 build libECS.a: phony ECS/libECS.a
+
+build libEventHandler.a: phony ECS/libEventHandler.a
 
 build libLoop.a: phony ECS/libLoop.a
 
@@ -289,7 +327,7 @@ build all: phony ../Ghost ECS/all
 #############################################
 # Folder: /home/strake/perso/engines/c++/SFML_ECS/build/ECS
 
-build ECS/all: phony ECS/libECS.a ECS/libWindow.a ECS/libLoop.a ECS/libTime.a
+build ECS/all: phony ECS/libECS.a ECS/libEventHandler.a ECS/libWindow.a ECS/libLoop.a ECS/libTime.a
 
 # =============================================================================
 # Built-in targets

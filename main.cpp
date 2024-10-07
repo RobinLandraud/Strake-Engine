@@ -1,6 +1,6 @@
-#include <ECS/Config.hpp>
 #include <ECS/Loop.hpp>
 #include <iostream>
+//#include <ECS/Config.hpp>
 
 // f() const means that the function does not modify any member variables.
 // const T& f() returns a reference to the object without allowing it to be modified.

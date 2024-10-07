@@ -13,6 +13,12 @@
 
 {
   "directory": "/home/strake/perso/engines/c++/SFML_ECS/build",
+  "command": "/usr/bin/c++   -I../ECS/include    -std=c++2a -o ECS/CMakeFiles/EventHandler.dir/src/Window/EventHandler.cpp.o -c /home/strake/perso/engines/c++/SFML_ECS/ECS/src/Window/EventHandler.cpp",
+  "file": "/home/strake/perso/engines/c++/SFML_ECS/ECS/src/Window/EventHandler.cpp"
+},
+
+{
+  "directory": "/home/strake/perso/engines/c++/SFML_ECS/build",
   "command": "/usr/bin/c++   -I../ECS/include    -std=c++2a -o ECS/CMakeFiles/Window.dir/src/Window/Window.cpp.o -c /home/strake/perso/engines/c++/SFML_ECS/ECS/src/Window/Window.cpp",
   "file": "/home/strake/perso/engines/c++/SFML_ECS/ECS/src/Window/Window.cpp"
 },
