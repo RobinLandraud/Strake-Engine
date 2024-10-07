@@ -2,8 +2,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 # Project's name
-PROJECT("Ghost" VERSION 0.1 LANGUAGES CXX)
-
+PROJECT("Ghost.out" VERSION 0.1 LANGUAGES CXX)
 
 # Specify the C++ standard
 SET(CMAKE_CXX_STANDARD 20)
@@ -34,11 +33,4 @@ ADD_EXECUTABLE(
     main.cpp
 )
 
-target_link_libraries(Ghost PUBLIC
-    ECS
-    sfml-system
-    sfml-window
-    sfml-graphics
-    sfml-network
-    sfml-audio
-)
+target_link_libraries(${PROJECT_NAME} PUBLIC ECS)
