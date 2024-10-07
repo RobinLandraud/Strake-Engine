@@ -22,7 +22,7 @@ namespace ECS {
             if (EventHandler::hasEvent(EventType::Closed))
             {
                 stop();
-                break;
+                continue;
             }
 
             bool is_updated = false;
@@ -34,8 +34,8 @@ namespace ECS {
 
             if (m_fpsDelta >= m_fpsTime)
             {
+                std::cout << "FPS: " << 1 / Time::getDeltaTime() << std::endl;
                 Time::updateForFrame();
-                std::cout << "FPS: " << 1 / (m_fpsDelta - m_fpsLoss) << std::endl;
                 m_fpsLoss = m_fpsDelta - m_fpsTime;
                 m_fpsDelta = m_fpsLoss;
                 is_updated = true;
