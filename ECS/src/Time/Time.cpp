@@ -16,7 +16,7 @@ namespace ECS {
 
     Time::~Time()
     {
-        m_instance.reset(); //reset the pointer to nullptr
+        // no need to delete the instance, unique_ptr will handle it
     }
 
     Time& Time::getInstance()

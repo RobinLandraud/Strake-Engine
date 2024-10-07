@@ -18,7 +18,7 @@ namespace ECS
 
     EventHandler::~EventHandler()
     {
-        m_instance.reset();
+        // no need to delete the instance, unique_ptr will handle it
     }
 
     EventHandler& EventHandler::getInstance()
@@ -117,5 +117,35 @@ namespace ECS
                 }
             }
         }
+    }
+
+    bool EventHandler::hasEvent(EventType event)
+    {
+        EventHandler &eventHandler = getInstance();
+        return std::find(eventHandler.m_events.begin(), eventHandler.m_events.end(), event) != eventHandler.m_events.end();
+    }
+
+    bool EventHandler::isKeyPressed(Key key)
+    {
+        EventHandler &eventHandler = getInstance();
+        return std::find(eventHandler.m_keysPressed.begin(), eventHandler.m_keysPressed.end(), key) != eventHandler.m_keysPressed.end();
+    }
+
+    bool EventHandler::isKeyReleased(Key key)
+    {
+        EventHandler &eventHandler = getInstance();
+        return std::find(eventHandler.m_keysReleased.begin(), eventHandler.m_keysReleased.end(), key) != eventHandler.m_keysReleased.end();
+    }
+
+    bool EventHandler::isKeyHeld(Key key)
+    {
+        EventHandler &eventHandler = getInstance();
+        return std::find(eventHandler.m_keyHeld.begin(), eventHandler.m_keyHeld.end(), key) != eventHandler.m_keyHeld.end();
+    }
+
+    mouse_t const& EventHandler::getMouse()
+    {
+        EventHandler &eventHandler = getInstance();
+        return eventHandler.m_mouse;
     }
 }

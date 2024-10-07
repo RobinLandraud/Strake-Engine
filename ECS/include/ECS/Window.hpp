@@ -1,5 +1,7 @@
 #include "SFML/Graphics.hpp"
 
+#pragma once
+
 namespace ECS
 {
     class Window

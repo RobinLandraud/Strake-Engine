@@ -1,6 +1,8 @@
 #include "Time.hpp"
-#include "Window.hpp"
+#include "EventHandler.hpp" // already include Window.hpp
 #include <chrono>
+
+#pragma once
 
 namespace ECS {
     class Loop {
@@ -17,7 +19,7 @@ namespace ECS {
             float m_fixedDelta;
             float m_fpsDelta;
             float m_fpsLoss;
-            void start();
+            void start(Window& window);
             void update();
             void fixedUpdate();
             void lateUpdate();

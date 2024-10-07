@@ -15,9 +15,16 @@ namespace ECS {
     void Loop::run(Window& window)
     {
         m_isRunning = true;
-        start();
+        start(window); // start the event handler
         while (m_isRunning)
         {
+            EventHandler::update();
+            if (EventHandler::hasEvent(EventType::Closed))
+            {
+                stop();
+                break;
+            }
+
             bool is_updated = false;
             bool is_fixed_updated = false;
 
@@ -61,9 +68,10 @@ namespace ECS {
         m_isRunning = false;
     }
 
-    void Loop::start()
+    void Loop::start(Window& window)
     {
         //std::cout << "Loop started" << std::endl;
+        EventHandler::init(window);
     }
     void Loop::update()
     {
