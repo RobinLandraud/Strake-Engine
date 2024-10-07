@@ -18,7 +18,6 @@ namespace ECS {
             float m_fpsTime;
             float m_fixedDelta;
             float m_fpsDelta;
-            float m_fpsLoss;
             void start(Window& window);
             void update();
             void fixedUpdate();

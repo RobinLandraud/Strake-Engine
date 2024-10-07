@@ -8,8 +8,7 @@ namespace ECS {
         m_fixedTime(0.02f), // 50 Hz
         m_fpsTime(1.0f / fps),
         m_fixedDelta(0.0f),
-        m_fpsDelta(0.0f),
-        m_fpsLoss(0.0f)
+        m_fpsDelta(0.0f)
     {
     }
     void Loop::run(Window& window)
@@ -36,8 +35,7 @@ namespace ECS {
             {
                 std::cout << "FPS: " << 1 / Time::getDeltaTime() << std::endl;
                 Time::updateForFrame();
-                m_fpsLoss = m_fpsDelta - m_fpsTime;
-                m_fpsDelta = m_fpsLoss;
+                m_fpsDelta = m_fpsDelta - m_fpsTime;
                 is_updated = true;
             }
 
