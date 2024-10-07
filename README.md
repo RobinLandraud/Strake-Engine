@@ -38,9 +38,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-With this projet, i tried to create a complete Entity Component System (CMS) supporting all features of the Simple and Fast Multimedia Library (SFML) in oder to make projects more stable and maintainable with a thoughtful hierarchy that is readable and easily modifiable.
+With this project, I aimed to develop a comprehensive Entity Component System (ECS) that fully supports all features of the Simple and Fast Multimedia Library (SFML). The goal is to create more stable and maintainable projects through a well-structured hierarchy that is both readable and easily modifiable.
 
-Inspired by Unity, this ECS automatically optimizes games thanks to its methods of updating entities scaled over several frequencies.
+Inspired by Unity, this ECS optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
 
 ### Built With
 
