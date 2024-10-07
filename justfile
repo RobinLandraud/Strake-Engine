@@ -5,4 +5,4 @@ format:
 build-prod:
     - rm -f Ghost && mkdir -p ./build && rm -rf ./build/* && cd build && cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release && ninja && cd ..    
 tidy:
-    - clang-tidy -p="./build" main.cpp -header-filter=.*
+    - clang-tidy -p="./build" main.cpp -header-filter=".*"
