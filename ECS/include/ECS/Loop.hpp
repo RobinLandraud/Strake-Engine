@@ -1,5 +1,5 @@
-#include "Time.hpp"
-#include "EventHandler.hpp" // already include Window.hpp
+#include <ECS/EventHandler.hpp>
+#include <ECS/Time.hpp>
 #include <chrono>
 
 #pragma once

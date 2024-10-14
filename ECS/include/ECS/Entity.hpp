@@ -1,8 +1,10 @@
 #pragma once
-#include <unordered_map>
-#include <typeindex>
-#include <memory>
 #include <ECS/Component.hpp>
+#include <memory>
+#include <optional>
+#include <typeindex>
+#include <unordered_map>
+#include <functional>
 
 namespace ECS {
     class Entity {
@@ -20,22 +22,24 @@ namespace ECS {
             void render();
 
             template<typename T, typename... Args>
-            void addComponent(const std::string &name, Args &&... args) {
+            short addComponent(const std::string &name, Args &&... args) {
                 if (m_components.find(name) != m_components.end()) {
-                    throw std::runtime_error("Component already exists : " + name);
+                    return -1;
                 }
                 m_components.insert(std::make_pair(name, ComponentHolder(std::type_index(typeid(T)), std::make_unique<T>(name, m_components, std::forward<Args>(args)...))));
+                return 0;
             }
 
             template<typename T>
-            T &getComponent(const std::string &name) {
+            std::optional<std::reference_wrapper<T>> getComponent(const std::string &name) {
                 if (m_components.find(name) == m_components.end()) {
-                    throw std::runtime_error("Component not found : " + name);
+                    return std::nullopt;
                 }
                 if (m_components.at(name).type != std::type_index(typeid(T))) {
-                    throw std::runtime_error("Component type mismatch : " + name);
+                    return std::nullopt;
                 }
-                return dynamic_cast<T &>(*m_components.at(name).component);
+                //return dynamic_cast<T &>(*m_components.at(name).component);
+                return std::ref(dynamic_cast<T &>(*m_components.at(name).component));
             }
 
         protected:

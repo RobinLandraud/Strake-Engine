@@ -1,6 +1,7 @@
-#include <vector>
 #include <ECS/Window.hpp>
 #include <memory>
+#include <unordered_map>
+#include <vector>
 
 #pragma once
 
@@ -175,7 +176,7 @@ namespace ECS {
             static EventHandler& getInstance();
             static std::unique_ptr<EventHandler> m_instance;
 
-            EventHandler(Window &window);
+            explicit EventHandler(Window &window);
             Window &m_window;
 
             std::vector<EventType> m_events;

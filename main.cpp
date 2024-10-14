@@ -1,5 +1,5 @@
-#include <ECS/Loop.hpp>
 #include <ECS/Entity.hpp>
+#include <ECS/Loop.hpp>
 #include <iostream>
 //#include <ECS/Config.hpp>
 
@@ -20,27 +20,13 @@
 class TestComponent : public ECS::Component
 {
     public:
-        TestComponent(const std::string &name, std::unordered_map<std::string, ECS::ComponentHolder> &parentComponents)
-            : ECS::Component(name, parentComponents)
-        {
+        using ECS::Component::Component;
+        void awake() {
+            test += 1;
+            std::cout << "TestComponent awake" << std::endl;
         }
-
-        ~TestComponent()
-        {
-        }
-};
-
-class TestComponent2 : public ECS::Component
-{
-    public:
-        TestComponent2(const std::string &name, std::unordered_map<std::string, ECS::ComponentHolder> &parentComponents)
-            : ECS::Component(name, parentComponents)
-        {
-        }
-
-        ~TestComponent2()
-        {
-        }
+    private:
+        int test = 0;
 };
 
 int main()
@@ -50,10 +36,21 @@ int main()
     ECS::Window window(800, 600, "Window");
     ECS::Loop loop(60);
     ECS::Entity entity("Entity");
-    entity.addComponent<TestComponent>("TestComponent1.1");
-    entity.addComponent<TestComponent>("TestComponent1.2");
-    entity.addComponent<TestComponent2>("TestComponent2.1");
-    TestComponent &comp = entity.getComponent<TestComponent>("TestComponent1.1");
+    if (entity.addComponent<TestComponent>("TestComponent1.1") == -1)
+    {
+        std::cerr << "Component already exists" << std::endl;
+    }
+    if (entity.addComponent<TestComponent>("TestComponent1.2") == -1)
+    {
+        std::cerr << "Component already exists" << std::endl;
+    }
+    auto comp = entity.getComponent<TestComponent>("TestComponent1.1");
+    if (comp.has_value())
+    {
+        std::cout << "Component found" << std::endl;
+    } else {
+        std::cerr << "Component not found" << std::endl;
+    }
     entity.awake();
     loop.run(window);
 

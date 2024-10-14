@@ -1,8 +1,8 @@
 #pragma once
-#include <string>
-#include <unordered_map>
-#include <typeindex>
 #include <memory>
+#include <string>
+#include <typeindex>
+#include <unordered_map>
 
 namespace ECS {
 
