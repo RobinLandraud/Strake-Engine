@@ -2,6 +2,8 @@
 #include <cmath>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+//#include "./myGL/include/Shaders.hpp"
+#include <myGL/Shaders.hpp>
 
 int main()
 {
@@ -89,31 +91,7 @@ int main()
     //this can cause distortion
     //to avoid this, we set the viewport size to the window size
 
-
-    //  CREATE SHADER PROGRAM WITH VERTEX AND FRAGMENT SHADERS
-
-    // Create a vertex shader
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER); // Create a vertex shader
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr); // Set the source code of the vertex shader
-    //1 is the number of strings in the source code
-    //&vertexShaderSource is the source code of the vertex shader
-    //nullptr is the length of the source code
-    glCompileShader(vertexShader); // Compile the vertex shader
-
-
-    // Create a fragment shader
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // Create a fragment shader
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr); // Set the source code of the fragment shader
-    glCompileShader(fragmentShader); // Compile the fragment shader
-
-    // Create a shader program
-    GLuint shaderProgram = glCreateProgram(); // Create a shader program
-    glAttachShader(shaderProgram, vertexShader); // Attach the vertex shader to the shader program
-    glAttachShader(shaderProgram, fragmentShader); // Attach the fragment shader to the shader program
-
-    glLinkProgram(shaderProgram); // Link the shader program
-    glDeleteShader(vertexShader); // Delete the vertex shader because it is no longer needed
-    glDeleteShader(fragmentShader); // Delete the fragment shader because it is no longer needed
+    Shader shader("myGL/src/Shaders/default.vert", "myGL/src/Shaders/default.frag");
 
     //  CREATE VERTEX BUFFER OBJECT AND VERTEX ARRAY OBJECT
 
@@ -194,7 +172,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer (using the clear color)
-        glUseProgram(shaderProgram); // Use the shader program
+        shader.activate(); // Use the shader program
         glBindVertexArray(VAO); // Bind the vertex array
         //the vertex array in use is the one that is bound
 
@@ -219,7 +197,7 @@ int main()
     glDeleteVertexArrays(1, &VAO); // Delete the vertex array
     glDeleteBuffers(1, &VBO); // Delete the buffer
     glDeleteBuffers(1, &EBO); // Delete the buffer
-    glDeleteProgram(shaderProgram); // Delete the shader program
+    shader.delete_shader(); // Delete the shader program
 
     glfwDestroyWindow(window); // Free resources for window
     glfwTerminate(); // Free resources

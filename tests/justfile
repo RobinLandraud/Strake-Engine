@@ -1,2 +1,2 @@
 build:
-    - rm -f test.out && mkdir -p ./build && rm -rf ./build/* && cd build; cmake .. && make; cd ..
+    - rm -f test.out && mkdir -p ./build && rm -rf ./build/* && cd build; cmake .. -GNinja && ninja && cd ..

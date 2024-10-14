@@ -1,14 +1,11 @@
 #pragma once
-
 #include <glad/glad.h>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <cerrno>
-
-std::string get_file_content(const char* filename);
-
+#include <array>
 
 class Shader
 {
@@ -16,9 +13,9 @@ class Shader
         Shader(const std::string &vertexPath, const std::string &fragmentPath);
         void activate();
         void delete_shader();
-        void getID();
+        GLuint getID();
     private:
         GLuint m_id;
-        std::string m_fileExt[];
-        static std::string read_file(const std::string& filename);
+        static const std::array<std::string, 2> m_fileExt;
+        static std::string get_file_content(const std::string& filename);
 };

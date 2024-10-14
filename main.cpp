@@ -1,4 +1,5 @@
 #include <ECS/Loop.hpp>
+#include <ECS/Entity.hpp>
 #include <iostream>
 //#include <ECS/Config.hpp>
 
@@ -16,12 +17,44 @@
 // const T&& f() is not a valid syntax; you cannot have `const` with `&&` as it does not make sense in C++.
 // T&& const f() is also not a valid syntax.
 
+class TestComponent : public ECS::Component
+{
+    public:
+        TestComponent(const std::string &name, std::unordered_map<std::string, ECS::ComponentHolder> &parentComponents)
+            : ECS::Component(name, parentComponents)
+        {
+        }
+
+        ~TestComponent()
+        {
+        }
+};
+
+class TestComponent2 : public ECS::Component
+{
+    public:
+        TestComponent2(const std::string &name, std::unordered_map<std::string, ECS::ComponentHolder> &parentComponents)
+            : ECS::Component(name, parentComponents)
+        {
+        }
+
+        ~TestComponent2()
+        {
+        }
+};
+
 int main()
 {
     //std::cout << "ECS version: " << ECS::Config::getVersion() << std::endl;
     //std::cout << "SFML version: " << ECS::Config::getSFMLVersion() << std::endl;
     ECS::Window window(800, 600, "Window");
     ECS::Loop loop(60);
+    ECS::Entity entity("Entity");
+    entity.addComponent<TestComponent>("TestComponent1.1");
+    entity.addComponent<TestComponent>("TestComponent1.2");
+    entity.addComponent<TestComponent2>("TestComponent2.1");
+    TestComponent &comp = entity.getComponent<TestComponent>("TestComponent1.1");
+    entity.awake();
     loop.run(window);
 
     return 0;

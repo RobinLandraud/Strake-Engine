@@ -42,7 +42,6 @@ namespace ECS
     {
         EventHandler &eventHandler = getInstance();
         sf::Event event;
-        //reset the events
         eventHandler.m_events.clear();
         eventHandler.m_keysPressed.clear();
         eventHandler.m_keysReleased.clear();
