@@ -1,6 +1,7 @@
-#include <ECS/Entity.hpp>
 #include <ECS/Loop.hpp>
 #include <iostream>
+#include <ECS/EntityManager.hpp>
+#include <ECS/Config.hpp>
 //#include <ECS/Config.hpp>
 
 // f() const means that the function does not modify any member variables.
@@ -25,33 +26,31 @@ class TestComponent : public ECS::Component
             test += 1;
             std::cout << "TestComponent awake" << std::endl;
         }
+        void destroyParent() {
+            std::cout << "Destroying parent : " + m_parent << std::endl;
+            r_entities.erase(m_parent);
+        }
     private:
         int test = 0;
 };
 
 int main()
 {
-    //std::cout << "ECS version: " << ECS::Config::getVersion() << std::endl;
-    //std::cout << "SFML version: " << ECS::Config::getSFMLVersion() << std::endl;
+    std::cout << "ECS version: " << ECS::Config::getVersion() << std::endl;
+    std::cout << "SFML version: " << ECS::Config::getSFMLVersion() << std::endl;
+
+    ECS::EntityManager manager;
+    manager.addEntity("Entity");
+    manager.addComponent<TestComponent>("Entity", "TestComponent");
+    auto component = manager.getComponent<TestComponent>("Entity", "TestComponent");
+    if (component.has_value())
+        component.value().get().destroyParent();
+    auto components = manager.getComponents("Entity");
+    if (!components.has_value())
+        std::cout << "Components not found" << std::endl;
+
     ECS::Window window(800, 600, "Window");
     ECS::Loop loop(60);
-    ECS::Entity entity("Entity");
-    if (entity.addComponent<TestComponent>("TestComponent1.1") == -1)
-    {
-        std::cerr << "Component already exists" << std::endl;
-    }
-    if (entity.addComponent<TestComponent>("TestComponent1.2") == -1)
-    {
-        std::cerr << "Component already exists" << std::endl;
-    }
-    auto comp = entity.getComponent<TestComponent>("TestComponent1.1");
-    if (comp.has_value())
-    {
-        std::cout << "Component found" << std::endl;
-    } else {
-        std::cerr << "Component not found" << std::endl;
-    }
-    entity.awake();
     loop.run(window);
 
     return 0;

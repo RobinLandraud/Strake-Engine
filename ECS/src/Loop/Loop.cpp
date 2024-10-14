@@ -11,7 +11,7 @@ namespace ECS {
         m_fpsDelta(0.0f)
     {
     }
-    void Loop::run(Window& window)
+    void Loop::run(Window& window, bool debug)
     {
         m_isRunning = true;
         start(window); // start the event handler
@@ -33,7 +33,8 @@ namespace ECS {
 
             if (m_fpsDelta >= m_fpsTime)
             {
-                std::cout << "FPS: " << 1 / Time::getDeltaTime() << std::endl;
+                if (debug)
+                    std::cout << "FPS: " << 1 / Time::getDeltaTime() << std::endl;
                 Time::updateForFrame();
                 m_fpsDelta = m_fpsDelta - m_fpsTime;
                 is_updated = true;

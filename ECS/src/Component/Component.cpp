@@ -2,14 +2,17 @@
 #include <ECS/Component.hpp>
 
 namespace ECS {
-    uint32_t Component::m_idCounter = 0;
 
-    Component::Component(const std::string &name, std::unordered_map<std::string, ComponentHolder> &parentComponents)
-        : m_id(m_idCounter++), m_name(name), m_parentComponents(parentComponents)
+    Component::Component(
+        const std::string &name,
+        const std::string &parent,
+        std::unordered_map<EntityTag, std::unordered_map<std::string, ComponentHolder>> &entities
+        )
+        : m_name(name), m_parent(parent), r_entities(entities)
     {}
 
     void Component::awake() {
-        for (auto &component : m_parentComponents)
+        for (auto &component : r_entities[m_parent])
         {
             std::cout << component.first << std::endl;
         }

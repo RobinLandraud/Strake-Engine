@@ -3,6 +3,7 @@
 #include <string>
 #include <typeindex>
 #include <unordered_map>
+#include <ECS/Entity.hpp>
 
 namespace ECS {
 
@@ -14,11 +15,22 @@ namespace ECS {
 
         ComponentHolder(std::type_index type, std::unique_ptr<Component> component)
             : type(type), component(std::move(component)) {}
+
+        ComponentHolder(const ComponentHolder&) = delete;
+        ComponentHolder& operator=(const ComponentHolder&) = delete;
+
+        // Allow move semantics
+        ComponentHolder(ComponentHolder&&) = default;
+        ComponentHolder& operator=(ComponentHolder&&) = default;
     };
 
     class Component {
         public:
-            explicit Component(const std::string &name, std::unordered_map<std::string, ComponentHolder> &parentComponents);
+            explicit Component(
+                const std::string &name,
+                const std::string &parent,
+                std::unordered_map<EntityTag, std::unordered_map<std::string, ComponentHolder>> &entities
+            );
             virtual ~Component() = default;
             void awake();
             void start();
@@ -28,11 +40,8 @@ namespace ECS {
             void render();
 
         protected:
-            const uint32_t m_id;
             const std::string m_name;
-
-        private:
-            static uint32_t m_idCounter;
-            std::unordered_map<std::string, ComponentHolder> &m_parentComponents;
+            std::unordered_map<EntityTag, std::unordered_map<std::string, ComponentHolder>> &r_entities;
+            const std::string m_parent;
     };
 }
