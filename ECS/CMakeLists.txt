@@ -13,13 +13,13 @@ add_library(Loop STATIC src/Loop/Loop.cpp)
 add_library(Window STATIC src/Window/Window.cpp)
 add_library(EventHandler STATIC src/Window/EventHandler.cpp)
 add_library(Component STATIC src/Component/Component.cpp)
-add_library(EntityManager STATIC src/Entity/EntityManager.cpp)
+add_library(GameObject STATIC src/GameObject/GameObject.cpp)
 
 # dependencies for the libraries
 target_link_libraries(Loop PUBLIC Window)
 target_link_libraries(Loop PUBLIC Time)
 target_link_libraries(EventHandler PUBLIC Window)
-target_link_libraries(EntityManager PUBLIC Component)
+target_link_libraries(Component PUBLIC GameObject)
 
 target_link_libraries(Window PUBLIC
     sfml-system
@@ -31,4 +31,4 @@ add_library(ECS STATIC
     "src/Config.cpp"
 )
 
-target_link_libraries(ECS PUBLIC Time Loop Window EventHandler Component EntityManager)
+target_link_libraries(ECS PUBLIC Time Loop Window EventHandler Component)

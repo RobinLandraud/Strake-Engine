@@ -1,47 +1,28 @@
 #pragma once
+#include <ECS/GameObject.hpp>
 #include <memory>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
-#include <ECS/Entity.hpp>
+#include <optional>
 
 namespace ECS {
-
-    class Component;
-
-    struct ComponentHolder {
-        std::type_index type;
-        std::unique_ptr<Component> component;
-
-        ComponentHolder(std::type_index type, std::unique_ptr<Component> component)
-            : type(type), component(std::move(component)) {}
-
-        ComponentHolder(const ComponentHolder&) = delete;
-        ComponentHolder& operator=(const ComponentHolder&) = delete;
-
-        // Allow move semantics
-        ComponentHolder(ComponentHolder&&) = default;
-        ComponentHolder& operator=(ComponentHolder&&) = default;
-    };
-
     class Component {
         public:
             explicit Component(
-                const std::string &name,
-                const std::string &parent,
-                std::unordered_map<EntityTag, std::unordered_map<std::string, ComponentHolder>> &entities
+                const GameObject &parent
             );
             virtual ~Component() = default;
-            void awake();
-            void start();
-            void update();
-            void fixedUpdate();
-            void lateUpdate();
-            void render();
+            virtual void awake();
+            virtual void start();
+            virtual void update();
+            virtual void fixedUpdate();
+            virtual void lateUpdate();
+            virtual void render();
 
-        protected:
-            const std::string m_name;
-            std::unordered_map<EntityTag, std::unordered_map<std::string, ComponentHolder>> &r_entities;
-            const std::string m_parent;
+            [[nodiscard]] const GameObject &getParent() const;
+
+        private:
+            const GameObject &r_parent;
     };
 }

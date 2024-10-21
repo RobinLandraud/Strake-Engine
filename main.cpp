@@ -1,7 +1,7 @@
+#include <ECS/Config.hpp>
+#include <ECS/Component.hpp>
 #include <ECS/Loop.hpp>
 #include <iostream>
-#include <ECS/EntityManager.hpp>
-#include <ECS/Config.hpp>
 //#include <ECS/Config.hpp>
 
 // f() const means that the function does not modify any member variables.
@@ -22,13 +22,10 @@ class TestComponent : public ECS::Component
 {
     public:
         using ECS::Component::Component;
-        void awake() {
+        void awake() override {
             test += 1;
             std::cout << "TestComponent awake" << std::endl;
-        }
-        void destroyParent() {
-            std::cout << "Destroying parent : " + m_parent << std::endl;
-            r_entities.erase(m_parent);
+            std::cout << getParent().getName() << std::endl;
         }
     private:
         int test = 0;
@@ -36,18 +33,15 @@ class TestComponent : public ECS::Component
 
 int main()
 {
-    std::cout << "ECS version: " << ECS::Config::getVersion() << std::endl;
-    std::cout << "SFML version: " << ECS::Config::getSFMLVersion() << std::endl;
-
-    ECS::EntityManager manager;
-    manager.addEntity("Entity");
-    manager.addComponent<TestComponent>("Entity", "TestComponent");
-    auto component = manager.getComponent<TestComponent>("Entity", "TestComponent");
-    if (component.has_value())
-        component.value().get().destroyParent();
-    auto components = manager.getComponents("Entity");
-    if (!components.has_value())
-        std::cout << "Components not found" << std::endl;
+    ECS::GameObject gameObject("GameObject");
+    gameObject.addComponent<TestComponent>();
+    auto comp = gameObject.getComponent<TestComponent>();
+    if (comp.has_value()) {
+        TestComponent &testComponent = comp.value().get();
+        testComponent.awake();
+        const ECS::GameObject &parent = testComponent.getParent();
+        std::cout << parent.getName() << std::endl;
+    }
 
     ECS::Window window(800, 600, "Window");
     ECS::Loop loop(60);
