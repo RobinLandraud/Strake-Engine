@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 #include <GL/glu.h>
-#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <vector>
@@ -25,10 +25,13 @@ void initOpenGL() {
     gluPerspective(45.0f, 800.0f / 600.0f, 1.0f, 100.0f);
 }
 
-// Create the sprite stack VBO
-GLuint createSpriteStackVBO(const sf::Texture& texture, int numberOfLayers, float spriteWidth, float spriteHeight, float spacing, GLuint& texCoordVBO) {
+// Create the sprite stack VAO and VBOs
+GLuint createSpriteStackVAO(const sf::Texture& texture, int numberOfLayers, float spriteWidth, float spriteHeight, float spacing, GLuint& vboID, GLuint& texCoordVBO) {
+    GLuint vaoID;
+    glGenVertexArrays(1, &vaoID);
+    glBindVertexArray(vaoID);
+
     // Create a new VBO for vertices
-    GLuint vboID;
     glGenBuffers(1, &vboID);
     glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
@@ -62,48 +65,67 @@ GLuint createSpriteStackVBO(const sf::Texture& texture, int numberOfLayers, floa
 
     // Upload the vertex data to the VBO
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
 
     // Create and upload the texture coordinate data to the VBO
     glGenBuffers(1, &texCoordVBO);
     glBindBuffer(GL_ARRAY_BUFFER, texCoordVBO);
     glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
-    return vboID;
+    glBindVertexArray(0); // Unbind the VAO
+
+    return vaoID;
 }
 
-// Function to render the sprite stack VBO
-void renderSpriteStackVBO(GLuint vboID, GLuint texCoordVBO, const sf::Texture& texture, int numberOfLayers) {
+// Function to render the sprite stack VAO
+void renderSpriteStackVAO(GLuint vaoID, const sf::Texture& texture, int numberOfLayers) {
     // Bind the texture
     GLuint textureID = texture.getNativeHandle();
     glBindTexture(GL_TEXTURE_2D, textureID);
 
-    // Bind the vertex VBO
-    glBindBuffer(GL_ARRAY_BUFFER, vboID);
-    glEnableClientState(GL_VERTEX_ARRAY); // Enable vertex array
-    glVertexPointer(3, GL_FLOAT, 0, 0); // Specify the vertex data
-
-    // Bind the texture coordinate VBO
-    glBindBuffer(GL_ARRAY_BUFFER, texCoordVBO);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    // Bind the VAO
+    glBindVertexArray(vaoID);
 
     // Draw the sprite stack
     glDrawArrays(GL_QUADS, 0, 4 * numberOfLayers);
 
-    // Disable client states
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glBindVertexArray(0); // Unbind the VAO
 }
 
 int main() {
-    sf::Window window(sf::VideoMode(800, 600), "Sprite Stacking with OpenGL", sf::Style::Default, sf::ContextSettings(32));
-    window.setVerticalSyncEnabled(true);
+
+    // Create the window
+    auto settings = sf::ContextSettings();
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.antialiasingLevel = 0;
+    settings.majorVersion = 3;
+    settings.minorVersion = 1;
+    settings.sRgbCapable = false;
+
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Sprite Stacking with OpenGL", sf::Style::Default, settings);
+    window.setVerticalSyncEnabled(false);
 
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
         std::cerr << "Failed to initialize GLEW" << std::endl;
         return -1;
     }
+
+    // Load the ground texture
+    sf::Texture groundTexture;
+    if (!groundTexture.loadFromFile("sprites/grass.png")) {
+        std::cerr << "Failed to load ground texture" << std::endl;
+        return -1;
+    }
+    // Create the sprite for the ground
+    sf::Sprite groundSprite;
+    groundSprite.setTexture(groundTexture);
+    groundSprite.setPosition(0, 0); // Set position to the bottom of the window
+    groundSprite.setScale(groundTexture.getSize().x / 800.0f, groundTexture.getSize().y / 600.0f); // Scale to window size
 
     // Initialize OpenGL settings
     initOpenGL();
@@ -115,9 +137,9 @@ int main() {
         return -1;
     }
 
-    // Create the sprite stack VBO and texture coordinate VBO
-    GLuint carTexCoordVBO;
-    GLuint carVBO = createSpriteStackVBO(carTexture, 9, carTexture.getSize().x / 9, carTexture.getSize().y, 0.6f, carTexCoordVBO);
+    // Create the sprite stack VAO and VBOs
+    GLuint carVBO, carTexCoordVBO;
+    GLuint carVAO = createSpriteStackVAO(carTexture, 9, carTexture.getSize().x / 9, carTexture.getSize().y, 0.6f, carVBO, carTexCoordVBO);
 
     // Parameters for the car sprite stack
     int numberOfLayers = 9;  // Number of layers in the sprite stack
@@ -129,7 +151,10 @@ int main() {
 
     // Move the camera back to see the car
     glTranslatef(0.0f, 0.0f, -50.0f);  
-    glRotatef(-40.0f, 1.0f, 0.0f, 0.0f);  // Rotate the car around the Y axis
+    glRotatef(-35.0f, 1.0f, 0.0f, 0.0f);  // Rotate the car around the Y axis
+
+    sf::Clock clock; // Create a clock
+    const float targetFrameTime = 1.0f / 60.0f; // Target frame time for 60 FPS
 
     // Main loop
     while (window.isOpen()) {
@@ -142,24 +167,38 @@ int main() {
         // Clear the window with OpenGL
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Draw the ground sprite
+        window.pushGLStates(); // Save the current OpenGL states
+        window.draw(groundSprite);
+        window.popGLStates(); // Restore the OpenGL states
+
         // Set up the modelview matrix
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);  // Rotate the car around the Z axis
 
         // Render the car sprite stack
-        renderSpriteStackVBO(carVBO, carTexCoordVBO, carTexture, numberOfLayers);
+        renderSpriteStackVAO(carVAO, carTexture, numberOfLayers);
 
         // Swap buffers to display the rendered image
         window.display();
 
         // Update the rotation
-        rotationAngle += 0.5f;
+        rotationAngle += 1.0f;
+
+        // Limit the frame rate
+        sf::Time elapsedTime = clock.getElapsedTime();
+        float frameTime = elapsedTime.asSeconds();
+        if (frameTime < targetFrameTime) {
+            sf::sleep(sf::seconds(targetFrameTime - frameTime));
+        }
+        clock.restart();
     }
 
     // Cleanup
     glDeleteBuffers(1, &carVBO);
     glDeleteBuffers(1, &carTexCoordVBO);
+    glDeleteVertexArrays(1, &carVAO);
 
     return 0;
 }
