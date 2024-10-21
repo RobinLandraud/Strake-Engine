@@ -26,6 +26,8 @@ class TestComponent : public ECS::Component
             test += 1;
             std::cout << "TestComponent awake" << std::endl;
             std::cout << getParent().getName() << std::endl;
+            TestComponent &testComponent = getParent().getComponent<TestComponent>().value().get();
+            std::cout << testComponent.test << std::endl;
         }
     private:
         int test = 0;

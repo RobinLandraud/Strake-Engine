@@ -28,11 +28,20 @@ namespace ECS {
             }
 
             template<typename T>
-            std::optional<std::reference_wrapper<T>> getComponent() {
+            std::optional<std::reference_wrapper<T>> getComponent() const {
                 if (m_components.find(typeid(T)) == m_components.end()) {
                     return std::nullopt;
                 }
-                return std::ref(static_cast<T&>(*m_components[typeid(T)]));
+                return std::ref(static_cast<T&>(*m_components.at(typeid(T))));
+            }
+
+            template<typename T>
+            bool removeComponent() {
+                if (m_components.find(typeid(T)) == m_components.end()) {
+                    return false;
+                }
+                m_components.erase(typeid(T));
+                return true;
             }
 
         private:
