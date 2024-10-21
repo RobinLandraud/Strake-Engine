@@ -5,6 +5,7 @@
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <vector>
+#include <cmath>
 
 // Function to set up OpenGL
 void initOpenGL() {
@@ -22,7 +23,7 @@ void initOpenGL() {
     // Set up a perspective projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, 800.0f / 600.0f, 1.0f, 100.0f);
+    gluPerspective(45.0f, 800.0f / 600.0f, 1.0f, 150.0f);
 }
 
 // Create the sprite stack VAO and VBOs
@@ -106,6 +107,10 @@ int main() {
     settings.minorVersion = 1;
     settings.sRgbCapable = false;
 
+    float carX = 0.0f; // Initial car X position
+    float carY = 0.0f; // Initial car Y position
+    const float carSpeed = 0.5f; // Car movement speed
+
     sf::RenderWindow window(sf::VideoMode(800, 600), "Sprite Stacking with OpenGL", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(false);
 
@@ -150,7 +155,7 @@ int main() {
     float rotationAngle = 0.0f;
 
     // Move the camera back to see the car
-    glTranslatef(0.0f, 0.0f, -50.0f);  
+    glTranslatef(0.0f, 0.0f, -100.0f);  
     glRotatef(-35.0f, 1.0f, 0.0f, 0.0f);  // Rotate the car around the Y axis
 
     sf::Clock clock; // Create a clock
@@ -175,6 +180,28 @@ int main() {
         // Set up the modelview matrix
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+
+        float angleInRadians = rotationAngle * M_PI / 180.0f;
+        float moveX = carSpeed * std::cos(angleInRadians);
+        float moveY = carSpeed * std::sin(angleInRadians);
+        int forward = 0;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+            carX += moveX;
+            carY += moveY;
+            forward = 1;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+            carX -= moveX;
+            carY -= moveY;
+            forward = -1;
+        }
+        if (forward != 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+            rotationAngle += 1.5f * forward;
+        }
+        if (forward != 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+            rotationAngle -= 1.5f * forward;
+        }
+        glTranslatef(carX, carY, 0.0f);  // Translate the car to its position
         glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);  // Rotate the car around the Z axis
 
         // Render the car sprite stack
@@ -182,9 +209,6 @@ int main() {
 
         // Swap buffers to display the rendered image
         window.display();
-
-        // Update the rotation
-        rotationAngle += 1.0f;
 
         // Limit the frame rate
         sf::Time elapsedTime = clock.getElapsedTime();
@@ -196,9 +220,12 @@ int main() {
     }
 
     // Cleanup
+    GLuint textureID = groundTexture.getNativeHandle();
+    glDeleteTextures(1, &textureID);
+    GLuint carTextureID = carTexture.getNativeHandle();
+    glDeleteTextures(1, &carTextureID);
     glDeleteBuffers(1, &carVBO);
     glDeleteBuffers(1, &carTexCoordVBO);
     glDeleteVertexArrays(1, &carVAO);
-
     return 0;
 }
