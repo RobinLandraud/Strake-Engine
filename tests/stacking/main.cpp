@@ -11,14 +11,17 @@
 void initOpenGL() {
     // Enable depth testing for 3D rendering
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
 
     // Enable texturing
     glEnable(GL_TEXTURE_2D);
 
     // Enable blending
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set blending function
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set blending function to use alpha values
+    // Enable alpha testing to discard transparent pixels
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.1f);  // Render pixels with alpha greater than 0.1
 
     // Set up a perspective projection
     glMatrixMode(GL_PROJECTION);
@@ -86,16 +89,6 @@ void renderSpriteStackVAO(GLuint vaoID, const sf::Texture& texture, int numberOf
     // Bind the texture
     GLuint textureID = texture.getNativeHandle();
     glBindTexture(GL_TEXTURE_2D, textureID);
-
-    // Enable depth testing to discard hidden pixels
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);  // Render topmost visible pixels
-
-    // TO CHANGE: USE INDEPENDANT SHADER PROGRAM TO RENDER SPRITES
-    ////Enable alpha testing to discard transparent pixels
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.1f);  // Render pixels with alpha greater than 0.1
-
     // Bind the VAO
     glBindVertexArray(vaoID);
 
@@ -106,7 +99,6 @@ void renderSpriteStackVAO(GLuint vaoID, const sf::Texture& texture, int numberOf
 }
 
 int main() {
-
     // Create the window
     auto settings = sf::ContextSettings();
     settings.depthBits = 24;
@@ -153,7 +145,7 @@ int main() {
 
     // Create the sprite stack VAO and VBOs
     GLuint carVBO, carTexCoordVBO;
-    GLuint carVAO = createSpriteStackVAO(carTexture, 9, carTexture.getSize().x / 9, carTexture.getSize().y, 0.6f, carVBO, carTexCoordVBO);
+    GLuint carVAO = createSpriteStackVAO(carTexture, 9, carTexture.getSize().x / 9, carTexture.getSize().y, 0.8f, carVBO, carTexCoordVBO);
 
     // Parameters for the car sprite stack
     int numberOfLayers = 9;  // Number of layers in the sprite stack
@@ -163,15 +155,61 @@ int main() {
 
     float rotationAngle = 0.0f;
 
-    // Move the camera back to see the car
-    glTranslatef(0.0f, 0.0f, -100.0f);  
-    glRotatef(-35.0f, 1.0f, 0.0f, 0.0f);  // Rotate the car around the Y axis
-
     sf::Clock clock; // Create a clock
     const float targetFrameTime = 1.0f / 60.0f; // Target frame time for 60 FPS
 
     int framecount = 0;
     int meanFramerate = 0;
+
+    std::vector<std::pair<float, float>> carPositions = {
+        {20.0f, 0.0f},
+        {-20.0f, 0.0f},
+        {0.0f, 20.0f},
+        {0.0f, -20.0f},
+        {20.0f, 20.0f},
+        {-20.0f, 20.0f},
+        {20.0f, -20.0f},
+        {-20.0f, -20.0f},
+        {40.0f, 0.0f},
+        {0.0f, 40.0f},
+        {40.0f, 40.0f},
+        {40.0f, -40.0f},
+        {-40.0f, 40.0f},
+        {-40.0f, -40.0f},
+        {40.0f, 20.0f},
+        {40.0f, -20.0f},
+        {-40.0f, 20.0f},
+        {-40.0f, -20.0f},
+        {20.0f, 40.0f},
+        {20.0f, -40.0f},
+        {-20.0f, 40.0f},
+        {-20.0f, -40.0f},
+        {60.0f, 0.0f},
+        {0.0f, 60.0f},
+        {60.0f, 60.0f},
+        {60.0f, -60.0f},
+        {-60.0f, 60.0f},
+        {-60.0f, -60.0f},
+        {60.0f, 20.0f},
+        {60.0f, -20.0f},
+        {-60.0f, 20.0f},
+        {-60.0f, -20.0f},
+        {20.0f, 60.0f},
+        {20.0f, -60.0f},
+        {-20.0f, 60.0f},
+        {-20.0f, -60.0f},
+        {80.0f, 0.0f},
+        {0.0f, 80.0f},
+        {80.0f, 80.0f},
+        {80.0f, -80.0f},
+        {-80.0f, 80.0f},
+        {-80.0f, -80.0f},
+        {80.0f, 20.0f},
+        {80.0f, -20.0f},
+        {-80.0f, 20.0f},
+        {-80.0f, -20.0f},
+        {20.0f, 80.0f},
+    };
 
     // Main loop
     while (window.isOpen()) {
@@ -193,6 +231,12 @@ int main() {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
+        // Move the camera back to see the cars
+        glTranslatef(0.0f, 0.0f, -100.0f);  // Move the camera back
+        glRotatef(-35.0f, 1.0f, 0.0f, 0.0f);  // Rotate the view around the Y axis
+        glTranslatef(-carX, -carY, 0.0f);  // Move the camera to the car position
+
+        // Update car1 position and rotation
         float angleInRadians = rotationAngle * M_PI / 180.0f;
         float moveX = carSpeed * std::cos(angleInRadians);
         float moveY = carSpeed * std::sin(angleInRadians);
@@ -213,11 +257,21 @@ int main() {
         if (forward != 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             rotationAngle -= 2.0f * forward;
         }
-        glTranslatef(carX, carY, 0.0f);  // Translate the car to its position
-        glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);  // Rotate the car around the Z axis
 
-        // Render the car sprite stack
+        // Render car1
+        glPushMatrix();  // Save the current transformation matrix
+        glTranslatef(carX, carY, 0.0f);  // Translate car1 to its position
+        glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);  // Rotate car1 around the Z axis
         renderSpriteStackVAO(carVAO, carTexture, numberOfLayers);
+        glPopMatrix();  // Restore the previous transformation matrix
+
+        // Render all other cars
+        for (auto& pos : carPositions) {
+            glPushMatrix();  // Save the current transformation matrix
+            glTranslatef(pos.first, pos.second, 0.0f);  // Translate car to its position
+            renderSpriteStackVAO(carVAO, carTexture, numberOfLayers);
+            glPopMatrix();  // Restore the previous transformation matrix
+        }
 
         // Swap buffers to display the rendered image
         window.display();
@@ -231,7 +285,11 @@ int main() {
         float framerate = 1.0f / frameTime;
         framecount++;
         meanFramerate += framerate;
-        std::cout << "Frame rate: " << meanFramerate / framecount << std::endl;
+        if (framecount >= 50) {
+            sf:window.setTitle("Sprite Stacking with OpenGL - " + std::to_string(meanFramerate / framecount) + " FPS");
+            meanFramerate = 0;
+            framecount = 0;
+        }
         clock.restart();
     }
 
