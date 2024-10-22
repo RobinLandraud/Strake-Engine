@@ -23,7 +23,7 @@ void initOpenGL() {
     // Set up a perspective projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, 800.0f / 600.0f, 1.0f, 150.0f);
+    gluPerspective(45.0f, 1800.0f / 900.0f, 1.0f, 150.0f);
 }
 
 // Create the sprite stack VAO and VBOs
@@ -87,6 +87,15 @@ void renderSpriteStackVAO(GLuint vaoID, const sf::Texture& texture, int numberOf
     GLuint textureID = texture.getNativeHandle();
     glBindTexture(GL_TEXTURE_2D, textureID);
 
+    // Enable depth testing to discard hidden pixels
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);  // Render topmost visible pixels
+
+    // TO CHANGE: USE INDEPENDANT SHADER PROGRAM TO RENDER SPRITES
+    ////Enable alpha testing to discard transparent pixels
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.1f);  // Render pixels with alpha greater than 0.1
+
     // Bind the VAO
     glBindVertexArray(vaoID);
 
@@ -111,7 +120,7 @@ int main() {
     float carY = 0.0f; // Initial car Y position
     const float carSpeed = 0.5f; // Car movement speed
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Sprite Stacking with OpenGL", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1800, 900), "Sprite Stacking with OpenGL", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(false);
 
     glewExperimental = GL_TRUE;
@@ -130,7 +139,7 @@ int main() {
     sf::Sprite groundSprite;
     groundSprite.setTexture(groundTexture);
     groundSprite.setPosition(0, 0); // Set position to the bottom of the window
-    groundSprite.setScale(groundTexture.getSize().x / 800.0f, groundTexture.getSize().y / 600.0f); // Scale to window size
+    groundSprite.setScale(1800.0f / groundTexture.getSize().x, 900.0f / groundTexture.getSize().y); // Scale to window size
 
     // Initialize OpenGL settings
     initOpenGL();
@@ -160,6 +169,9 @@ int main() {
 
     sf::Clock clock; // Create a clock
     const float targetFrameTime = 1.0f / 60.0f; // Target frame time for 60 FPS
+
+    int framecount = 0;
+    int meanFramerate = 0;
 
     // Main loop
     while (window.isOpen()) {
@@ -196,10 +208,10 @@ int main() {
             forward = -1;
         }
         if (forward != 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-            rotationAngle += 1.5f * forward;
+            rotationAngle += 2.0f * forward;
         }
         if (forward != 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-            rotationAngle -= 1.5f * forward;
+            rotationAngle -= 2.0f * forward;
         }
         glTranslatef(carX, carY, 0.0f);  // Translate the car to its position
         glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);  // Rotate the car around the Z axis
@@ -213,9 +225,13 @@ int main() {
         // Limit the frame rate
         sf::Time elapsedTime = clock.getElapsedTime();
         float frameTime = elapsedTime.asSeconds();
-        if (frameTime < targetFrameTime) {
-            sf::sleep(sf::seconds(targetFrameTime - frameTime));
-        }
+        //if (frameTime < targetFrameTime) {
+        //    sf::sleep(sf::seconds(targetFrameTime - frameTime));
+        //}
+        float framerate = 1.0f / frameTime;
+        framecount++;
+        meanFramerate += framerate;
+        std::cout << "Frame rate: " << meanFramerate / framecount << std::endl;
         clock.restart();
     }
 
