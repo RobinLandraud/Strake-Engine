@@ -39,10 +39,8 @@ int main()
     gameObject.addComponent<TestComponent>();
     auto comp = gameObject.getComponent<TestComponent>();
     if (comp.has_value()) {
-        TestComponent &testComponent = comp.value().get();
+        ECS::Component &testComponent = comp.value().get();
         testComponent.awake();
-        const ECS::GameObject &parent = testComponent.getParent();
-        std::cout << parent.getName() << std::endl;
     }
 
     ECS::Window window(800, 600, "Window");
