@@ -23,7 +23,12 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 # Add include directory for ECS
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ECS/include)
 
+cmake_policy(SET CMP0072 NEW) # FindOpenGL prefers GLVND by default when available
+
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+find_package(Threads REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_subdirectory(ECS)
 

@@ -2,6 +2,8 @@
 // include sfml events
 #include <SFML/Window/Event.hpp>
 
+#include <iostream>
+
 namespace ECS
 {
     std::unique_ptr<EventHandler> EventHandler::m_instance = nullptr;
@@ -14,6 +16,12 @@ namespace ECS
         m_mouse({0, 0, false, false, false, 0}),
         m_window(window)
     {
+        glfwSetWindowUserPointer(m_window.getGLFWWindow(), this);
+        glfwSetKeyCallback(m_window.getGLFWWindow(), keyCallback);
+        glfwSetMouseButtonCallback(m_window.getGLFWWindow(), mouseButtonCallback);
+        glfwSetCursorPosCallback(m_window.getGLFWWindow(), cursorPosCallback);
+        glfwSetScrollCallback(m_window.getGLFWWindow(), scrollCallback);
+        glfwSetWindowCloseCallback(m_window.getGLFWWindow(), windowCloseCallback);
     }
 
     EventHandler::~EventHandler()
@@ -46,76 +54,7 @@ namespace ECS
         eventHandler.m_keysPressed.clear();
         eventHandler.m_keysReleased.clear();
         eventHandler.m_mouse.wheel = 0;
-
-        while (eventHandler.m_window.getRenderWindow().pollEvent(event))
-        {
-            if (eventHandler.m_eventTypes.find(event.type) != eventHandler.m_eventTypes.end()) {
-                eventHandler.m_events.push_back(eventHandler.m_eventTypes.at(event.type));
-                if (event.type == sf::Event::MouseMoved) //update mouse position
-                {
-                    eventHandler.m_mouse.x = event.mouseMove.x;
-                    eventHandler.m_mouse.y = event.mouseMove.y;
-                }
-                else if (event.type == sf::Event::MouseButtonPressed) //update mouse button
-                {
-                    switch (event.mouseButton.button)
-                    {
-                        case sf::Mouse::Left:
-                            eventHandler.m_mouse.left = true;
-                            break;
-                        case sf::Mouse::Right:
-                            eventHandler.m_mouse.right = true;
-                            break;
-                        case sf::Mouse::Middle:
-                            eventHandler.m_mouse.middle = true;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (event.type == sf::Event::MouseButtonReleased) //update mouse button
-                {
-                    switch (event.mouseButton.button)
-                    {
-                        case sf::Mouse::Left:
-                            eventHandler.m_mouse.left = false;
-                            break;
-                        case sf::Mouse::Right:
-                            eventHandler.m_mouse.right = false;
-                            break;
-                        case sf::Mouse::Middle:
-                            eventHandler.m_mouse.middle = false;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (event.type == sf::Event::MouseWheelScrolled) //update mouse scroll
-                {
-                    eventHandler.m_mouse.wheel = event.mouseWheelScroll.delta;
-                }
-                else if (event.type == sf::Event::KeyPressed) // update key pressed
-                {
-                    if (eventHandler.m_keys.find(event.key.code) != eventHandler.m_keys.end())
-                    {
-                        eventHandler.m_keysPressed.push_back(eventHandler.m_keys.at(event.key.code));
-                        eventHandler.m_keyHeld.push_back(eventHandler.m_keys.at(event.key.code));
-                    }
-                }
-                else if (event.type == sf::Event::KeyReleased) // update key released
-                {
-                    if (eventHandler.m_keys.find(event.key.code) != eventHandler.m_keys.end())
-                    {
-                        eventHandler.m_keysReleased.push_back(eventHandler.m_keys.at(event.key.code));
-                        auto it = std::find(eventHandler.m_keyHeld.begin(), eventHandler.m_keyHeld.end(), eventHandler.m_keys.at(event.key.code));
-                        if (it != eventHandler.m_keyHeld.end())
-                        {
-                            eventHandler.m_keyHeld.erase(it);
-                        }
-                    }
-                }
-            }
-        }
+        glfwPollEvents();
     }
 
     bool EventHandler::hasEvent(EventType event)
@@ -146,5 +85,83 @@ namespace ECS
     {
         EventHandler &eventHandler = getInstance();
         return eventHandler.m_mouse;
+    }
+
+    void EventHandler::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        if (action == GLFW_PRESS)
+        {
+            handler->m_keysPressed.push_back(static_cast<Key>(key));
+            handler->m_keyHeld.push_back(static_cast<Key>(key));
+            handler->m_events.push_back(EventType::KeyPressed);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            handler->m_keysReleased.push_back(static_cast<Key>(key));
+            handler->m_keyHeld.erase(std::remove(handler->m_keyHeld.begin(), handler->m_keyHeld.end(), static_cast<Key>(key)), handler->m_keyHeld.end());
+            handler->m_events.push_back(EventType::KeyReleased);
+        }
+    }
+
+    void EventHandler::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+    {
+        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        if (action == GLFW_PRESS)
+        {
+            handler->m_events.push_back(EventType::MouseButtonPressed);
+            switch (button)
+            {
+                case GLFW_MOUSE_BUTTON_LEFT:
+                    handler->m_mouse.left = true;
+                    break;
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    handler->m_mouse.right = true;
+                    break;
+                case GLFW_MOUSE_BUTTON_MIDDLE:
+                    handler->m_mouse.middle = true;
+                    break;
+                default:
+                    break;
+            }
+        } else if (action == GLFW_RELEASE)
+        {
+            handler->m_events.push_back(EventType::MouseButtonReleased);
+            switch (button)
+            {
+                case GLFW_MOUSE_BUTTON_LEFT:
+                    handler->m_mouse.left = false;
+                    break;
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    handler->m_mouse.right = false;
+                    break;
+                case GLFW_MOUSE_BUTTON_MIDDLE:
+                    handler->m_mouse.middle = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    void EventHandler::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+    {
+        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        handler->m_events.push_back(EventType::MouseMoved);
+        handler->m_mouse.x = static_cast<float>(xpos);
+        handler->m_mouse.y = static_cast<float>(ypos);
+    }
+
+    void EventHandler::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+    {
+        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        handler->m_events.push_back(EventType::MouseWheelScrolled);
+        handler->m_mouse.wheel = static_cast<float>(yoffset);
+    }
+
+    void EventHandler::windowCloseCallback(GLFWwindow* window)
+    {
+        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        handler->m_events.push_back(EventType::Closed);
     }
 }

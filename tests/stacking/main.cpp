@@ -6,6 +6,94 @@
 #include <SFML/Window.hpp>
 #include <vector>
 #include <cmath>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+class Camera {
+    public:
+        Camera(float fov, float aspectRatio, float nearPlane, float farPlane) :
+            fov(fov), aspectRatio(aspectRatio), nearPlane(nearPlane), farPlane(farPlane),
+            posX(0.0f), posY(0.0f), posZ(0.0f),
+            pitch(0.0f), yaw(0.0f), roll(0.0f) {}
+
+        void setPerspective(float fov, float aspectRatio, float nearPlane, float farPlane) {
+            this->fov = fov;
+            this->aspectRatio = aspectRatio;
+            this->nearPlane = nearPlane;
+            this->farPlane = farPlane;
+        }
+
+        void applyPerspective() {
+            glMatrixMode(GL_PROJECTION); // Switch to projection matrix
+            glLoadIdentity();
+            gluPerspective(fov, aspectRatio, nearPlane, farPlane);
+            glMatrixMode(GL_MODELVIEW); // Switch back to modelview matrix
+            updateFrustum();
+        }
+
+        void setPosition(float x, float y, float z) {
+            posX = x;
+            posY = y;
+            posZ = z;
+        }
+        void setRotation(float pitch, float yaw, float roll) {
+            this->pitch = pitch;
+            this->yaw = yaw;
+            this->roll = roll;
+        }
+        void move(float dx, float dy, float dz) {
+            posX += dx;
+            posY += dy;
+            posZ += dz;
+        }
+        void rotate(float dpitch, float dyaw, float droll) {
+            pitch += dpitch;
+            yaw += dyaw;
+            roll += droll;
+        }
+
+        void applyTransformations() {
+            glLoadIdentity();
+            glRotatef(pitch, 1.0f, 0.0f, 0.0f);
+            glRotatef(roll, 0.0f, 0.0f, 1.0f);
+            glRotatef(yaw, 0.0f, 1.0f, 0.0f);
+            glTranslatef(posX, posY, posZ);
+            updateFrustum();
+        }
+
+        void applyTrasformationWithoutFrustum() {
+            glLoadIdentity();
+            glRotatef(pitch, 1.0f, 0.0f, 0.0f);
+            glRotatef(roll, 0.0f, 0.0f, 1.0f);
+            glRotatef(yaw, 0.0f, 1.0f, 0.0f);
+            glTranslatef(posX, posY, posZ);
+        }
+
+        void printPosition() {
+            std::cout << "Camera position: (" << posX << ", " << posY << ", " << posZ << ")" << std::endl;
+        }
+
+        void printFrustum() {
+        }
+
+        void updateFrustum()
+        {
+        }
+
+        bool isInFrustum(float x, float y, float z, float radius) {
+            return true;
+        }
+
+    private:
+        float fov;
+        float aspectRatio;
+        float nearPlane;
+        float farPlane;
+
+        float posX, posY, posZ;
+        float pitch, yaw, roll;
+};
 
 // Function to set up OpenGL
 void initOpenGL() {
@@ -26,7 +114,6 @@ void initOpenGL() {
     // Set up a perspective projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, 1800.0f / 900.0f, 1.0f, 150.0f);
 }
 
 // Create the sprite stack VAO and VBOs
@@ -135,6 +222,8 @@ int main() {
 
     // Initialize OpenGL settings
     initOpenGL();
+    Camera camera(45.0f, 1800.0f / 900.0f, 1.0f, 200.0f);
+    camera.applyPerspective();
 
     // Load the car sprite texture (sprite sheet)
     sf::Texture carTexture;
@@ -229,12 +318,24 @@ int main() {
 
         // Set up the modelview matrix
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+        glLoadIdentity(); // Reset the modelview matrix
 
         // Move the camera back to see the cars
-        glTranslatef(0.0f, 0.0f, -100.0f);  // Move the camera back
-        glRotatef(-35.0f, 1.0f, 0.0f, 0.0f);  // Rotate the view around the Y axis
-        glTranslatef(-carX, -carY, 0.0f);  // Move the camera to the car position
+        //glTranslatef(0.0f, 0.0f, -100.0f);  // Move the camera back
+        //glRotatef(-35.0f, 1.0f, 0.0f, 0.0f);  // Rotate the view around the Y axis
+        //glTranslatef(-carX, -carY, 0.0f);  // Move the camera to the car position
+
+        // Apply camera transformations
+        camera.setPosition(-carX, -carY, -50.0f);
+        //camera.setRotation(-35.0f, 0.0f, 0.0f);
+        camera.applyTransformations();
+        camera.setPosition(0, 0, -150.0f);
+        camera.applyTrasformationWithoutFrustum();
+
+        // Bind the car texture and VAO once
+        GLuint carTextureID = carTexture.getNativeHandle();
+        glBindTexture(GL_TEXTURE_2D, carTextureID);
+        glBindVertexArray(carVAO);
 
         // Update car1 position and rotation
         float angleInRadians = rotationAngle * M_PI / 180.0f;
@@ -267,11 +368,18 @@ int main() {
 
         // Render all other cars
         for (auto& pos : carPositions) {
+            if (!camera.isInFrustum(pos.first, pos.second, 0.0f, 10.0f)) {
+                continue;  // Skip rendering if the car is outside the camera frustum
+            }
             glPushMatrix();  // Save the current transformation matrix
             glTranslatef(pos.first, pos.second, 0.0f);  // Translate car to its position
             renderSpriteStackVAO(carVAO, carTexture, numberOfLayers);
             glPopMatrix();  // Restore the previous transformation matrix
         }
+
+        // Unbind the VAO and texture
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         // Swap buffers to display the rendered image
         window.display();
@@ -279,18 +387,19 @@ int main() {
         // Limit the frame rate
         sf::Time elapsedTime = clock.getElapsedTime();
         float frameTime = elapsedTime.asSeconds();
-        //if (frameTime < targetFrameTime) {
-        //    sf::sleep(sf::seconds(targetFrameTime - frameTime));
-        //}
         float framerate = 1.0f / frameTime;
         framecount++;
         meanFramerate += framerate;
         if (framecount >= 50) {
-            sf:window.setTitle("Sprite Stacking with OpenGL - " + std::to_string(meanFramerate / framecount) + " FPS");
+            window.setTitle("Sprite Stacking with OpenGL - " + std::to_string(meanFramerate / framecount) + " FPS");
             meanFramerate = 0;
             framecount = 0;
         }
         clock.restart();
+
+        //print camera center
+        camera.printPosition();
+        camera.printFrustum();
     }
 
     // Cleanup

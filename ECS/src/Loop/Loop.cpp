@@ -65,6 +65,7 @@ namespace ECS {
     void Loop::stop()
     {
         m_isRunning = false;
+        glfwTerminate();
     }
 
     void Loop::start(Window& window)

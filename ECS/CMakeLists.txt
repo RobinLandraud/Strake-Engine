@@ -7,6 +7,10 @@ project(ECS)
 include_directories(include)
 
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+find_package(Threads REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(glfw3 REQUIRED)
 
 add_library(Time STATIC src/Time/Time.cpp)
 add_library(Loop STATIC src/Loop/Loop.cpp)
@@ -25,6 +29,11 @@ target_link_libraries(Window PUBLIC
     sfml-system
     sfml-window
     sfml-graphics
+    Threads::Threads
+    GLEW::GLEW
+    OpenGL::GL
+    OpenGL::GLU
+    glfw
 ) # Window depends on SFML
 
 add_library(ECS STATIC

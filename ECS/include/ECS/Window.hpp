@@ -1,4 +1,9 @@
 #include "SFML/Graphics.hpp"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <stdexcept>
+#include <memory>
+#include <string>
 
 #pragma once
 
@@ -21,9 +26,9 @@ namespace ECS
             bool isOpen() const;
             void clear();
             void display();
-            sf::RenderWindow& getRenderWindow();
+            GLFWwindow *getGLFWWindow();
 
         private:
-            sf::RenderWindow m_window;
+            std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> m_window;
     };
 }
