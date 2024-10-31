@@ -1,8 +1,6 @@
-#include <iostream>
 #include <ECS/Component.hpp>
 
 namespace ECS {
-
     Component::Component(
         const GameObject &parent
         )
@@ -19,6 +17,4 @@ namespace ECS {
     const GameObject &Component::getParent() const {
         return r_parent;
     }
-
-    //can be moved
 }

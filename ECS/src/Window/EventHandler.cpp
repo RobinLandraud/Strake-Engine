@@ -1,8 +1,4 @@
 #include <ECS/EventHandler.hpp>
-// include sfml events
-#include <SFML/Window/Event.hpp>
-
-#include <iostream>
 
 namespace ECS
 {
@@ -49,7 +45,6 @@ namespace ECS
     void EventHandler::update()
     {
         EventHandler &eventHandler = getInstance();
-        sf::Event event;
         eventHandler.m_events.clear();
         eventHandler.m_keysPressed.clear();
         eventHandler.m_keysReleased.clear();

@@ -1,10 +1,10 @@
 #pragma once
 #include <ECS/GameObject.hpp>
 #include <memory>
+#include <optional>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
-#include <optional>
 
 namespace ECS {
     class Component {

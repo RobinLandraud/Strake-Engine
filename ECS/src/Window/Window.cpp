@@ -1,6 +1,4 @@
 #include <ECS/Window.hpp>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 namespace ECS
 {
@@ -12,8 +10,8 @@ namespace ECS
         }
         glewInit();
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ECS_GLFW_VERSION_MAJOR);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ECS_GLFW_VERSION_MINOR);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         m_window.reset(glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr));
         if (!m_window)

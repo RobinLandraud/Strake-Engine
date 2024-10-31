@@ -1,11 +1,10 @@
-#include "SFML/Graphics.hpp"
+#pragma once
+#include <ECS/Config.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <stdexcept>
 #include <memory>
+#include <stdexcept>
 #include <string>
-
-#pragma once
 
 namespace ECS
 {
@@ -23,7 +22,7 @@ namespace ECS
             Window(Window&&) = delete; // move constructor is deleted
 
             void close();
-            bool isOpen() const;
+            [[nodiscard]] bool isOpen() const;
             void clear();
             void display();
             GLFWwindow *getGLFWWindow();

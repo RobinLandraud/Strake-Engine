@@ -1,7 +1,6 @@
+#pragma once
 #include <chrono>
 #include <memory>
-
-#pragma once
 
 namespace ECS {
     class Time {

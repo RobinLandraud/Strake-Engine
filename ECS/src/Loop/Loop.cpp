@@ -1,5 +1,4 @@
 #include <ECS/Loop.hpp>
-#include <iostream>
 
 namespace ECS {
     Loop::Loop(int fps)

@@ -1,17 +1,21 @@
 #pragma once
 #include <memory>
+#include <optional>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
-#include <optional>
 
 namespace ECS {
     class Component;
 
     class GameObject {
         public:
-            GameObject(const std::string &name);
+            explicit GameObject(const std::string &name);
             ~GameObject();
+            GameObject(const GameObject&) = delete;
+            GameObject& operator=(const GameObject&) = delete;
+            GameObject& operator=(GameObject&&) = delete;
+            GameObject(GameObject&&) = delete;
 
             [[nodiscard]] const std::string &getName() const;
             

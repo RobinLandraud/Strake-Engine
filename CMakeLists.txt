@@ -2,7 +2,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 # Project's name
-PROJECT("Ghost.out" VERSION 0.1 LANGUAGES CXX)
+PROJECT("Strake.out" VERSION 0.1.0 LANGUAGES CXX)
 
 # Specify the C++ standard
 SET(CMAKE_CXX_STANDARD 20)
@@ -25,7 +25,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ECS/include)
 
 cmake_policy(SET CMP0072 NEW) # FindOpenGL prefers GLVND by default when available
 
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED) # will be removed update to GLFW
 find_package(Threads REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)

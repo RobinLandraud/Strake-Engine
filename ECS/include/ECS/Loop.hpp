@@ -1,8 +1,8 @@
+#pragma once
 #include <ECS/EventHandler.hpp>
 #include <ECS/Time.hpp>
 #include <chrono>
-
-#pragma once
+#include <iostream>
 
 namespace ECS {
     class Loop {
