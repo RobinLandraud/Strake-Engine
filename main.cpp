@@ -96,10 +96,11 @@ int main()
     ECS::ShaderProgram shaderProgram("ECS/src/Shader/glsl/texture2D/vertex.glsl", "ECS/src/Shader/glsl/texture2D/fragment.glsl");
     shaderProgram.use();
     shaderProgram.setUniform("ourTexture", 0);
-    glm::mat4 projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1000.0f / 800.0f, 0.1f, 100.0f); // Perspective projection
     shaderProgram.setUniform("projection", projection);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f)); // Move back along Z-axis
+    shaderProgram.setUniform("view", view);
     shaderProgram.setUniform("model", glm::mat4(1.0f)); // Identity matrix for model matrix
-    shaderProgram.setUniform("view", glm::mat4(1.0f)); // Identity matrix for view matrix
 
     //ECS::Loop loop(60);
     //loop.run(window);
@@ -116,7 +117,7 @@ int main()
 
         glActiveTexture(GL_TEXTURE0);
         texture.bind();
-        
+
         error = glGetError();
         if (error != GL_NO_ERROR) {
             std::cout << "Error texture bind: " << error << std::endl;
