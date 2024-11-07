@@ -32,11 +32,16 @@ namespace ECS {
             }
 
             template<typename T>
-            std::optional<std::reference_wrapper<T>> getComponent() const {
+            std::optional<std::reference_wrapper<T>> findComponent() const {
                 if (m_components.find(typeid(T)) == m_components.end()) {
                     return std::nullopt;
                 }
                 return std::ref(static_cast<T&>(*m_components.at(typeid(T))));
+            }
+
+            template<typename T>
+            T &getComponent() const {
+                return static_cast<T&>(*m_components.at(typeid(T)));
             }
 
             template<typename T>

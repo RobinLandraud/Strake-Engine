@@ -10,7 +10,7 @@ namespace ECS {
     class Component {
         public:
             explicit Component(
-                const GameObject &parent
+                GameObject &parent
             );
             virtual ~Component() = default;
             virtual void awake();
@@ -20,9 +20,9 @@ namespace ECS {
             virtual void lateUpdate();
             virtual void render();
 
-            [[nodiscard]] const GameObject &getParent() const;
+            [[nodiscard]] GameObject &getParent() const;
 
         private:
-            const GameObject &r_parent;
+            GameObject &r_parent;
     };
 }

@@ -1,4 +1,5 @@
 #include <ECS/Component.hpp>
+#include <ECS/Transform.hpp>
 #include <ECS/Config.hpp>
 #include <ECS/Loop.hpp>
 #include <ECS/init.hpp>
@@ -63,7 +64,7 @@ class TestComponent : public ECS::Component
             test += 1;
             std::cout << "TestComponent awake" << std::endl;
             std::cout << getParent().getName() << std::endl;
-            TestComponent &testComponent = getParent().getComponent<TestComponent>().value().get();
+            TestComponent &testComponent = getParent().getComponent<TestComponent>();
             std::cout << testComponent.test << std::endl;
         }
     private:
@@ -80,11 +81,13 @@ int main()
     GLuint error = 0;
 
     ECS::GameObject gameObject("GameObject");
-    gameObject.addComponent<TestComponent>();
-    auto comp = gameObject.getComponent<TestComponent>();
+    gameObject.addComponent<ECS::Transform>();
+    auto comp = gameObject.findComponent<ECS::Transform>();
     if (comp.has_value()) {
-        ECS::Component &testComponent = comp.value().get();
-        testComponent.awake();
+        ECS::Transform &transform = comp.value().get();
+        std::cout << transform.getPosition().x << std::endl;
+        std::cout << transform.getPosition().y << std::endl;
+        std::cout << transform.getPosition().z << std::endl;
     }
 
     ECS::Texture2D texture("tests/stacking/sprites/grass.png");
@@ -100,7 +103,7 @@ int main()
     shaderProgram.setUniform("projection", projection);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f)); // Move back along Z-axis
     shaderProgram.setUniform("view", view);
-    shaderProgram.setUniform("model", glm::mat4(1.0f)); // Identity matrix for model matrix
+    shaderProgram.setUniform("model", gameObject.getComponent<ECS::Transform>().getMatrix());
 
     //ECS::Loop loop(60);
     //loop.run(window);

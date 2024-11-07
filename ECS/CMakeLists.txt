@@ -53,4 +53,14 @@ add_library(ECS STATIC
     "src/init.cpp"
 )
 
-target_link_libraries(ECS PUBLIC Config Time Texture Shader Loop Window EventHandler Component)
+target_link_libraries(ECS PUBLIC
+    Config
+    Time
+    Texture
+    Shader
+    Loop
+    Window
+    EventHandler
+    Component
+    Transform
+)

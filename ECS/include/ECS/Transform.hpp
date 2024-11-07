@@ -7,7 +7,7 @@ namespace ECS {
     {
         public:
             using ECS::Component::Component;
-            void lateUpdate() override; // update matrix
+            virtual void lateUpdate() final; // update matrix
 
             void setPosition(const glm::vec3 &position);
             void setRotation(const glm::vec3 &rotation);

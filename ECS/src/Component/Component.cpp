@@ -2,7 +2,7 @@
 
 namespace ECS {
     Component::Component(
-        const GameObject &parent
+        GameObject &parent
         )
         : r_parent(parent)
     {}
@@ -14,7 +14,7 @@ namespace ECS {
     void Component::lateUpdate() {}
     void Component::render() {}
 
-    const GameObject &Component::getParent() const {
+    GameObject &Component::getParent() const {
         return r_parent;
     }
 }

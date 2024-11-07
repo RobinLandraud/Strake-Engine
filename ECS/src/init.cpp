@@ -9,7 +9,7 @@
 } while (0)
 
 int ECS::init() {
-    //GL_CHECK(glEnable(GL_DEPTH_TEST)); // Enable depth testing for 3D rendering (occlusion culling)
+    GL_CHECK(glEnable(GL_DEPTH_TEST)); // Enable depth testing for 3D rendering (occlusion culling)
     GL_CHECK(glDepthFunc(GL_LEQUAL)); // Set depth function to less than or equal to
     //GL_CHECK(glEnable(GL_TEXTURE_2D)); // wil be replaced with sampler2D in shader
     GL_CHECK(glEnable(GL_BLEND)); // Enable blending
