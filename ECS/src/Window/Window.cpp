@@ -8,8 +8,6 @@ namespace ECS
         if (!glfwInit()) {
             throw std::runtime_error("Failed to initialize GLFW");
         }
-        glewInit();
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ECS_GLFW_VERSION_MAJOR);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ECS_GLFW_VERSION_MINOR);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -27,6 +25,15 @@ namespace ECS
         }
         glfwGetFramebufferSize(m_window.get(), &width, &height);
         glViewport(0, 0, width, height);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        //if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
+        //{
+        //    throw std::runtime_error("Failed to initialize GLAD");
+        //    glfwDestroyWindow(m_window.get()); // Free resources for window
+        //    glfwTerminate(); // Free resources
+        //}
     }
 
     Window::~Window()

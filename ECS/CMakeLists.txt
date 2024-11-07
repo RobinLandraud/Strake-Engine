@@ -14,6 +14,15 @@ find_package(glfw3 REQUIRED)
 
 add_library(Config STATIC src/Config/Config.cpp)
 add_library(Time STATIC src/Time/Time.cpp)
+add_library(Texture STATIC
+    src/Texture/Texture.cpp
+    src/Texture/Texture2D.cpp
+    src/Texture/Texture3D.cpp
+)
+add_library(Shader STATIC
+    src/Shader/Shader.cpp
+    src/Shader/ShaderProgram.cpp
+)
 add_library(Loop STATIC src/Loop/Loop.cpp)
 add_library(Window STATIC src/Window/Window.cpp)
 add_library(EventHandler STATIC src/Window/EventHandler.cpp)
@@ -42,4 +51,4 @@ add_library(ECS STATIC
     "src/init.cpp"
 )
 
-target_link_libraries(ECS PUBLIC Config Time Loop Window EventHandler Component)
+target_link_libraries(ECS PUBLIC Config Time Texture Shader Loop Window EventHandler Component)
