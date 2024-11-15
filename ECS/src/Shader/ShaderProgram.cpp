@@ -79,7 +79,7 @@ namespace ECS {
         }
     }
 
-    void ShaderProgram::setUniform(const std::string &name, const float value) {
+    void ShaderProgram::setUniform(const std::string &name, float value) {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
             std::cerr << "Failed to find uniform: " << name << std::endl;
@@ -92,7 +92,7 @@ namespace ECS {
         }
     }
 
-    void ShaderProgram::setUniform(const std::string &name, const int value) {
+    void ShaderProgram::setUniform(const std::string &name, int value) {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
             std::cerr << "Failed to find uniform: " << name << std::endl;

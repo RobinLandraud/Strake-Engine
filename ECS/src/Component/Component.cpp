@@ -5,7 +5,8 @@ namespace ECS {
         GameObject &parent
         )
         : r_parent(parent)
-    {}
+    {
+    }
 
     void Component::awake() {}
     void Component::start() {}

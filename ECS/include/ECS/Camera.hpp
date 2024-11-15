@@ -1,15 +1,15 @@
+#include <ECS/Component.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <ECS/Component.hpp>
 
 namespace ECS {
     class Camera : public Component
     {
         public:
             using ECS::Component::Component;
-            
-            virtual void lateUpdate() final; // update matrix
-            
+
+            void lateUpdate() final; // update matrix
+
             void setProjection(float fov, float aspect, float near, float far);
             void setPosition(const glm::vec3 &position);
             void setFront(const glm::vec3 &front);

@@ -30,6 +30,7 @@ add_library(GameObject STATIC src/GameObject/GameObject.cpp)
 add_library(Component STATIC src/Component/Component.cpp)
 add_library(Transform STATIC src/Component/Transform.cpp)
 add_library(Camera STATIC src/Component/Camera.cpp)
+add_library(Script STATIC src/Component/Script.cpp)
 
 # dependencies for the libraries
 target_link_libraries(Window PUBLIC Config)
@@ -40,6 +41,7 @@ target_link_libraries(Component PUBLIC GameObject)
 
 target_link_libraries(Transform PUBLIC Component)
 target_link_libraries(Camera PUBLIC Component)
+target_link_libraries(Script PUBLIC Component)
 
 target_link_libraries(Window PUBLIC
     sfml-system
@@ -67,4 +69,5 @@ target_link_libraries(ECS PUBLIC
     Component
     Transform
     Camera
+    Script
 )

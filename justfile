@@ -5,4 +5,4 @@ format:
 build-prod:
     - rm -f Ghost && mkdir -p ./build && rm -rf ./build/* && cd build && cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release && ninja && cd ..    
 tidy:
-    - clang-tidy -p="./build" main.cpp -header-filter=".*"
+    - find . -type f \( -name "*.cpp" -o -name "*.hpp" \) ! -path "./build/*" ! -path "./ECS/include/third_party/*" ! -path "./CMakeFiles/*" ! -path "./tests/*" | xargs clang-tidy -p="./build" -header-filter=".*"

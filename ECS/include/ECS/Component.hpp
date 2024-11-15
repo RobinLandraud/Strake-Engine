@@ -18,7 +18,8 @@ namespace ECS {
             virtual void update();
             virtual void fixedUpdate();
             virtual void lateUpdate();
-            virtual void render();
+
+            virtual void render(); // not accessible from certain inherited classes like Camera, Script, etc.
 
             [[nodiscard]] GameObject &getParent() const;
 

@@ -4,6 +4,7 @@
 #include <string>
 #include <typeindex>
 #include <unordered_map>
+#include <vector>
 
 namespace ECS {
     class Component;
@@ -53,8 +54,47 @@ namespace ECS {
                 return true;
             }
 
+            void addChild(const std::string &name);
+            bool removeChild(const std::string &name);
+            GameObject &getChild(const std::string &name);
+            std::optional<std::reference_wrapper<GameObject>> findChild(const std::string &name);
+
+            template<typename T>
+            T &getComponentInChildren() {
+                for (auto &child : m_children) {
+                    auto component = child.second->findComponent<T>();
+                    if (component.has_value()) {
+                        return component.value().get();
+                    }
+                }
+            }
+
+            template<typename T>
+            std::vector<std::reference_wrapper<T>> getComponentsInChildren() {
+                std::vector<std::reference_wrapper<T>> components;
+                for (auto &child : m_children) {
+                    auto component = child.second->findComponent<T>();
+                    if (component.has_value()) {
+                        components.push_back(component.value().get());
+                    }
+                }
+                return components;
+            }
+
+            template<typename T>
+            std::optional<std::reference_wrapper<T>> findComponentInChildren() {
+                for (auto &child : m_children) {
+                    auto component = child.second->findComponent<T>();
+                    if (component.has_value()) {
+                        return component;
+                    }
+                }
+                return std::nullopt;
+            }
+
         private:
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
+            std::unordered_map<std::string, std::unique_ptr<GameObject>> m_children;
             const std::string m_name;
     };
 }
