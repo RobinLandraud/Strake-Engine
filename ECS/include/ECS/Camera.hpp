@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <ECS/Component.hpp>
 
 namespace ECS {
     class Camera : public Component
@@ -24,8 +25,8 @@ namespace ECS {
             void setNear(float near);
             void setFar(float far);
             
-            [[nodiscard]] glm::mat4 getViewMatrix(); // get the view matrix at this frame. deprecated if transform is not updated
-            [[nodiscard]] glm::mat4 getProjectionMatrix(); // get the projection matrix at this frame. deprecated if transform is not updated
+            [[nodiscard]] const glm::mat4 &getViewMatrix() const; // get the view matrix at this frame. deprecated if transform is not updated
+            [[nodiscard]] const glm::mat4 &getProjectionMatrix() const; // get the projection matrix at this frame. deprecated if transform is not updated
             [[nodiscard]] const glm::vec3 &getPosition() const; // get the position at this tick
             [[nodiscard]] const glm::vec3 &getFront() const; // get the front at this tick
             [[nodiscard]] const glm::vec3 &getUp() const; // get the up at this tick
@@ -38,11 +39,14 @@ namespace ECS {
             [[nodiscard]] float getFar() const; // get the far at this tick
         
         private:
-            void updateMatrix();
+            void updateViewMatrix();
+            void updateProjectionMatrix();
 
             // model matrix
             glm::mat4 m_viewMatrix = glm::mat4(1.0f);
             glm::mat4 m_projectionMatrix = glm::mat4(1.0f);
+            bool m_viewNeedUpdate = false;
+            bool m_projectionNeedUpdate = false;
 
             // position
             glm::vec3 m_position = glm::vec3(0.0f);
@@ -57,10 +61,10 @@ namespace ECS {
             float m_yaw = 0.0f;
 
             // projection matrix
-            float fov = 45.0f;
-            float aspect = 1.0f;
-            float near = 0.1f;
-            float far = 100.0f;
+            float m_fov = 45.0f;
+            float m_aspect = 1.0f;
+            float m_near = 0.1f;
+            float m_far = 100.0f;
 
             bool needUpdate = false;
     };

@@ -5,6 +5,7 @@
 #include <ECS/init.hpp>
 #include <ECS/Shaders.hpp>
 #include <ECS/Textures.hpp>
+#include <ECS/Camera.hpp>
 #include <iostream>
 
 // f() const means that the function does not modify any member variables.
@@ -73,22 +74,21 @@ class TestComponent : public ECS::Component
 
 int main()
 {
+    GLuint error = 0;
+
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
+
     ECS::Window window(1000, 800, "Strake Engine V0.1.0");
     ECS::init();
 
-    GLuint error = 0;
+    ECS::GameObject mainCamera("Main Camera");
+    mainCamera.addComponent<ECS::Camera>();
+    mainCamera.getComponent<ECS::Camera>().setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
+    mainCamera.getComponent<ECS::Camera>().setPosition(glm::vec3(0.0f, 0.0f, -3.0f));
 
-    ECS::GameObject gameObject("GameObject");
-    gameObject.addComponent<ECS::Transform>();
-    auto comp = gameObject.findComponent<ECS::Transform>();
-    if (comp.has_value()) {
-        ECS::Transform &transform = comp.value().get();
-        std::cout << transform.getPosition().x << std::endl;
-        std::cout << transform.getPosition().y << std::endl;
-        std::cout << transform.getPosition().z << std::endl;
-    }
+    ECS::GameObject planeObject("plane");
+    planeObject.addComponent<ECS::Transform>();
 
     ECS::Texture2D texture("tests/stacking/sprites/grass.png");
     if (!texture.isLoaded()) {
@@ -98,12 +98,10 @@ int main()
 
     ECS::ShaderProgram shaderProgram("ECS/src/Shader/glsl/texture2D/vertex.glsl", "ECS/src/Shader/glsl/texture2D/fragment.glsl");
     shaderProgram.use();
-    shaderProgram.setUniform("ourTexture", 0);
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1000.0f / 800.0f, 0.1f, 100.0f); // Perspective projection
-    shaderProgram.setUniform("projection", projection);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f)); // Move back along Z-axis
-    shaderProgram.setUniform("view", view);
-    shaderProgram.setUniform("model", gameObject.getComponent<ECS::Transform>().getMatrix());
+    shaderProgram.setUniform("textureSampler", 0);
+    shaderProgram.setUniform("projection", mainCamera.getComponent<ECS::Camera>().getProjectionMatrix());
+    shaderProgram.setUniform("view", mainCamera.getComponent<ECS::Camera>().getViewMatrix());
+    shaderProgram.setUniform("model", planeObject.getComponent<ECS::Transform>().getMatrix());
 
     //ECS::Loop loop(60);
     //loop.run(window);
@@ -126,6 +124,11 @@ int main()
             std::cout << "Error texture bind: " << error << std::endl;
         }
         glBindVertexArray(vao);
+        //rotate the square
+        planeObject.getComponent<ECS::Transform>().rotate(glm::vec3(0.0f, 0.0f, 0.01f));
+        planeObject.getComponent<ECS::Transform>().lateUpdate();
+        shaderProgram.setUniform("model", planeObject.getComponent<ECS::Transform>().getMatrix());
+
         error = glGetError();
         if (error != GL_NO_ERROR) {
             std::cout << "Error bind vertex array: " << error << std::endl;
