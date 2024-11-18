@@ -11,7 +11,7 @@ namespace ECS {
 
     class GameObject {
         public:
-            explicit GameObject(const std::string &name);
+            explicit GameObject(std::string name);
             ~GameObject();
             GameObject(const GameObject&) = delete;
             GameObject& operator=(const GameObject&) = delete;

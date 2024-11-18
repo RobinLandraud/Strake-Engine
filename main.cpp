@@ -4,9 +4,12 @@
 #include <ECS/Loop.hpp>
 #include <ECS/Script.hpp>
 #include <ECS/Shaders.hpp>
-#include <ECS/Textures.hpp>
+#include <ECS/Material.hpp>
 #include <ECS/Transform.hpp>
+#include <ECS/MeshFilter.hpp>
+#include <ECS/MeshRenderer.hpp>
 #include <ECS/init.hpp>
+#include <array>
 #include <iostream>
 
 // f() const means that the function does not modify any member variables.
@@ -28,14 +31,14 @@
 
 void createSquareVAO(GLuint &vao, GLuint &vbo)
 {
-    float vertices[] = {
+    std::array<float, 30> vertices = {
         // Positions        // Texture Coords
         -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
-         0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
+        0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
+        0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
 
         -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
-         0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
+        0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
         -0.5f,  0.5f, 0.0f,  0.0f, 1.0f
     };
 
@@ -44,14 +47,14 @@ void createSquareVAO(GLuint &vao, GLuint &vbo)
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
     glEnableVertexAttribArray(0);
 
     // Texture Coordinate attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -78,7 +81,7 @@ class PlaneRotator : public ECS::Script
     public:
         using ECS::Script::Script;
         void update() override {
-            getParent().getComponent<ECS::Transform>().rotate(glm::vec3(0.0f, 0.0f, 0.01f));
+            getParent().getComponent<ECS::Transform>().rotate(glm::vec3(0.012f, 0.010f, 0.008f));
         }
 };
 
@@ -95,21 +98,164 @@ int main()
     ECS::GameObject mainCamera("Main Camera");
     mainCamera.addComponent<ECS::Camera>();
     mainCamera.getComponent<ECS::Camera>().setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
-    mainCamera.getComponent<ECS::Camera>().setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+    mainCamera.getComponent<ECS::Camera>().setPosition(glm::vec3(0.0f, 0.0f, 6.0f));
 
     ECS::GameObject planeObject("plane");
     planeObject.addComponent<ECS::Transform>();
+    planeObject.getComponent<ECS::Transform>().setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+    planeObject.addComponent<ECS::MeshFilter>();
+    planeObject.getComponent<ECS::MeshFilter>().setVertices({
+        // Front face
+        glm::vec3(-0.5f, -0.5f,  0.5f), // bottom left
+        glm::vec3( 0.5f, -0.5f,  0.5f), // bottom right
+        glm::vec3( 0.5f,  0.5f,  0.5f), // top right
+        glm::vec3(-0.5f,  0.5f,  0.5f), // top left
+
+        // Back face
+        glm::vec3(-0.5f, -0.5f, -0.5f), // bottom left
+        glm::vec3( 0.5f, -0.5f, -0.5f), // bottom right
+        glm::vec3( 0.5f,  0.5f, -0.5f), // top right
+        glm::vec3(-0.5f,  0.5f, -0.5f), // top left
+
+        // Left face
+        glm::vec3(-0.5f, -0.5f, -0.5f), // bottom left
+        glm::vec3(-0.5f, -0.5f,  0.5f), // bottom right
+        glm::vec3(-0.5f,  0.5f,  0.5f), // top right
+        glm::vec3(-0.5f,  0.5f, -0.5f), // top left
+
+        // Right face
+        glm::vec3( 0.5f, -0.5f, -0.5f), // bottom left
+        glm::vec3( 0.5f, -0.5f,  0.5f), // bottom right
+        glm::vec3( 0.5f,  0.5f,  0.5f), // top right
+        glm::vec3( 0.5f,  0.5f, -0.5f), // top left
+
+        // Top face
+        glm::vec3(-0.5f,  0.5f, -0.5f), // bottom left
+        glm::vec3( 0.5f,  0.5f, -0.5f), // bottom right
+        glm::vec3( 0.5f,  0.5f,  0.5f), // top right
+        glm::vec3(-0.5f,  0.5f,  0.5f), // top left
+
+        // Bottom face
+        glm::vec3(-0.5f, -0.5f, -0.5f), // bottom left
+        glm::vec3( 0.5f, -0.5f, -0.5f), // bottom right
+        glm::vec3( 0.5f, -0.5f,  0.5f), // top right
+        glm::vec3(-0.5f, -0.5f,  0.5f)  // top left
+    });
+
+    planeObject.getComponent<ECS::MeshFilter>().setNormals({
+        // Front face
+        glm::vec3(0.0f, 0.0f, 1.0f),
+        glm::vec3(0.0f, 0.0f, 1.0f),
+        glm::vec3(0.0f, 0.0f, 1.0f),
+        glm::vec3(0.0f, 0.0f, 1.0f),
+
+        // Back face
+        glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3(0.0f, 0.0f, -1.0f),
+
+        // Left face
+        glm::vec3(-1.0f, 0.0f, 0.0f),
+        glm::vec3(-1.0f, 0.0f, 0.0f),
+        glm::vec3(-1.0f, 0.0f, 0.0f),
+        glm::vec3(-1.0f, 0.0f, 0.0f),
+
+        // Right face
+        glm::vec3(1.0f, 0.0f, 0.0f),
+        glm::vec3(1.0f, 0.0f, 0.0f),
+        glm::vec3(1.0f, 0.0f, 0.0f),
+        glm::vec3(1.0f, 0.0f, 0.0f),
+
+        // Top face
+        glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
+
+        // Bottom face
+        glm::vec3(0.0f, -1.0f, 0.0f),
+        glm::vec3(0.0f, -1.0f, 0.0f),
+        glm::vec3(0.0f, -1.0f, 0.0f),
+        glm::vec3(0.0f, -1.0f, 0.0f)
+    });
+
+    planeObject.getComponent<ECS::MeshFilter>().setUVs({
+        // Front face
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f),
+        glm::vec2(0.0f, 1.0f),
+
+        // Back face
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f),
+        glm::vec2(0.0f, 1.0f),
+
+        // Left face
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f),
+        glm::vec2(0.0f, 1.0f),
+
+        // Right face
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f),
+        glm::vec2(0.0f, 1.0f),
+
+        // Top face
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f),
+        glm::vec2(0.0f, 1.0f),
+
+        // Bottom face
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f),
+        glm::vec2(0.0f, 1.0f)
+    });
+
+    planeObject.getComponent<ECS::MeshFilter>().setIndices({
+        // Front face (CCW)
+        0, 1, 2,
+        2, 3, 0,
+
+        // Back face (CW)
+        4, 6, 5,
+        6, 4, 7,
+
+        // Left face (CCW)
+        8, 9, 10,
+        10, 11, 8,
+
+        // Right face (CCW)
+        13, 12, 14,
+        15, 14, 12,
+
+        // Top face (CCW)
+        17, 16, 18,
+        19, 18, 16,
+
+        // Bottom face (CCW)
+        20, 21, 22,
+        22, 23, 20
+    });
     planeObject.addComponent<PlaneRotator>();
 
-    ECS::Texture2D texture("tests/stacking/sprites/grass.png");
+    ECS::Texture2D texture("tests/stacking/sprites/cube.jpg");
     if (!texture.isLoaded()) {
         std::cout << "Failed to load texture" << std::endl;
     }
 
 
     ECS::ShaderProgram shaderProgram("ECS/src/Shader/glsl/texture2D/vertex.glsl", "ECS/src/Shader/glsl/texture2D/fragment.glsl");
+    ECS::Material material(shaderProgram);
+    material.addTexture(texture, "textureSampler");
+    planeObject.addComponent<ECS::MeshRenderer>(material);
     shaderProgram.use();
-    shaderProgram.setUniform("textureSampler", 0);
 
     //ECS::Loop loop(60);
     //loop.run(window);
@@ -120,42 +266,32 @@ int main()
 
     bool stop = false;
 
-    shaderProgram.use();
-
     while (window.isOpen())
     {
-        window.clear();
+        ECS::Window::clear();
 
         planeObject.getComponent<PlaneRotator>().update();
         planeObject.getComponent<ECS::Transform>().lateUpdate();
         mainCamera.getComponent<ECS::Camera>().lateUpdate();
 
-
-        glActiveTexture(GL_TEXTURE0);
-        texture.bind();
-
-        error = glGetError();
-        if (error != GL_NO_ERROR) {
-            std::cout << "Error texture bind: " << error << std::endl;
-        }
-        glBindVertexArray(vao);
-
         shaderProgram.setUniform("model", planeObject.getComponent<ECS::Transform>().getMatrix());
         shaderProgram.setUniform("projection", mainCamera.getComponent<ECS::Camera>().getProjectionMatrix());
         shaderProgram.setUniform("view", mainCamera.getComponent<ECS::Camera>().getViewMatrix());
 
-        error = glGetError();
-        if (error != GL_NO_ERROR) {
-            std::cout << "Error bind vertex array: " << error << std::endl;
-        }
-        glDrawArrays(GL_TRIANGLES, 0, 6);  // Draw two triangles for the square
-        error = glGetError();
-        if (error != GL_NO_ERROR) {
-            std::cout << "Error draw arrays: " << error << std::endl;
-        }
-
-        glBindVertexArray(0);
-        texture.unbind();
+        //glBindVertexArray(vao);
+        //
+        //error = glGetError();
+        //if (error != GL_NO_ERROR) {
+        //    std::cout << "Error bind vertex array: " << error << std::endl;
+        //}
+        //glDrawArrays(GL_TRIANGLES, 0, 6);  // Draw two triangles for the square
+        //error = glGetError();
+        //if (error != GL_NO_ERROR) {
+        //    std::cout << "Error draw arrays: " << error << std::endl;
+        //}
+//
+        //glBindVertexArray(0);
+        planeObject.getComponent<ECS::MeshRenderer>().render();
 
         window.display();
         glfwPollEvents();

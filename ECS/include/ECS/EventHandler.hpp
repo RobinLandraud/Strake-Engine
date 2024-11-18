@@ -181,7 +181,7 @@ namespace ECS {
             EventHandler& operator=(EventHandler&&) = delete;
             EventHandler(EventHandler&&) = delete;
 
-            ~EventHandler();
+            ~EventHandler() = default;
 
         private:
             static EventHandler& getInstance();

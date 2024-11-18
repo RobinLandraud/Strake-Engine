@@ -4,11 +4,7 @@ namespace ECS
 {
     std::unique_ptr<EventHandler> EventHandler::m_instance = nullptr;
 
-    EventHandler::EventHandler(Window& window)
-        : m_events(std::vector<EventType>()),
-        m_keysPressed(std::vector<Key>()),
-        m_keysReleased(std::vector<Key>()),
-        m_keyHeld(std::vector<Key>()),
+    EventHandler::EventHandler(Window& window) :
         m_mouse({0, 0, false, false, false, 0}),
         m_window(window)
     {
@@ -18,11 +14,6 @@ namespace ECS
         glfwSetCursorPosCallback(m_window.getGLFWWindow(), cursorPosCallback);
         glfwSetScrollCallback(m_window.getGLFWWindow(), scrollCallback);
         glfwSetWindowCloseCallback(m_window.getGLFWWindow(), windowCloseCallback);
-    }
-
-    EventHandler::~EventHandler()
-    {
-        // no need to delete the instance, unique_ptr will handle it
     }
 
     EventHandler& EventHandler::getInstance()
@@ -84,54 +75,54 @@ namespace ECS
 
     void EventHandler::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        EventHandler &handler = *static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
         if (action == GLFW_PRESS)
         {
-            handler->m_keysPressed.push_back(static_cast<Key>(key));
-            handler->m_keyHeld.push_back(static_cast<Key>(key));
-            handler->m_events.push_back(EventType::KeyPressed);
+            handler.m_keysPressed.push_back(static_cast<Key>(key));
+            handler.m_keyHeld.push_back(static_cast<Key>(key));
+            handler.m_events.push_back(EventType::KeyPressed);
         }
         else if (action == GLFW_RELEASE)
         {
-            handler->m_keysReleased.push_back(static_cast<Key>(key));
-            handler->m_keyHeld.erase(std::remove(handler->m_keyHeld.begin(), handler->m_keyHeld.end(), static_cast<Key>(key)), handler->m_keyHeld.end());
-            handler->m_events.push_back(EventType::KeyReleased);
+            handler.m_keysReleased.push_back(static_cast<Key>(key));
+            handler.m_keyHeld.erase(std::remove(handler.m_keyHeld.begin(), handler.m_keyHeld.end(), static_cast<Key>(key)), handler.m_keyHeld.end());
+            handler.m_events.push_back(EventType::KeyReleased);
         }
     }
 
     void EventHandler::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
     {
-        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        EventHandler &handler = *static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
         if (action == GLFW_PRESS)
         {
-            handler->m_events.push_back(EventType::MouseButtonPressed);
+            handler.m_events.push_back(EventType::MouseButtonPressed);
             switch (button)
             {
                 case GLFW_MOUSE_BUTTON_LEFT:
-                    handler->m_mouse.left = true;
+                    handler.m_mouse.left = true;
                     break;
                 case GLFW_MOUSE_BUTTON_RIGHT:
-                    handler->m_mouse.right = true;
+                    handler.m_mouse.right = true;
                     break;
                 case GLFW_MOUSE_BUTTON_MIDDLE:
-                    handler->m_mouse.middle = true;
+                    handler.m_mouse.middle = true;
                     break;
                 default:
                     break;
             }
         } else if (action == GLFW_RELEASE)
         {
-            handler->m_events.push_back(EventType::MouseButtonReleased);
+            handler.m_events.push_back(EventType::MouseButtonReleased);
             switch (button)
             {
                 case GLFW_MOUSE_BUTTON_LEFT:
-                    handler->m_mouse.left = false;
+                    handler.m_mouse.left = false;
                     break;
                 case GLFW_MOUSE_BUTTON_RIGHT:
-                    handler->m_mouse.right = false;
+                    handler.m_mouse.right = false;
                     break;
                 case GLFW_MOUSE_BUTTON_MIDDLE:
-                    handler->m_mouse.middle = false;
+                    handler.m_mouse.middle = false;
                     break;
                 default:
                     break;
@@ -141,22 +132,22 @@ namespace ECS
 
     void EventHandler::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
     {
-        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
-        handler->m_events.push_back(EventType::MouseMoved);
-        handler->m_mouse.x = static_cast<float>(xpos);
-        handler->m_mouse.y = static_cast<float>(ypos);
+        EventHandler &handler = *static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        handler.m_events.push_back(EventType::MouseMoved);
+        handler.m_mouse.x = static_cast<float>(xpos);
+        handler.m_mouse.y = static_cast<float>(ypos);
     }
 
     void EventHandler::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
     {
-        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
-        handler->m_events.push_back(EventType::MouseWheelScrolled);
-        handler->m_mouse.wheel = static_cast<float>(yoffset);
+        EventHandler &handler = *static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        handler.m_events.push_back(EventType::MouseWheelScrolled);
+        handler.m_mouse.wheel = static_cast<float>(yoffset);
     }
 
     void EventHandler::windowCloseCallback(GLFWwindow* window)
     {
-        EventHandler* handler = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
-        handler->m_events.push_back(EventType::Closed);
+        EventHandler &handler = *static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        handler.m_events.push_back(EventType::Closed);
     }
 }

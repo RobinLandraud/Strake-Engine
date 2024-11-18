@@ -1,10 +1,10 @@
-#include <ECS/GameObject.hpp>
 #include <ECS/Component.hpp>
+#include <ECS/GameObject.hpp>
 
 namespace ECS {
 
-    GameObject::GameObject(const std::string &name)
-        : m_name(name)
+    GameObject::GameObject(std::string name)
+        : m_name(std::move(name))
     {}
 
     GameObject::~GameObject() {

@@ -5,6 +5,7 @@
 
 #include <GL/glew.h>
 #include <GL/glu.h>
+#include <array>
 #include <fstream>
 #include <glm/glm.hpp>
 #include <iostream>
@@ -20,7 +21,7 @@ namespace ECS {
             Shader& operator=(Shader&&) = delete;
             Shader(Shader&&) = delete;
 
-            [[nodiscard]] const GLuint getID() const;
+            [[nodiscard]] GLuint getID() const;
         private:
             GLuint m_shader;
     };
@@ -34,12 +35,12 @@ namespace ECS {
             ShaderProgram& operator=(ShaderProgram&&) = delete;
             ShaderProgram(ShaderProgram&&) = delete;
 
-            void use();
-            void setUniform(const std::string &name, const glm::mat4 &value);
-            void setUniform(const std::string &name, const glm::vec3 &value);
-            void setUniform(const std::string &name, const glm::vec4 &value);
-            void setUniform(const std::string &name, float value);
-            void setUniform(const std::string &name, int value);
+            void use() const;
+            void setUniform(const std::string &name, const glm::mat4 &value) const;
+            void setUniform(const std::string &name, const glm::vec3 &value) const;
+            void setUniform(const std::string &name, const glm::vec4 &value) const;
+            void setUniform(const std::string &name, float value) const;
+            void setUniform(const std::string &name, int value) const;
         private:
             GLuint m_program;
     };

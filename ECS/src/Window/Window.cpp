@@ -5,7 +5,7 @@ namespace ECS
     Window::Window( int width,  int height, const std::string& title)
         : m_window(nullptr, glfwDestroyWindow)
     {
-        if (!glfwInit()) {
+        if (glfwInit() == 0) {
             throw std::runtime_error("Failed to initialize GLFW");
         }
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ECS_GLFW_VERSION_MAJOR);
@@ -43,12 +43,12 @@ namespace ECS
 
     void Window::close()
     {
-        glfwSetWindowShouldClose(m_window.get(), true);
+        glfwSetWindowShouldClose(m_window.get(), GLFW_TRUE);
     }
 
     bool Window::isOpen() const
     {
-        return !glfwWindowShouldClose(m_window.get());
+        return glfwWindowShouldClose(m_window.get()) == 0;
     }
 
     void Window::clear()

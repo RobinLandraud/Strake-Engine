@@ -5,7 +5,7 @@ namespace ECS {
         : m_isRunning(false),
         m_fps(fps),
         m_fixedTime(0.02f), // 50 Hz
-        m_fpsTime(1.0f / fps),
+        m_fpsTime(1.0f / static_cast<float>(m_fps)),
         m_fixedDelta(0.0f),
         m_fpsDelta(0.0f)
     {
@@ -54,7 +54,7 @@ namespace ECS {
             }
             if (is_updated) {
                 lateUpdate();
-                window.clear();
+                ECS::Window::clear();
                 render();
                 window.display();
             }
@@ -69,8 +69,8 @@ namespace ECS {
 
     void Loop::start(Window& window)
     {
-        //std::cout << "Loop started" << std::endl;
         EventHandler::init(window);
+        m_isRunning = true;
     }
     void Loop::update()
     {

@@ -1,31 +1,23 @@
 #include <ECS/Time.hpp>
 
 namespace ECS {
-    std::unique_ptr<Time> Time::m_instance = nullptr;
-
-    Time::Time()
+    Time::Time() : 
+        m_time(std::chrono::high_resolution_clock::now()),
+        m_lastTime(std::chrono::high_resolution_clock::now()),
+        m_tickTime(std::chrono::high_resolution_clock::now()),
+        m_tickLastTime(std::chrono::high_resolution_clock::now()),
+        m_fixedTime(std::chrono::high_resolution_clock::now()),
+        m_fixedLastTime(std::chrono::high_resolution_clock::now()),
+        m_deltaTime(std::chrono::duration<float>(0.0f)),
+        m_tickDeltaTime(std::chrono::duration<float>(0.0f)),
+        m_fixedDeltaTime(std::chrono::duration<float>(0.0f))
     {
-        std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
-        m_time = now;
-        m_lastTime = now;
-        m_tickTime = now;
-        m_tickLastTime = now;
-        m_fixedTime = now;
-        m_fixedLastTime = now;
-    }
-
-    Time::~Time()
-    {
-        // no need to delete the instance, unique_ptr will handle it
     }
 
     Time& Time::getInstance()
     {
-        if (!m_instance)
-        {
-            m_instance.reset(new Time());
-        }
-        return *m_instance; //dereference the pointer to get the object
+        static Time instance;
+        return instance;
     }
 
     void Time::updateForTick()

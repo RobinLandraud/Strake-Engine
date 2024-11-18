@@ -8,22 +8,21 @@ namespace ECS {
         glAttachShader(m_program, vertexShader.getID());
         glAttachShader(m_program, fragmentShader.getID());
         glLinkProgram(m_program);
-        GLint success;
+        GLint success = 0;
+        std::array<GLchar, 512> infoLog = {0};
         glGetProgramiv(m_program, GL_LINK_STATUS, &success);
-        if (!success) {
-            GLchar infoLog[512];
-            glGetProgramInfoLog(m_program, 512, nullptr, infoLog);
+        if (success == 0) {
+            glGetProgramInfoLog(m_program, 512, nullptr, infoLog.data());
             std::cerr << "Failed to link shader program" << std::endl;
-            std::cerr << infoLog << std::endl;
+            std::cerr << infoLog.data() << std::endl;
             return;
         }
         glValidateProgram(m_program);
         glGetProgramiv(m_program, GL_VALIDATE_STATUS, &success);
-        if (!success) {
-            GLchar infoLog[512];
-            glGetProgramInfoLog(m_program, 512, nullptr, infoLog);
+        if (success == 0) {
+            glGetProgramInfoLog(m_program, 512, nullptr, infoLog.data());
             std::cerr << "Failed to validate shader program" << std::endl;
-            std::cerr << infoLog << std::endl;
+            std::cerr << infoLog.data() << std::endl;
             return;
         }
     }
@@ -32,7 +31,7 @@ namespace ECS {
         glDeleteProgram(m_program);
     }
 
-    void ShaderProgram::use() {
+    void ShaderProgram::use() const {
         glUseProgram(m_program);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
@@ -40,7 +39,7 @@ namespace ECS {
         }
     }
 
-    void ShaderProgram::setUniform(const std::string &name, const glm::mat4 &value) {
+    void ShaderProgram::setUniform(const std::string &name, const glm::mat4 &value) const {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
             std::cerr << "Failed to find uniform: " << name << std::endl;
@@ -53,7 +52,7 @@ namespace ECS {
         }
     }
 
-    void ShaderProgram::setUniform(const std::string &name, const glm::vec3 &value) {
+    void ShaderProgram::setUniform(const std::string &name, const glm::vec3 &value) const {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
             std::cerr << "Failed to find uniform: " << name << std::endl;
@@ -66,7 +65,7 @@ namespace ECS {
         }
     }
 
-    void ShaderProgram::setUniform(const std::string &name, const glm::vec4 &value) {
+    void ShaderProgram::setUniform(const std::string &name, const glm::vec4 &value) const {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
             std::cerr << "Failed to find uniform: " << name << std::endl;
@@ -79,7 +78,7 @@ namespace ECS {
         }
     }
 
-    void ShaderProgram::setUniform(const std::string &name, float value) {
+    void ShaderProgram::setUniform(const std::string &name, float value) const {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
             std::cerr << "Failed to find uniform: " << name << std::endl;
@@ -92,7 +91,7 @@ namespace ECS {
         }
     }
 
-    void ShaderProgram::setUniform(const std::string &name, int value) {
+    void ShaderProgram::setUniform(const std::string &name, int value) const {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
             std::cerr << "Failed to find uniform: " << name << std::endl;

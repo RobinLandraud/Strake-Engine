@@ -23,7 +23,7 @@ namespace ECS
 
             void close();
             [[nodiscard]] bool isOpen() const;
-            void clear();
+            static void clear();
             void display();
             GLFWwindow *getGLFWWindow();
 

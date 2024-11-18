@@ -19,7 +19,7 @@ namespace ECS {
             Time& operator=(Time&&) = delete;
             Time(Time&&) = delete;
 
-            ~Time();
+            ~Time() = default;
 
         private:
             static Time& getInstance();

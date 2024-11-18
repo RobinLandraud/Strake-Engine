@@ -12,11 +12,11 @@ namespace ECS {
         }
     }
 
-    const GLuint Texture::getID() const {
+    GLuint Texture::getID() const {
         return m_texture;
     }
 
-    const bool Texture::isLoaded() const {
+    bool Texture::isLoaded() const {
         return m_texture != 0;
     }
 }

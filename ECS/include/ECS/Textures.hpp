@@ -18,8 +18,8 @@ namespace ECS {
 
             virtual void bind() = 0;
             virtual void unbind()= 0;
-            [[nodiscard]] const GLuint getID() const;
-            [[nodiscard]] const bool isLoaded() const;
+            [[nodiscard]] GLuint getID() const;
+            [[nodiscard]] bool isLoaded() const;
         protected:
             Texture() = default;
             GLuint m_texture = 0;

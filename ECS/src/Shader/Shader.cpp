@@ -17,13 +17,13 @@ namespace ECS {
         m_shader = glCreateShader(type);
         glShaderSource(m_shader, 1, &src, nullptr);
         glCompileShader(m_shader);
-        GLint success;
+        GLint success = 0;
+        std::array<GLchar, 512> infoLog = {0};
         glGetShaderiv(m_shader, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            GLchar infoLog[512];
-            glGetShaderInfoLog(m_shader, 512, nullptr, infoLog);
+        if (success == 0) {
+            glGetShaderInfoLog(m_shader, 512, nullptr, infoLog.data());
             std::cerr << "Failed to compile shader: " << path << std::endl;
-            std::cerr << infoLog << std::endl;
+            std::cerr << infoLog.data() << std::endl;
             return;
         }
     }
@@ -32,7 +32,7 @@ namespace ECS {
         glDeleteShader(m_shader);
     }
 
-    const GLuint Shader::getID() const {
+    GLuint Shader::getID() const {
         return m_shader;
     }
 }
