@@ -46,6 +46,7 @@ target_link_libraries(Component PUBLIC GameObject)
 target_link_libraries(Scene PUBLIC GameObject)
 target_link_libraries(Scene PUBLIC Component)
 target_link_libraries(Scene PUBLIC Camera)
+target_link_libraries(Scene PUBLIC Transform)
 
 target_link_libraries(Transform PUBLIC Component)
 target_link_libraries(Camera PUBLIC Component)

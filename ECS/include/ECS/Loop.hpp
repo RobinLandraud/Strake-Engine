@@ -10,7 +10,7 @@ namespace ECS {
         public:
             explicit Loop(int fps = 60);
             ~Loop() = default;
-            void run(Window& window, Camera &camera, bool debug = false);
+            void run(Window& window, bool debug = false);
             void stop();
         private:
             bool m_isRunning;

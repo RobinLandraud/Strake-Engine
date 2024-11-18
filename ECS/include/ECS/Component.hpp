@@ -21,7 +21,7 @@ namespace ECS {
             virtual void fixedUpdate();
             virtual void lateUpdate();
 
-            virtual void render();
+            virtual void render(Camera &camera);
 
             [[nodiscard]] GameObject &getParent() const;
 

@@ -9,7 +9,8 @@
 namespace ECS {
     class Material {
         public:
-            Material(const ShaderProgram &shaderProgram);
+            Material();
+            Material(const std::string &vertexPath, const std::string &fragmentPath);
             ~Material() = default;
             Material(const Material &other) = delete;
             Material(Material &&other) = delete;
@@ -23,7 +24,7 @@ namespace ECS {
             ShaderProgram &getShaderProgram() const;
 
         private:
-            const ShaderProgram &m_shaderProgram;
+            const ShaderProgram m_shaderProgram;
             std::unordered_map<std::string, std::optional<std::reference_wrapper<Texture>>> m_textures;
     };
 }

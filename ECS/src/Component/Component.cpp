@@ -13,7 +13,7 @@ namespace ECS {
     void Component::update() {}
     void Component::fixedUpdate() {}
     void Component::lateUpdate() {}
-    void Component::render() {}
+    void Component::render(Camera &camera) {}
 
     GameObject &Component::getParent() const {
         return r_parent;

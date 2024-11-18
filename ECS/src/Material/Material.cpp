@@ -1,11 +1,23 @@
 #include <ECS/Material.hpp>
 
 namespace ECS {
-    Material::Material(const ShaderProgram &shaderProgram) :
-    m_shaderProgram(shaderProgram)
+    Material::Material() :
+    m_shaderProgram(
+        ShaderProgram(
+            "ECS/src/Shader/glsl/texture2D/vertex.glsl",
+            "ECS/src/Shader/glsl/texture2D/fragment.glsl"
+        )
+    )
+    {}
+
+    Material::Material(const std::string &vertexPath, const std::string &fragmentPath) :
+    m_shaderProgram(
+        ShaderProgram(vertexPath, fragmentPath)
+    )
     {}
 
     void Material::bind() const {
+        getShaderProgram().use();
         int textureUnit = 0;
         for (const auto &pair : m_textures) {
             glActiveTexture(GL_TEXTURE0 + textureUnit);

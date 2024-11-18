@@ -8,6 +8,7 @@
 
 namespace ECS {
     class Component;
+    class Camera;
 
     class GameObject {
         public:
@@ -97,7 +98,7 @@ namespace ECS {
             void update();
             void fixedUpdate();
             void lateUpdate();
-            void render();
+            void render(Camera &camera);
 
         private:
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;

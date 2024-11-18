@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <ECS/Material.hpp>
 #include <ECS/Camera.hpp>
+#include <ECS/Transform.hpp>
 
 namespace ECS {
     class MeshRenderer : public Component
@@ -21,7 +22,7 @@ namespace ECS {
             MeshRenderer &operator=(MeshRenderer &&other) = delete;
             ~MeshRenderer() override;
 
-            void render() override;
+            void render(Camera &camera) override;
 
             void lateUpdate() override;
 

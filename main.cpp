@@ -13,69 +13,7 @@
 #include <array>
 #include <iostream>
 
-// f() const means that the function does not modify any member variables.
-// const T& f() returns a reference to the object without allowing it to be modified.
-// T& const f() is not a valid syntax.
-// T* const f() returns a pointer to the object without allowing the pointer itself to be modified, 
-// but allowing the object to be modified.
-// const T f() returns a copy of the object without allowing the copy to be modified.
-// const T* f() returns a pointer to the object without allowing the pointer to be modified,
-// but allowing the object to be modified.
-// T& f() returns a reference to the object, allowing it to be modified.
-// T* f() returns a pointer to the object, allowing it to be modified and allowing the pointer to be modified to point to something else.
-// T&& f() returns an rvalue reference to the object, allowing it to be modified (transfers ownership of the object).
-// const T&& f() is not a valid syntax; you cannot have `const` with `&&` as it does not make sense in C++.
-// T&& const f() is also not a valid syntax.
-
-//ECS_EXIT() is a macro that calls glfwTerminate() and exits the program.
 #define ECS_EXIT() { glfwTerminate(); exit(0); }
-
-void createSquareVAO(GLuint &vao, GLuint &vbo)
-{
-    std::array<float, 30> vertices = {
-        // Positions        // Texture Coords
-        -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
-        0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
-
-        -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
-        0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f,  0.0f, 1.0f
-    };
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
-
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
-    glEnableVertexAttribArray(0);
-
-    // Texture Coordinate attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-class TestComponent : public ECS::Component
-{
-    public:
-        using ECS::Component::Component;
-        void awake() override {
-            test += 1;
-            std::cout << "TestComponent awake" << std::endl;
-            std::cout << getParent().getName() << std::endl;
-            auto testComponent = getParent().getComponent<TestComponent>();
-            std::cout << testComponent.test << std::endl;
-        }
-    private:
-        int test = 0;
-};
 
 class PlaneRotator : public ECS::Script
 {
@@ -253,52 +191,24 @@ int main()
         std::cout << "Failed to load texture" << std::endl;
     }
 
-    ECS::ShaderProgram shaderProgram("ECS/src/Shader/glsl/texture2D/vertex.glsl", "ECS/src/Shader/glsl/texture2D/fragment.glsl");
-    ECS::Material material(shaderProgram);
+    ECS::Material material;
     material.addTexture(texture, "textureSampler");
     planeObject.addComponent<ECS::MeshRenderer>(material);
-    
-    
-    shaderProgram.use();
-
-    //ECS::Loop loop(60);
-    //loop.run(window);
 
     bool stop = false;
+
     scene.awake();
     scene.start();
-
 
     while (window.isOpen())
     {
         ECS::Window::clear();
         scene.update();
         scene.lateUpdate();
-        shaderProgram.setUniform("model", planeObject.getComponent<ECS::Transform>().getMatrix());
-        shaderProgram.setUniform("view", scene.getMainCamera().getViewMatrix());
-        shaderProgram.setUniform("projection", scene.getMainCamera().getProjectionMatrix());
         scene.render();
-
-
-        //planeObject.getComponent<PlaneRotator>().update();
-        //scene.getMainCamera().translate(glm::vec3(0.0f, 0.0f, 0.001f));
-        //planeObject.getComponent<ECS::Transform>().lateUpdate();
-        //scene.getMainCamera().lateUpdate();
-//
-//
-        //if (scene.getMainCamera().hasChangedView()) {
-        //    shaderProgram.setUniform("view", scene.getMainCamera().getViewMatrix());
-        //}
-        //if (scene.getMainCamera().hasChangedProjection()) {
-        //    shaderProgram.setUniform("projection", scene.getMainCamera().getProjectionMatrix());
-        //}
-        //scene.getMainCamera().resetUpdateFlags();
-//
-        //planeObject.getComponent<ECS::MeshRenderer>().render();
 
         window.display();
         glfwPollEvents();
     }
     ECS_EXIT();
-    return 0;
 }

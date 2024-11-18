@@ -86,12 +86,12 @@ namespace ECS {
         }
     }
 
-    void GameObject::render() {
+    void GameObject::render(Camera &camera) {
         for (auto &component : m_components) {
-            component.second->render();
+            component.second->render(camera);
         }
         for (auto &child : m_children) {
-            child.second->render();
+            child.second->render(camera);
         }
     }
 }

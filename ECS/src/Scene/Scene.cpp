@@ -81,8 +81,11 @@ namespace ECS {
 
     void Scene::render()
     {
+        if (!m_mainCamera.has_value()) {
+            return;
+        }
         for (auto &gameObject : m_gameObjects) {
-            gameObject.second->render();
+            gameObject.second->render(m_mainCamera.value().get());
         }
     }
 }
