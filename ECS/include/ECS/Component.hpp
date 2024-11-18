@@ -7,6 +7,8 @@
 #include <unordered_map>
 
 namespace ECS {
+
+    class Camera;
     class Component {
         public:
             explicit Component(
@@ -19,7 +21,7 @@ namespace ECS {
             virtual void fixedUpdate();
             virtual void lateUpdate();
 
-            virtual void render(); // not accessible from certain inherited classes like Camera, Script, etc.
+            virtual void render();
 
             [[nodiscard]] GameObject &getParent() const;
 

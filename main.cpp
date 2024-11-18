@@ -9,6 +9,7 @@
 #include <ECS/MeshFilter.hpp>
 #include <ECS/MeshRenderer.hpp>
 #include <ECS/init.hpp>
+#include <ECS/Scene.hpp>
 #include <array>
 #include <iostream>
 
@@ -94,13 +95,15 @@ int main()
 
     ECS::Window window(1000, 800, "Strake Engine V0.1.0");
     ECS::init();
+    ECS::Scene scene;
 
-    ECS::GameObject mainCamera("Main Camera");
+    ECS::GameObject &mainCamera = scene.addGameObject("Main Camera");
     mainCamera.addComponent<ECS::Camera>();
     mainCamera.getComponent<ECS::Camera>().setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
     mainCamera.getComponent<ECS::Camera>().setPosition(glm::vec3(0.0f, 0.0f, 6.0f));
+    scene.setMainCamera(mainCamera.getComponent<ECS::Camera>());
 
-    ECS::GameObject planeObject("plane");
+    ECS::GameObject &planeObject = scene.addGameObject("Plane");
     planeObject.addComponent<ECS::Transform>();
     planeObject.getComponent<ECS::Transform>().setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
     planeObject.addComponent<ECS::MeshFilter>();
@@ -250,48 +253,48 @@ int main()
         std::cout << "Failed to load texture" << std::endl;
     }
 
-
     ECS::ShaderProgram shaderProgram("ECS/src/Shader/glsl/texture2D/vertex.glsl", "ECS/src/Shader/glsl/texture2D/fragment.glsl");
     ECS::Material material(shaderProgram);
     material.addTexture(texture, "textureSampler");
     planeObject.addComponent<ECS::MeshRenderer>(material);
+    
+    
     shaderProgram.use();
 
     //ECS::Loop loop(60);
     //loop.run(window);
 
-    GLuint vao = 0;
-    GLuint vbo = 0;
-    createSquareVAO(vao, vbo);
-
     bool stop = false;
+    scene.awake();
+    scene.start();
+
 
     while (window.isOpen())
     {
         ECS::Window::clear();
-
-        planeObject.getComponent<PlaneRotator>().update();
-        planeObject.getComponent<ECS::Transform>().lateUpdate();
-        mainCamera.getComponent<ECS::Camera>().lateUpdate();
-
+        scene.update();
+        scene.lateUpdate();
         shaderProgram.setUniform("model", planeObject.getComponent<ECS::Transform>().getMatrix());
-        shaderProgram.setUniform("projection", mainCamera.getComponent<ECS::Camera>().getProjectionMatrix());
-        shaderProgram.setUniform("view", mainCamera.getComponent<ECS::Camera>().getViewMatrix());
+        shaderProgram.setUniform("view", scene.getMainCamera().getViewMatrix());
+        shaderProgram.setUniform("projection", scene.getMainCamera().getProjectionMatrix());
+        scene.render();
 
-        //glBindVertexArray(vao);
-        //
-        //error = glGetError();
-        //if (error != GL_NO_ERROR) {
-        //    std::cout << "Error bind vertex array: " << error << std::endl;
-        //}
-        //glDrawArrays(GL_TRIANGLES, 0, 6);  // Draw two triangles for the square
-        //error = glGetError();
-        //if (error != GL_NO_ERROR) {
-        //    std::cout << "Error draw arrays: " << error << std::endl;
-        //}
+
+        //planeObject.getComponent<PlaneRotator>().update();
+        //scene.getMainCamera().translate(glm::vec3(0.0f, 0.0f, 0.001f));
+        //planeObject.getComponent<ECS::Transform>().lateUpdate();
+        //scene.getMainCamera().lateUpdate();
 //
-        //glBindVertexArray(0);
-        planeObject.getComponent<ECS::MeshRenderer>().render();
+//
+        //if (scene.getMainCamera().hasChangedView()) {
+        //    shaderProgram.setUniform("view", scene.getMainCamera().getViewMatrix());
+        //}
+        //if (scene.getMainCamera().hasChangedProjection()) {
+        //    shaderProgram.setUniform("projection", scene.getMainCamera().getProjectionMatrix());
+        //}
+        //scene.getMainCamera().resetUpdateFlags();
+//
+        //planeObject.getComponent<ECS::MeshRenderer>().render();
 
         window.display();
         glfwPollEvents();

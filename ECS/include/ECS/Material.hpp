@@ -20,6 +20,7 @@ namespace ECS {
             void unbind() const;
 
             void addTexture(Texture &texture, const std::string &uniformName);
+            ShaderProgram &getShaderProgram() const;
 
         private:
             const ShaderProgram &m_shaderProgram;

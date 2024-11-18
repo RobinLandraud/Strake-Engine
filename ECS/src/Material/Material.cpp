@@ -36,4 +36,8 @@ namespace ECS {
     void Material::addTexture(Texture &texture, const std::string &uniformName) {
         m_textures[uniformName] = std::ref(texture);
     }
+
+    ShaderProgram &Material::getShaderProgram() const {
+        return const_cast<ShaderProgram &>(m_shaderProgram);
+    }
 }

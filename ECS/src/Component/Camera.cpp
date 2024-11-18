@@ -6,10 +6,12 @@ namespace ECS {
         if (m_viewNeedUpdate) {
             updateViewMatrix();
             m_viewNeedUpdate = false;
+            m_hasChangedView = true;
         }
         if (m_projectionNeedUpdate) {
             updateProjectionMatrix();
             m_projectionNeedUpdate = false;
+            m_hasChangedProjection = true;
         }
     }
 
@@ -172,5 +174,21 @@ namespace ECS {
     void Camera::updateProjectionMatrix()
     {
         m_projectionMatrix = glm::perspective(glm::radians(m_fov), m_aspect, m_near, m_far);
+    }
+
+    void Camera::resetUpdateFlags()
+    {
+        m_hasChangedView = false;
+        m_hasChangedProjection = false;
+    }
+
+    bool Camera::hasChangedView() const
+    {
+        return m_hasChangedView;
+    }
+
+    bool Camera::hasChangedProjection() const
+    {
+        return m_hasChangedProjection;
     }
 }

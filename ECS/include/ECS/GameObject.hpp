@@ -92,6 +92,13 @@ namespace ECS {
                 return std::nullopt;
             }
 
+            void awake();
+            void start();
+            void update();
+            void fixedUpdate();
+            void lateUpdate();
+            void render();
+
         private:
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_children;

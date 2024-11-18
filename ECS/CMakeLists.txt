@@ -34,6 +34,7 @@ add_library(Camera STATIC src/Component/Camera.cpp)
 add_library(Script STATIC src/Component/Script.cpp)
 add_library(MeshFilter STATIC src/Component/MeshFilter.cpp)
 add_library(MeshRenderer STATIC src/Component/MeshRenderer.cpp)
+add_library(Scene STATIC src/Scene/Scene.cpp)
 
 # dependencies for the libraries
 target_link_libraries(Window PUBLIC Config)
@@ -41,6 +42,10 @@ target_link_libraries(Loop PUBLIC Window)
 target_link_libraries(Loop PUBLIC Time)
 target_link_libraries(EventHandler PUBLIC Window)
 target_link_libraries(Component PUBLIC GameObject)
+
+target_link_libraries(Scene PUBLIC GameObject)
+target_link_libraries(Scene PUBLIC Component)
+target_link_libraries(Scene PUBLIC Camera)
 
 target_link_libraries(Transform PUBLIC Component)
 target_link_libraries(Camera PUBLIC Component)
@@ -77,4 +82,5 @@ target_link_libraries(ECS PUBLIC
     Script
     MeshFilter
     MeshRenderer
+    Scene
 )

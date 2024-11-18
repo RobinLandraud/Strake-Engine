@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ECS/Component.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,6 +26,8 @@ namespace ECS {
             void setAspect(float aspect);
             void setNear(float near);
             void setFar(float far);
+
+            void resetUpdateFlags(); // reset the update flags
             
             [[nodiscard]] const glm::mat4 &getViewMatrix() const; // get the view matrix at this frame. deprecated if transform is not updated
             [[nodiscard]] const glm::mat4 &getProjectionMatrix() const; // get the projection matrix at this frame. deprecated if transform is not updated
@@ -37,6 +41,9 @@ namespace ECS {
             [[nodiscard]] float getAspect() const; // get the aspect at this tick
             [[nodiscard]] float getNear() const; // get the near at this tick
             [[nodiscard]] float getFar() const; // get the far at this tick
+
+            [[nodiscard]] bool hasChangedView() const; // check if the view matrix has changed
+            [[nodiscard]] bool hasChangedProjection() const; // check if the projection matrix has changed
         
         private:
             void updateViewMatrix();
@@ -66,6 +73,7 @@ namespace ECS {
             float m_near = 0.1f;
             float m_far = 100.0f;
 
-            bool needUpdate = false;
+            bool m_hasChangedView = true;
+            bool m_hasChangedProjection = true;
     };
 }

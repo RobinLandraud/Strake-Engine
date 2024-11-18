@@ -10,7 +10,7 @@ namespace ECS {
         m_fpsDelta(0.0f)
     {
     }
-    void Loop::run(Window& window, bool debug)
+    void Loop::run(Window& window, Camera &camera, bool debug)
     {
         m_isRunning = true;
         start(window); // start the event handler
