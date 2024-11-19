@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ECS/Component.hpp>
 #include <ECS/GameObject.hpp>
 #include <ECS/Camera.hpp>

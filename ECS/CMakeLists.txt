@@ -40,6 +40,7 @@ add_library(Scene STATIC src/Scene/Scene.cpp)
 target_link_libraries(Window PUBLIC Config)
 target_link_libraries(Loop PUBLIC Window)
 target_link_libraries(Loop PUBLIC Time)
+target_link_libraries(Loop PUBLIC Scene)
 target_link_libraries(EventHandler PUBLIC Window)
 target_link_libraries(Component PUBLIC GameObject)
 

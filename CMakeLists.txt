@@ -10,10 +10,10 @@ SET(CMAKE_CXX_STANDARD_REQUIRED True)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
 # Set compiler flags for Debug build
-set(CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb -O0")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb -O0")
 
 # Set compiler flags for Release build
-## set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_DEBUG "-O3")
 
 # Add the compile commands to the output
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

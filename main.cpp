@@ -10,6 +10,7 @@
 #include <ECS/MeshRenderer.hpp>
 #include <ECS/init.hpp>
 #include <ECS/Scene.hpp>
+#include <ECS/EventHandler.hpp>
 #include <array>
 #include <iostream>
 
@@ -19,7 +20,7 @@ class PlaneRotator : public ECS::Script
 {
     public:
         using ECS::Script::Script;
-        void update() override {
+        void fixedUpdate() override {
             getParent().getComponent<ECS::Transform>().rotate(glm::vec3(0.012f, 0.010f, 0.008f));
         }
 };
@@ -33,6 +34,8 @@ int main()
 
     ECS::Window window(1000, 800, "Strake Engine V0.1.0");
     ECS::init();
+    ECS::EventHandler::init(window);
+
     ECS::Scene scene;
 
     ECS::GameObject &mainCamera = scene.addGameObject("Main Camera");
@@ -195,20 +198,12 @@ int main()
     material.addTexture(texture, "textureSampler");
     planeObject.addComponent<ECS::MeshRenderer>(material);
 
-    bool stop = false;
-
     scene.awake();
     scene.start();
 
-    while (window.isOpen())
-    {
-        ECS::Window::clear();
-        scene.update();
-        scene.lateUpdate();
-        scene.render();
+    ECS::Loop loop(120);
+    loop.run(window, scene, true);
 
-        window.display();
-        glfwPollEvents();
-    }
+    
     ECS_EXIT();
 }

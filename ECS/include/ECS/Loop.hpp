@@ -2,15 +2,17 @@
 #include <ECS/EventHandler.hpp>
 #include <ECS/Time.hpp>
 #include <ECS/Camera.hpp>
+#include <ECS/Scene.hpp>
 #include <chrono>
 #include <iostream>
+#include <cmath>
 
 namespace ECS {
     class Loop {
         public:
             explicit Loop(int fps = 60);
             ~Loop() = default;
-            void run(Window& window, bool debug = false);
+            void run(Window& window, Scene &scene, bool debug = false);
             void stop();
         private:
             bool m_isRunning;
@@ -19,10 +21,9 @@ namespace ECS {
             float m_fpsTime;
             float m_fixedDelta;
             float m_fpsDelta;
-            void start(Window& window);
-            void update();
-            void fixedUpdate();
-            void lateUpdate();
-            void render();
+            void update(Scene &scene);
+            void fixedUpdate(Scene &scene);
+            void lateUpdate(Scene &scene);
+            void render(Scene &scene);
     };
 }
