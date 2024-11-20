@@ -2,10 +2,10 @@
 <!-- PROJECT TITLE -->
 <br />
 <div align="center">
-  <h3 align="center">SFML ECS</h3>
+  <h3 align="center">Strake Engine</h3>
 
   <p align="center">
-    A full designed ECS for making games with SFML
+    A full designed GameObject Component System with OpenGL
     <br />
     <a href="https://github.com/RobinLandraud/SFML_ECS"><strong>Explore the docs »</strong></a>
   </p>
@@ -38,7 +38,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-With this project, I aimed to develop a comprehensive Entity Component System (ECS) that fully supports all features of the Simple and Fast Multimedia Library (SFML). The goal is to create more stable and maintainable projects through a well-structured hierarchy that is both readable and easily modifiable.
+With this project, I aimed to develop a comprehensive  GameObject Component System using Open Graphics Library (OpenGL). The goal is to create more stable and maintainable projects/games through a well-structured hierarchy that is both readable and easily modifiable.
 
 Inspired by Unity, this ECS optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
 
