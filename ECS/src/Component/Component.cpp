@@ -15,6 +15,14 @@ namespace ECS {
     void Component::lateUpdate() {}
     void Component::render(Camera &camera) {}
 
+    void Component::setDerivedType(const std::type_index &type) {
+        m_derivedType = type;
+    }
+
+    std::type_index Component::getDerivedType() const {
+        return m_derivedType;
+    }
+
     GameObject &Component::getParent() const {
         return r_parent;
     }

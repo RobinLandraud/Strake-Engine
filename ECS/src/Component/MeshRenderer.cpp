@@ -10,6 +10,7 @@ namespace ECS {
         m_EBO(0)
     {
         setupMesh();
+        setDerivedType(typeid(MeshRenderer));
     }
 
     MeshRenderer::MeshRenderer(GameObject &parent, Material &material) :
@@ -21,6 +22,7 @@ namespace ECS {
         m_EBO(0)
     {
         setupMesh();
+        setDerivedType(typeid(MeshRenderer));
     }
 
     MeshRenderer::~MeshRenderer()

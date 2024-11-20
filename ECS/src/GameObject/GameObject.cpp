@@ -15,6 +15,10 @@ namespace ECS {
         return m_name;
     }
 
+    std::type_index GameObject::getDerivedType(Component &component) const {
+        return component.getDerivedType();
+    }
+
     void GameObject::addChild(const std::string &name) {
         if (m_children.find(name) != m_children.end()) {
             return;

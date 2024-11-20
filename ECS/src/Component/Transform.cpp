@@ -1,6 +1,10 @@
 #include <ECS/Transform.hpp>
 
 namespace ECS {
+    Transform::Transform(GameObject &parent) : Component(parent) {
+        setDerivedType(typeid(Transform));
+    }
+
     void Transform::lateUpdate() {
         if (needUpdate) {
             updateMatrix();

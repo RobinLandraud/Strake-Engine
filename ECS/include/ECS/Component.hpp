@@ -24,8 +24,13 @@ namespace ECS {
             virtual void render(Camera &camera);
 
             [[nodiscard]] GameObject &getParent() const;
+            [[nodiscard]] std::type_index getDerivedType() const;
+
+        protected:
+            void setDerivedType(const std::type_index &type);
 
         private:
             GameObject &r_parent;
+            std::type_index m_derivedType = typeid(Component);
     };
 }

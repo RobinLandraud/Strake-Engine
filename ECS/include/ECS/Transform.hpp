@@ -8,7 +8,7 @@ namespace ECS {
     class Transform : public Component
     {
         public:
-            using ECS::Component::Component;
+            Transform(GameObject &parent);
             void lateUpdate() final; // update matrix
 
             void setPosition(const glm::vec3 &position);

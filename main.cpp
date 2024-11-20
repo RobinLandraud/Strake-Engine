@@ -22,7 +22,16 @@ class PlaneRotator : public ECS::Script
         using ECS::Script::Script;
         void fixedUpdate() override {
             getParent().getComponent<ECS::Transform>().rotate(glm::vec3(0.012f, 0.010f, 0.008f));
+            if (getParent().getComponent<ECS::Transform>().getScale().y > 3.0f) {
+                m_scaleFactor = 0.999f;
+            }
+            if (getParent().getComponent<ECS::Transform>().getScale().y < 1.0f) {
+                m_scaleFactor = 1.001f;
+            }
+            getParent().getComponent<ECS::Transform>().scale(glm::vec3(1.000f, m_scaleFactor, 1.000f));
         }
+    private:
+        float m_scaleFactor = 1.001f;
 };
 
 int main()
@@ -188,6 +197,8 @@ int main()
         22, 23, 20
     });
     planeObject.addComponent<PlaneRotator>();
+    planeObject.addComponent<ECS::MeshFilter>(); // -1 because MeshFilter is already added
+    planeObject.addComponent<PlaneRotator>(); // 0 because Scripts can be added multiple times
 
     ECS::Texture2D texture("tests/stacking/sprites/cube.jpg");
     if (!texture.isLoaded()) {
@@ -204,6 +215,5 @@ int main()
     ECS::Loop loop(120);
     loop.run(window, scene, true);
 
-    
     ECS_EXIT();
 }

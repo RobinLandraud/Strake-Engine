@@ -8,7 +8,7 @@ namespace ECS {
     class Camera : public Component
     {
         public:
-            using ECS::Component::Component;
+            Camera(GameObject &parent);
 
             void lateUpdate() final; // update matrix
 

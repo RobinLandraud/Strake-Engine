@@ -1,6 +1,11 @@
 #include <ECS/Camera.hpp>
 
 namespace ECS {
+    Camera::Camera(GameObject &parent) : Component(parent)
+    {
+        setDerivedType(typeid(Camera));
+    }
+
     void Camera::lateUpdate()
     {
         if (m_viewNeedUpdate) {

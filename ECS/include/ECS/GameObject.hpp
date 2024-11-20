@@ -5,10 +5,12 @@
 #include <typeindex>
 #include <unordered_map>
 #include <vector>
+#include <iostream>
 
 namespace ECS {
     class Component;
     class Camera;
+    class Script;
 
     class GameObject {
         public:
@@ -20,39 +22,62 @@ namespace ECS {
             GameObject(GameObject&&) = delete;
 
             [[nodiscard]] const std::string &getName() const;
+            [[nodiscard]] std::type_index getDerivedType(Component &component) const;
             
             template<typename T, typename... Args>
             short addComponent(Args&&... args) {
                 if (!std::is_base_of<Component, T>::value) {
+                    std::cerr << "Component must derive from Component class" << std::endl;
                     return -2;
                 }
-                if (m_components.find(typeid(T)) != m_components.end()) {
-                    return -1;
+                std::unique_ptr<T> component = std::make_unique<T>(*this, std::forward<Args>(args)...);
+                std::type_index devType = getDerivedType(*component);
+                if (devType != typeid(Script)) {
+                    for (auto &derivedType : m_derivedTypes) {
+                        if (derivedType == devType) {
+                            std::cerr << "Component already added" << std::endl;
+                            return -1;
+                        }
+                    }
+                    m_derivedTypes.push_back(devType);
                 }
-                m_components[typeid(T)] = std::make_unique<T>(*this, std::forward<Args>(args)...);
+                m_components[typeid(T)] = std::move(component);
                 return 0;
             }
 
             template<typename T>
             std::optional<std::reference_wrapper<T>> findComponent() {
-                if (m_components.find(typeid(T)) == m_components.end()) {
-                    return std::nullopt;
+                for (auto &component : m_components) {
+                    if (component.first == typeid(T)) {
+                        return std::ref(static_cast<T&>(*component.second));
+                    } else if (T *derived = dynamic_cast<T*>(component.second.get())) {
+                        return std::ref(*derived);
+                    }
                 }
-                return std::ref(static_cast<T&>(*m_components.at(typeid(T))));
             }
 
             template<typename T>
             T &getComponent() {
-                return static_cast<T&>(*m_components.at(typeid(T)));
+                for (auto &component : m_components) {
+                    if (component.first == typeid(T)) {
+                        return static_cast<T&>(*component.second);
+                    } else if (T *derived = dynamic_cast<T*>(component.second.get())) {
+                        return *derived;
+                    }
+                }
+                throw std::runtime_error("Component not found");
             }
 
             template<typename T>
-            bool removeComponent() {
+            short removeComponent() {
                 if (m_components.find(typeid(T)) == m_components.end()) {
-                    return false;
+                    std::cerr << "Component not found" << std::endl;
+                    return -1;
                 }
+                std::type_index derivedType = getDerivedType(*m_components[typeid(T)]);
                 m_components.erase(typeid(T));
-                return true;
+                m_derivedTypes.erase(std::remove(m_derivedTypes.begin(), m_derivedTypes.end(), derivedType), m_derivedTypes.end());
+                return 0;
             }
 
             void addChild(const std::string &name);
@@ -102,6 +127,7 @@ namespace ECS {
 
         private:
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
+            std::vector<std::type_index> m_derivedTypes;
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_children;
             const std::string m_name;
     };

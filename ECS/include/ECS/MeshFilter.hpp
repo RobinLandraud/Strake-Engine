@@ -9,7 +9,7 @@ namespace ECS
     class MeshFilter : public Component
     {
         public:
-            using ECS::Component::Component;
+            MeshFilter(GameObject &parent);
 
             void setVertices(const std::vector<glm::vec3> &vertices);
             void setNormals(const std::vector<glm::vec3> &normals);

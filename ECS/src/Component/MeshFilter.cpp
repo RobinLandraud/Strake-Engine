@@ -2,6 +2,11 @@
 
 namespace ECS
 {
+    MeshFilter::MeshFilter(GameObject &parent) : Component(parent)
+    {
+        setDerivedType(typeid(MeshFilter));
+    }
+
     void MeshFilter::setVertices(const std::vector<glm::vec3> &vertices)
     {
         m_vertices = vertices;
