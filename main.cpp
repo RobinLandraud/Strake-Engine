@@ -20,18 +20,36 @@ class PlaneRotator : public ECS::Script
 {
     public:
         using ECS::Script::Script;
+        void awake() override {
+            r_transform = getParent().getComponent<ECS::Transform>();
+        }
         void fixedUpdate() override {
-            getParent().getComponent<ECS::Transform>().rotate(glm::vec3(0.012f, 0.010f, 0.008f));
-            if (getParent().getComponent<ECS::Transform>().getScale().y > 3.0f) {
+            r_transform->get().rotate(glm::vec3(0.012f, 0.010f, 0.008f));
+        }
+    private:
+        std::optional<std::reference_wrapper<ECS::Transform>> r_transform;
+};
+
+class PlaneScaler : public ECS::Script
+{
+    public:
+        using ECS::Script::Script;
+        void awake() override {
+            r_transform = getParent().getComponent<ECS::Transform>();
+        }
+        void fixedUpdate() override {
+            ECS::Transform &transform = r_transform.value();
+            if (transform.getScale().y > 3.0f) {
                 m_scaleFactor = 0.999f;
             }
-            if (getParent().getComponent<ECS::Transform>().getScale().y < 1.0f) {
+            if (transform.getScale().y < 1.0f) {
                 m_scaleFactor = 1.001f;
             }
-            getParent().getComponent<ECS::Transform>().scale(glm::vec3(1.000f, m_scaleFactor, 1.000f));
+            transform.scale(glm::vec3(1.000f, m_scaleFactor, 1.000f));
         }
     private:
         float m_scaleFactor = 1.001f;
+        std::optional<std::reference_wrapper<ECS::Transform>> r_transform;
 };
 
 int main()
@@ -43,164 +61,29 @@ int main()
 
     ECS::Window window(1000, 800, "Strake Engine V0.1.0");
     ECS::init();
+    window.setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
     ECS::EventHandler::init(window);
 
     ECS::Scene scene;
 
     ECS::GameObject &mainCamera = scene.addGameObject("Main Camera");
     mainCamera.addComponent<ECS::Camera>();
-    mainCamera.getComponent<ECS::Camera>().setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
-    mainCamera.getComponent<ECS::Camera>().setPosition(glm::vec3(0.0f, 0.0f, 6.0f));
-    scene.setMainCamera(mainCamera.getComponent<ECS::Camera>());
+    ECS::Camera &cam = mainCamera.getComponent<ECS::Camera>();
+    cam.setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
+    cam.setPosition(glm::vec3(0.0f, 0.0f, 6.0f));
+    scene.setMainCamera(cam);
 
     ECS::GameObject &planeObject = scene.addGameObject("Plane");
     planeObject.addComponent<ECS::Transform>();
     planeObject.getComponent<ECS::Transform>().setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
-    planeObject.addComponent<ECS::MeshFilter>();
-    planeObject.getComponent<ECS::MeshFilter>().setVertices({
-        // Front face
-        glm::vec3(-0.5f, -0.5f,  0.5f), // bottom left
-        glm::vec3( 0.5f, -0.5f,  0.5f), // bottom right
-        glm::vec3( 0.5f,  0.5f,  0.5f), // top right
-        glm::vec3(-0.5f,  0.5f,  0.5f), // top left
-
-        // Back face
-        glm::vec3(-0.5f, -0.5f, -0.5f), // bottom left
-        glm::vec3( 0.5f, -0.5f, -0.5f), // bottom right
-        glm::vec3( 0.5f,  0.5f, -0.5f), // top right
-        glm::vec3(-0.5f,  0.5f, -0.5f), // top left
-
-        // Left face
-        glm::vec3(-0.5f, -0.5f, -0.5f), // bottom left
-        glm::vec3(-0.5f, -0.5f,  0.5f), // bottom right
-        glm::vec3(-0.5f,  0.5f,  0.5f), // top right
-        glm::vec3(-0.5f,  0.5f, -0.5f), // top left
-
-        // Right face
-        glm::vec3( 0.5f, -0.5f, -0.5f), // bottom left
-        glm::vec3( 0.5f, -0.5f,  0.5f), // bottom right
-        glm::vec3( 0.5f,  0.5f,  0.5f), // top right
-        glm::vec3( 0.5f,  0.5f, -0.5f), // top left
-
-        // Top face
-        glm::vec3(-0.5f,  0.5f, -0.5f), // bottom left
-        glm::vec3( 0.5f,  0.5f, -0.5f), // bottom right
-        glm::vec3( 0.5f,  0.5f,  0.5f), // top right
-        glm::vec3(-0.5f,  0.5f,  0.5f), // top left
-
-        // Bottom face
-        glm::vec3(-0.5f, -0.5f, -0.5f), // bottom left
-        glm::vec3( 0.5f, -0.5f, -0.5f), // bottom right
-        glm::vec3( 0.5f, -0.5f,  0.5f), // top right
-        glm::vec3(-0.5f, -0.5f,  0.5f)  // top left
-    });
-
-    planeObject.getComponent<ECS::MeshFilter>().setNormals({
-        // Front face
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-
-        // Back face
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-
-        // Left face
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-
-        // Right face
-        glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f),
-
-        // Top face
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-
-        // Bottom face
-        glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f)
-    });
-
-    planeObject.getComponent<ECS::MeshFilter>().setUVs({
-        // Front face
-        glm::vec2(0.0f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec2(0.0f, 1.0f),
-
-        // Back face
-        glm::vec2(0.0f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec2(0.0f, 1.0f),
-
-        // Left face
-        glm::vec2(0.0f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec2(0.0f, 1.0f),
-
-        // Right face
-        glm::vec2(0.0f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec2(0.0f, 1.0f),
-
-        // Top face
-        glm::vec2(0.0f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec2(0.0f, 1.0f),
-
-        // Bottom face
-        glm::vec2(0.0f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec2(0.0f, 1.0f)
-    });
-
-    planeObject.getComponent<ECS::MeshFilter>().setIndices({
-        // Front face (CCW)
-        0, 1, 2,
-        2, 3, 0,
-
-        // Back face (CW)
-        4, 6, 5,
-        6, 4, 7,
-
-        // Left face (CCW)
-        8, 9, 10,
-        10, 11, 8,
-
-        // Right face (CCW)
-        13, 12, 14,
-        15, 14, 12,
-
-        // Top face (CCW)
-        17, 16, 18,
-        19, 18, 16,
-
-        // Bottom face (CCW)
-        20, 21, 22,
-        22, 23, 20
-    });
+    planeObject.addComponent<ECS::Cube>();
+    ECS::MeshFilter &meshFilter = planeObject.getComponent<ECS::MeshFilter>();
     planeObject.addComponent<PlaneRotator>();
+    planeObject.addComponent<PlaneScaler>(); // 0 beacause several Script components can be added
     planeObject.addComponent<ECS::MeshFilter>(); // -1 because MeshFilter is already added
-    planeObject.addComponent<PlaneRotator>(); // 0 because Scripts can be added multiple times
+    planeObject.addComponent<PlaneRotator>(); // -1 because PlaneRotator is already added
 
-    ECS::Texture2D texture("tests/stacking/sprites/cube.jpg");
+    ECS::Texture2D texture("tests/stacking/sprites/gradient.png");
     if (!texture.isLoaded()) {
         std::cout << "Failed to load texture" << std::endl;
     }

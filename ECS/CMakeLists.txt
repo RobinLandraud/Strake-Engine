@@ -32,7 +32,10 @@ add_library(Component STATIC src/Component/Component.cpp)
 add_library(Transform STATIC src/Component/Transform.cpp)
 add_library(Camera STATIC src/Component/Camera.cpp)
 add_library(Script STATIC src/Component/Script.cpp)
-add_library(MeshFilter STATIC src/Component/MeshFilter.cpp)
+add_library(MeshFilter STATIC
+    src/Component/MeshFilter.cpp
+    src/Component/Cube.cpp
+)
 add_library(MeshRenderer STATIC src/Component/MeshRenderer.cpp)
 add_library(Scene STATIC src/Scene/Scene.cpp)
 

@@ -65,4 +65,15 @@ namespace ECS
     {
         return m_window.get();
     }
+
+    void Window::setBgColor(const glm::vec4 &color)
+    {
+        m_bgColor = color;
+        glClearColor(color.r, color.g, color.b, color.a);
+    }
+
+    glm::vec4 Window::getBgColor() const
+    {
+        return m_bgColor;
+    }
 }

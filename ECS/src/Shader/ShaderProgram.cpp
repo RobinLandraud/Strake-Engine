@@ -87,7 +87,7 @@ namespace ECS {
         glUniform1f(location, value);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            std::cerr << "OpenGL error: " << error << std::endl;
+            std::cerr << "Failed to set uniform: " << error << std::endl;
         }
     }
 

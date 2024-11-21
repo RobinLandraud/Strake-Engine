@@ -26,11 +26,17 @@ namespace ECS
             [[nodiscard]] bool isUpdated() const;
             void setUpdated(bool updated);
 
-        private:
+        protected:
             bool m_isUpdated = false;
             std::vector<glm::vec3> m_vertices;
             std::vector<glm::vec3> m_normals;
             std::vector<glm::vec2> m_uvs;
             std::vector<unsigned int> m_indices;
+    };
+
+    class Cube : public MeshFilter
+    {
+        public:
+            Cube(GameObject &parent);
     };
 }

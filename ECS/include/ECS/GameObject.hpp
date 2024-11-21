@@ -30,6 +30,10 @@ namespace ECS {
                     std::cerr << "Component must derive from Component class" << std::endl;
                     return -2;
                 }
+                if (m_components.find(typeid(T)) != m_components.end()) {
+                    std::cerr << "Component already added" << std::endl;
+                    return -1;
+                }
                 std::unique_ptr<T> component = std::make_unique<T>(*this, std::forward<Args>(args)...);
                 std::type_index devType = getDerivedType(*component);
                 if (devType != typeid(Script)) {

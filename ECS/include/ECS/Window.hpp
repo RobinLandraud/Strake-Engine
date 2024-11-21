@@ -5,6 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <glm/glm.hpp>
 
 namespace ECS
 {
@@ -26,8 +27,11 @@ namespace ECS
             static void clear();
             void display();
             GLFWwindow *getGLFWWindow();
+            void setBgColor(const glm::vec4 &color);
+            [[nodiscard]] glm::vec4 getBgColor() const;
 
         private:
             std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> m_window;
+            glm::vec4 m_bgColor;
     };
 }

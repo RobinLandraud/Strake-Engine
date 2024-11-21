@@ -8,7 +8,10 @@ namespace ECS {
             "ECS/src/Shader/glsl/texture2D/fragment.glsl"
         )
     )
-    {}
+    {
+        getShaderProgram().use();
+        getShaderProgram().setUniform("alphaThreshold", 0.01f);
+    }
 
     Material::Material(const std::string &vertexPath, const std::string &fragmentPath) :
     m_shaderProgram(
