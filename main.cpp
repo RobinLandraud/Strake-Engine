@@ -39,13 +39,13 @@ class PlaneScaler : public ECS::Script
         }
         void fixedUpdate() override {
             ECS::Transform &transform = r_transform.value();
-            if (transform.getScale().y > 3.0f) {
+            if (transform.getScale().x > 2.0f) {
                 m_scaleFactor = 0.999f;
             }
-            if (transform.getScale().y < 1.0f) {
+            if (transform.getScale().x < 1.0f) {
                 m_scaleFactor = 1.001f;
             }
-            transform.scale(glm::vec3(1.000f, m_scaleFactor, 1.000f));
+            transform.scale(glm::vec3(m_scaleFactor, 1.000f, m_scaleFactor));
         }
     private:
         float m_scaleFactor = 1.001f;
@@ -70,20 +70,22 @@ int main()
     mainCamera.addComponent<ECS::Camera>();
     ECS::Camera &cam = mainCamera.getComponent<ECS::Camera>();
     cam.setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
-    cam.setPosition(glm::vec3(0.0f, 0.0f, 6.0f));
+    cam.setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
     scene.setMainCamera(cam);
 
     ECS::GameObject &planeObject = scene.addGameObject("Plane");
     planeObject.addComponent<ECS::Transform>();
-    planeObject.getComponent<ECS::Transform>().setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
-    planeObject.addComponent<ECS::Cube>();
+    planeObject.getComponent<ECS::Transform>().setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    //planeObject.addComponent<ECS::Cube>();
+    planeObject.addComponent<ECS::MeshFilter>();
+    planeObject.getComponent<ECS::MeshFilter>().loadFromOBJ("assets/barrel.obj");
     ECS::MeshFilter &meshFilter = planeObject.getComponent<ECS::MeshFilter>();
     planeObject.addComponent<PlaneRotator>();
     planeObject.addComponent<PlaneScaler>(); // 0 beacause several Script components can be added
     planeObject.addComponent<ECS::MeshFilter>(); // -1 because MeshFilter is already added
     planeObject.addComponent<PlaneRotator>(); // -1 because PlaneRotator is already added
 
-    ECS::Texture2D texture("tests/stacking/sprites/gradient.png");
+    ECS::Texture2D texture("assets/map.png");
     if (!texture.isLoaded()) {
         std::cout << "Failed to load texture" << std::endl;
     }
