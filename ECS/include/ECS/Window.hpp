@@ -27,11 +27,15 @@ namespace ECS
             static void clear();
             void display();
             GLFWwindow *getGLFWWindow();
+            [[nodiscard]] int getWidth() const;
+            [[nodiscard]] int getHeight() const;
             void setBgColor(const glm::vec4 &color);
             [[nodiscard]] glm::vec4 getBgColor() const;
 
         private:
             std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> m_window;
             glm::vec4 m_bgColor;
+            int m_width;
+            int m_height;
     };
 }

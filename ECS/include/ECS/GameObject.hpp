@@ -6,11 +6,12 @@
 #include <unordered_map>
 #include <vector>
 #include <iostream>
+#include <glm/glm.hpp>
 
 namespace ECS {
     class Component;
     class Camera;
-    class Script;
+    class Transform;
 
     class GameObject {
         public:
@@ -36,7 +37,7 @@ namespace ECS {
                 }
                 std::unique_ptr<T> component = std::make_unique<T>(*this, std::forward<Args>(args)...);
                 std::type_index devType = getDerivedType(*component);
-                if (devType != typeid(Script)) {
+                if (!isScript(devType)) {
                     for (auto &derivedType : m_derivedTypes) {
                         if (derivedType == devType) {
                             std::cerr << "Component already added" << std::endl;
@@ -50,7 +51,7 @@ namespace ECS {
             }
 
             template<typename T>
-            std::optional<std::reference_wrapper<T>> findComponent() {
+            [[nodiscard]] std::optional<std::reference_wrapper<T>> findComponent() {
                 for (auto &component : m_components) {
                     if (component.first == typeid(T)) {
                         return std::ref(static_cast<T&>(*component.second));
@@ -58,10 +59,11 @@ namespace ECS {
                         return std::ref(*derived);
                     }
                 }
+                return std::nullopt;
             }
 
             template<typename T>
-            T &getComponent() {
+            [[nodiscard]] T &getComponent() {
                 for (auto &component : m_components) {
                     if (component.first == typeid(T)) {
                         return static_cast<T&>(*component.second);
@@ -84,35 +86,48 @@ namespace ECS {
                 return 0;
             }
 
-            void addChild(const std::string &name);
+            [[nodiscard]] const std::unordered_map<std::type_index, std::unique_ptr<Component>> &getComponents() const;
+
+            GameObject &addChild(const std::string &name);
             bool removeChild(const std::string &name);
-            GameObject &getChild(const std::string &name);
-            std::optional<std::reference_wrapper<GameObject>> findChild(const std::string &name);
+            [[nodiscard]] GameObject &getChild(const std::string &name);
+            [[nodiscard]] const std::unordered_map<std::string, std::unique_ptr<GameObject>> &getChildren() const;
+
+            [[nodiscard]] std::optional<std::reference_wrapper<GameObject>> findChild(const std::string &name);
 
             template<typename T>
-            T &getComponentInChildren() {
+            [[nodiscard]] T &getComponentInChildren() {
                 for (auto &child : m_children) {
                     auto component = child.second->findComponent<T>();
                     if (component.has_value()) {
                         return component.value().get();
+                    } else {
+                        auto &comp = child.second->findComponentInChildren<T>();
+                        if (comp.has_value()) {
+                            return comp.value().get();
+                        }
                     }
                 }
             }
 
             template<typename T>
-            std::vector<std::reference_wrapper<T>> getComponentsInChildren() {
+            [[nodiscard]] std::vector<std::reference_wrapper<T>> getComponentsInChildren() {
                 std::vector<std::reference_wrapper<T>> components;
                 for (auto &child : m_children) {
                     auto component = child.second->findComponent<T>();
                     if (component.has_value()) {
                         components.push_back(component.value().get());
                     }
+                    auto &comps = child.second->getComponentsInChildren<T>();
+                    for (auto &comp : comps) {
+                        components.push_back(comp);
+                    }
                 }
                 return components;
             }
 
             template<typename T>
-            std::optional<std::reference_wrapper<T>> findComponentInChildren() {
+            [[nodiscard]] std::optional<std::reference_wrapper<T>> findComponentInChildren() {
                 for (auto &child : m_children) {
                     auto component = child.second->findComponent<T>();
                     if (component.has_value()) {
@@ -121,6 +136,11 @@ namespace ECS {
                 }
                 return std::nullopt;
             }
+
+            Transform &getTransform();
+
+            [[nodiscard]] bool hasParent() const;
+            [[nodiscard]] GameObject &getParent() const;
 
             void awake();
             void start();
@@ -133,6 +153,9 @@ namespace ECS {
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
             std::vector<std::type_index> m_derivedTypes;
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_children;
+            [[nodiscard]] bool isScript(std::type_index type) const;
             const std::string m_name;
+            std::optional<std::reference_wrapper<Transform>> m_transform;
+            std::optional<std::reference_wrapper<GameObject>> m_parent;
     };
 }

@@ -1,9 +1,8 @@
 #include <ECS/EventHandler.hpp>
+#include <iostream>
 
 namespace ECS
 {
-    std::unique_ptr<EventHandler> EventHandler::m_instance = nullptr;
-
     EventHandler::EventHandler(Window& window) :
         m_mouse({0, 0, false, false, false, 0}),
         m_window(window)
@@ -16,6 +15,19 @@ namespace ECS
         glfwSetWindowCloseCallback(m_window.getGLFWWindow(), windowCloseCallback);
     }
 
+    void EventHandler::init(Window &window)
+    {
+        if (m_instance == nullptr)
+        {
+            m_instance = std::unique_ptr<EventHandler>(new EventHandler(window));
+        }
+    }
+
+    void EventHandler::destroy()
+    {
+        m_instance.reset();
+    }
+
     EventHandler& EventHandler::getInstance()
     {
         if (m_instance == nullptr)
@@ -23,14 +35,6 @@ namespace ECS
             throw std::runtime_error("EventHandler not initialized. Call init() first.");
         }
         return *m_instance;
-    }
-
-    void EventHandler::init(Window &window)
-    {
-        if (m_instance == nullptr)
-        {
-            m_instance = std::unique_ptr<EventHandler>(new EventHandler(window));
-        }
     }
 
     void EventHandler::update()
@@ -41,6 +45,12 @@ namespace ECS
         eventHandler.m_keysReleased.clear();
         eventHandler.m_mouse.wheel = 0;
         glfwPollEvents();
+    }
+
+    void EventHandler::setMouseCentered(bool centered)
+    {
+        EventHandler &eventHandler = getInstance();
+        eventHandler.m_mouseCentered = centered;
     }
 
     bool EventHandler::hasEvent(EventType event)
@@ -133,9 +143,20 @@ namespace ECS
     void EventHandler::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
     {
         EventHandler &handler = *static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+        if (handler.m_callbackSet == true)
+        {
+            handler.m_callbackSet = false;
+            return;
+        }
         handler.m_events.push_back(EventType::MouseMoved);
-        handler.m_mouse.x = static_cast<float>(xpos);
-        handler.m_mouse.y = static_cast<float>(ypos);
+        handler.m_mouse.x = static_cast<float>(xpos) - handler.m_window.getWidth() / 2;
+        handler.m_mouse.y = static_cast<float>(ypos) - handler.m_window.getHeight() / 2;
+        if (handler.m_mouseCentered)
+        {
+            glfwSetCursorPos(window, handler.m_window.getWidth() / 2, handler.m_window.getHeight() / 2);
+            std::cout << "Mouse centered" << std::endl;
+            handler.m_callbackSet = true;
+        }
     }
 
     void EventHandler::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)

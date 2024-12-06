@@ -52,8 +52,11 @@ target_link_libraries(Scene PUBLIC Component)
 target_link_libraries(Scene PUBLIC Camera)
 target_link_libraries(Scene PUBLIC Transform)
 
+target_link_libraries(GameObject PUBLIC Script)
+
 target_link_libraries(Transform PUBLIC Component)
 target_link_libraries(Camera PUBLIC Component)
+target_link_libraries(Camera PUBLIC Transform)
 target_link_libraries(Script PUBLIC Component)
 target_link_libraries(MeshFilter PUBLIC Component)
 target_link_libraries(MeshRenderer PUBLIC Component MeshFilter)
@@ -88,4 +91,5 @@ target_link_libraries(ECS PUBLIC
     MeshFilter
     MeshRenderer
     Scene
+    GameObject
 )

@@ -14,10 +14,26 @@ namespace ECS {
     {
     }
 
+    void Time::init()
+    {
+        if (m_instance == nullptr)
+        {
+            m_instance = std::unique_ptr<Time>(new Time());
+        }
+    }
+
+    void Time::destroy()
+    {
+        m_instance.reset();
+    }
+
     Time& Time::getInstance()
     {
-        static Time instance;
-        return instance;
+        if (m_instance == nullptr)
+        {
+            throw std::runtime_error("Time not initialized. Call init() first.");
+        }
+        return *m_instance;
     }
 
     void Time::updateForTick()

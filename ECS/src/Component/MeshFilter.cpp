@@ -186,11 +186,6 @@ namespace ECS
         setIndices(newIndices);
 
         m_isUpdated = true;
-        std::cout << "Loaded mesh from: " << path << std::endl;
-        std::cout << "Vertices: " << orderedVertices.size() << std::endl;
-        std::cout << "Normals: " << orderedNormals.size() << std::endl;
-        std::cout << "UVs: " << orderedUVs.size() << std::endl;
-        std::cout << "Indices: " << newIndices.size() << std::endl;
     }
 
     void MeshFilter::setUpdated(bool updated)

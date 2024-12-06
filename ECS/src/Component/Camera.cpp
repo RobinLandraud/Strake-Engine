@@ -67,7 +67,14 @@ namespace ECS {
 
     void Camera::translate(const glm::vec3 &translation)
     {
-        m_position += translation;
+        // Calculate the right vector from the front and up vectors
+        glm::vec3 right = glm::normalize(glm::cross(m_front, m_up));
+
+        // Translate the position based on the camera's orientation
+        m_position += translation.x * right;       // Move along the right vector
+        m_position += translation.y * m_up;        // Move along the up vector
+        m_position += translation.z * m_front;     // Move along the front vector
+
         m_viewNeedUpdate = true;
     }
 
@@ -173,6 +180,12 @@ namespace ECS {
 
     void Camera::updateViewMatrix()
     {
+        m_front = glm::normalize(glm::vec3(
+            cos(glm::radians(m_pitch)) * cos(glm::radians(m_yaw)),
+            sin(glm::radians(m_pitch)),
+            cos(glm::radians(m_pitch)) * sin(glm::radians(m_yaw))
+        ));
+        m_up = glm::normalize(glm::cross(glm::cross(m_front, glm::vec3(0.0f, 1.0f, 0.0f)), m_front));
         m_viewMatrix = glm::lookAt(m_position, m_position + m_front, m_up);
     }
 

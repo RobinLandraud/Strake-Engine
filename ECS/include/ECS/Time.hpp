@@ -5,6 +5,8 @@
 namespace ECS {
     class Time {
         public:
+            static void init();
+            static void destroy();
             // no nead of constructor and avoid using getInstance() method
             static void updateForTick();
             static void updateForFrame();
@@ -23,7 +25,7 @@ namespace ECS {
 
         private:
             static Time& getInstance();
-            static std::unique_ptr<Time> m_instance;
+            static inline std::unique_ptr<Time> m_instance;
 
             std::chrono::high_resolution_clock::time_point m_time;
             std::chrono::duration<float> m_deltaTime;

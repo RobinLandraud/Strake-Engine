@@ -5,6 +5,7 @@
 #include <string>
 #include <typeindex>
 #include <unordered_map>
+#include <glm/glm.hpp>
 
 namespace ECS {
 

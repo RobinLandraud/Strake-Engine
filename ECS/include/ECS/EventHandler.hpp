@@ -164,7 +164,14 @@ namespace ECS {
     class EventHandler {
         public:
             static void init(Window &window);
-            static void update();
+            static void destroy();
+            //prevent copying and moving
+            EventHandler(const EventHandler&) = delete;
+            EventHandler& operator=(const EventHandler&) = delete;
+            EventHandler& operator=(EventHandler&&) = delete;
+            EventHandler(EventHandler&&) = delete;
+            ~EventHandler() = default;
+
             [[nodiscard]] static const std::vector<EventType>& getEvents();
             [[nodiscard]] static const std::vector<Key>& getKeysPressed();
             [[nodiscard]] static const std::vector<Key>& getKeysReleased();
@@ -175,17 +182,12 @@ namespace ECS {
             [[nodiscard]] static bool isMouseMoved(); // to do
             [[nodiscard]] static bool hasEvent(EventType event);
 
-            //prevent copying and moving
-            EventHandler(const EventHandler&) = delete;
-            EventHandler& operator=(const EventHandler&) = delete;
-            EventHandler& operator=(EventHandler&&) = delete;
-            EventHandler(EventHandler&&) = delete;
-
-            ~EventHandler() = default;
+            static void update();
+            static void setMouseCentered(bool centered);
 
         private:
             static EventHandler& getInstance();
-            static std::unique_ptr<EventHandler> m_instance;
+            static inline std::unique_ptr<EventHandler> m_instance = nullptr;
 
             explicit EventHandler(Window &window);
             Window &m_window;
@@ -195,11 +197,13 @@ namespace ECS {
             std::vector<Key> m_keysReleased;
             std::vector<Key> m_keyHeld;
             mouse_t m_mouse;
+            bool m_mouseCentered = false;
+            bool m_callbackSet = false;
 
             static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
             static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
             static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
             static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
             static void windowCloseCallback(GLFWwindow* window);
-            };
+    };
 }

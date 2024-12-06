@@ -2,8 +2,11 @@
 
 namespace ECS
 {
-    Window::Window( int width,  int height, const std::string& title)
-        : m_window(nullptr, glfwDestroyWindow)
+    Window::Window( int width, int height, const std::string& title) :
+        m_window(nullptr, glfwDestroyWindow),
+        m_bgColor(0.0f, 0.0f, 0.0f, 1.0f),
+        m_width(width),
+        m_height(height)
     {
         if (glfwInit() == 0) {
             throw std::runtime_error("Failed to initialize GLFW");
@@ -28,17 +31,22 @@ namespace ECS
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        //if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
-        //{
-        //    throw std::runtime_error("Failed to initialize GLAD");
-        //    glfwDestroyWindow(m_window.get()); // Free resources for window
-        //    glfwTerminate(); // Free resources
-        //}
+        //glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
     }
 
     Window::~Window()
     {
         glfwDestroyWindow(m_window.get());
+    }
+
+    int Window::getWidth() const
+    {
+        return m_width;
+    }
+
+    int Window::getHeight() const
+    {
+        return m_height;
     }
 
     void Window::close()

@@ -65,7 +65,7 @@ namespace ECS {
             // rotations
             float m_roll = 0.0f;
             float m_pitch = 0.0f;
-            float m_yaw = 0.0f;
+            float m_yaw = -90.0f;
 
             // projection matrix
             float m_fov = 45.0f;

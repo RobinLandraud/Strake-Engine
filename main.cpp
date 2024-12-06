@@ -21,7 +21,7 @@ class PlaneRotator : public ECS::Script
     public:
         using ECS::Script::Script;
         void awake() override {
-            r_transform = getParent().getComponent<ECS::Transform>();
+            r_transform = getParent().getTransform();
         }
         void fixedUpdate() override {
             r_transform->get().rotate(glm::vec3(0.012f, 0.010f, 0.008f));
@@ -35,7 +35,7 @@ class PlaneScaler : public ECS::Script
     public:
         using ECS::Script::Script;
         void awake() override {
-            r_transform = getParent().getComponent<ECS::Transform>();
+            r_transform = getParent().getTransform();
         }
         void fixedUpdate() override {
             ECS::Transform &transform = r_transform.value();
@@ -52,6 +52,68 @@ class PlaneScaler : public ECS::Script
         std::optional<std::reference_wrapper<ECS::Transform>> r_transform;
 };
 
+class CharacterController: public ECS::Script
+{
+    public:
+        using ECS::Script::Script;
+        void awake() override {
+            r_cam = getParent().findComponent<ECS::Camera>();
+        }
+        void update() override {
+            ECS::Camera &cam = r_cam.value();
+            const ECS::mouse_t &mouse = ECS::EventHandler::getMouse();
+            //std::cout << "Mouse: " << mouse.x << " " << mouse.y << std::endl;
+            if (ECS::EventHandler::isKeyHeld(ECS::Key::W)) {
+                cam.translate(glm::vec3(0.0f, 0.0f, m_speed));
+                //std::cout << "Z key pressed" << std::endl;
+            } else if (ECS::EventHandler::isKeyHeld(ECS::Key::S)) {
+                cam.translate(glm::vec3(0.0f, 0.0f, -m_speed));
+            }
+            if (ECS::EventHandler::isKeyHeld(ECS::Key::A)) {
+                cam.translate(glm::vec3(-m_speed, 0.0f, 0.0f));
+            } else if (ECS::EventHandler::isKeyHeld(ECS::Key::D)) {
+                cam.translate(glm::vec3(m_speed, 0.0f, 0.0f));
+            }
+            if (ECS::EventHandler::isKeyHeld(ECS::Key::Space)) {
+                cam.translate(glm::vec3(0.0f, m_speed, 0.0f));
+            } else if (ECS::EventHandler::isKeyHeld(ECS::Key::LeftShift)) {
+                cam.translate(glm::vec3(0.0f, -m_speed, 0.0f));
+            }
+            //look at mouse
+            cam.setYaw(-mouse.x * 0.1f);
+            cam.setPitch(mouse.y * 0.1f);
+            std::cout << "Rotation: " << cam.getYaw() << " " << cam.getPitch() << std::endl;
+            //setmouse to center
+        }
+    private:
+        std::optional<std::reference_wrapper<ECS::Camera>> r_cam;
+        std::optional<std::reference_wrapper<ECS::Transform>> transform;
+        const float m_speed = 0.05f;
+};
+
+void printComponent(ECS::GameObject &go, int depth)
+{
+    for (int i = 0; i < depth; i++) {
+        std::cout << "\t";
+    }
+    std::cout << "* " << go.getName() << " {" << std::endl;
+    auto &comp = go.getComponents();
+    for (auto &c : comp) {
+        for (int i = 0; i < depth; i++) {
+            std::cout << "\t";
+        }
+        std::cout << "\t- " << c.first.name() << std::endl;
+    }
+    auto &children = go.getChildren();
+    for (auto &child : children) {
+        printComponent(*child.second, depth + 1);
+    }
+    for (int i = 0; i < depth; i++) {
+        std::cout << "\t";
+    }
+    std::cout << "}" << std::endl;
+}
+
 int main()
 {
     GLuint error = 0;
@@ -62,28 +124,29 @@ int main()
     ECS::Window window(1000, 800, "Strake Engine V0.1.0");
     ECS::init();
     window.setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
+
+    // create singletons
     ECS::EventHandler::init(window);
+    ECS::Time::init();
 
     ECS::Scene scene;
 
-    ECS::GameObject &mainCamera = scene.addGameObject("Main Camera");
-    mainCamera.addComponent<ECS::Camera>();
-    ECS::Camera &cam = mainCamera.getComponent<ECS::Camera>();
+    ECS::GameObject &player = scene.addGameObject("Main Camera");
+    player.addComponent<ECS::Camera>();
+    ECS::Camera &cam = player.getComponent<ECS::Camera>();
     cam.setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
-    cam.setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
+    cam.setPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+    player.addComponent<CharacterController>();
     scene.setMainCamera(cam);
 
     ECS::GameObject &planeObject = scene.addGameObject("Plane");
-    planeObject.addComponent<ECS::Transform>();
-    planeObject.getComponent<ECS::Transform>().setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    planeObject.getTransform().setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     //planeObject.addComponent<ECS::Cube>();
     planeObject.addComponent<ECS::MeshFilter>();
     planeObject.getComponent<ECS::MeshFilter>().loadFromOBJ("assets/barrel.obj");
     ECS::MeshFilter &meshFilter = planeObject.getComponent<ECS::MeshFilter>();
     planeObject.addComponent<PlaneRotator>();
-    planeObject.addComponent<PlaneScaler>(); // 0 beacause several Script components can be added
-    planeObject.addComponent<ECS::MeshFilter>(); // -1 because MeshFilter is already added
-    planeObject.addComponent<PlaneRotator>(); // -1 because PlaneRotator is already added
+    std::cout << planeObject.addComponent<PlaneScaler>() << std::endl;
 
     ECS::Texture2D texture("assets/map.png");
     if (!texture.isLoaded()) {
@@ -94,11 +157,19 @@ int main()
     material.addTexture(texture, "textureSampler");
     planeObject.addComponent<ECS::MeshRenderer>(material);
 
+    for (auto &go : scene.getGameObjects()) {
+        printComponent(*go.second, 0);
+    }
+
     scene.awake();
     scene.start();
 
-    ECS::Loop loop(120);
+    ECS::Loop loop(180);
     loop.run(window, scene, true);
+
+    //destroy singletons
+    ECS::EventHandler::destroy();
+    ECS::Time::destroy();
 
     ECS_EXIT();
 }
