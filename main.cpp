@@ -24,7 +24,7 @@ class PlaneRotator : public ECS::Script
             r_transform = getParent().getTransform();
         }
         void fixedUpdate() override {
-            r_transform->get().rotate(glm::vec3(0.012f, 0.010f, 0.008f));
+            r_transform->get().rotate(glm::vec3(1.2f, 1.0f, 0.8f));
         }
     private:
         std::optional<std::reference_wrapper<ECS::Transform>> r_transform;
@@ -80,10 +80,10 @@ class CharacterController: public ECS::Script
                 cam.translate(glm::vec3(0.0f, -m_speed, 0.0f));
             }
             //look at mouse
-            cam.setYaw(-mouse.x * 0.1f);
-            cam.setPitch(mouse.y * 0.1f);
-            std::cout << "Rotation: " << cam.getYaw() << " " << cam.getPitch() << std::endl;
+            cam.setPitch(-mouse.x * 0.1f);
+            cam.setRoll(mouse.y * 0.1f);
             //setmouse to center
+            //std::cout << "Camera Rotation: " << cam.getRotation().x << " " << cam.getRotation().y << " " << cam.getRotation().z << std::endl;
         }
     private:
         std::optional<std::reference_wrapper<ECS::Camera>> r_cam;
@@ -135,7 +135,7 @@ int main()
     player.addComponent<ECS::Camera>();
     ECS::Camera &cam = player.getComponent<ECS::Camera>();
     cam.setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
-    cam.setPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+    cam.setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
     player.addComponent<CharacterController>();
     scene.setMainCamera(cam);
 
@@ -164,7 +164,7 @@ int main()
     scene.awake();
     scene.start();
 
-    ECS::Loop loop(180);
+    ECS::Loop loop(100);
     loop.run(window, scene, true);
 
     //destroy singletons
