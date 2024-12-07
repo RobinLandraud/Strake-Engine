@@ -81,7 +81,7 @@ class CharacterController: public ECS::Script
             }
             //look at mouse
             cam.setPitch(-mouse.x * 0.1f);
-            cam.setRoll(mouse.y * 0.1f);
+            cam.setRoll(-mouse.y * 0.1f);
             //setmouse to center
             //std::cout << "Camera Rotation: " << cam.getRotation().x << " " << cam.getRotation().y << " " << cam.getRotation().z << std::endl;
         }
