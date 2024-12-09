@@ -78,7 +78,7 @@ namespace ECS {
     {
         m_material.bind();
 
-        m_material.getShaderProgram().setUniform("model", getParent().getComponent<Transform>().getMatrix());
+        m_material.getShaderProgram().setUniform("model", getParent().getComponent<Transform>().getWorldMatrix());
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
         if (camera.hasChangedProjection()) {
             m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());

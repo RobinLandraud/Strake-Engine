@@ -154,7 +154,6 @@ namespace ECS
         if (handler.m_mouseCentered)
         {
             glfwSetCursorPos(window, handler.m_window.getWidth() / 2, handler.m_window.getHeight() / 2);
-            std::cout << "Mouse centered" << std::endl;
             handler.m_callbackSet = true;
         }
     }

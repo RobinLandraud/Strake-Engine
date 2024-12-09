@@ -14,17 +14,17 @@ namespace ECS {
 
             void setProjection(float fov, float aspect, float near, float far);
 
-            void translate(const glm::vec3 &translation);
-            void setPosition(const glm::vec3 &position);
+            //void translate(const glm::vec3 &translation);
+            //void setPosition(const glm::vec3 &position);
 
-            void rotate(float roll, float pitch, float yaw);
-            void rotate(const glm::vec3 &rotation);
-            void setFront(const glm::vec3 &front);
-            void setUp(const glm::vec3 &up);
-            void setRight(const glm::vec3 &right);
-            void setRoll(float roll);
-            void setPitch(float pitch);
-            void setYaw(float yaw);
+            //void rotate(float roll, float pitch, float yaw);
+            //void rotate(const glm::vec3 &rotation);
+            //void setFront(const glm::vec3 &front);
+            //void setUp(const glm::vec3 &up);
+            //void setRight(const glm::vec3 &right);
+            //void setRoll(float roll);
+            //void setPitch(float pitch);
+            //void setYaw(float yaw);
 
             void setFov(float fov);
             void setAspect(float aspect);
@@ -33,18 +33,18 @@ namespace ECS {
 
             void resetUpdateFlags(); // reset the update flags
             
-            [[nodiscard]] const glm::mat4 &getViewMatrix() const; // get the view matrix at this frame. deprecated if transform is not updated
+            [[nodiscard]] const glm::mat4 &getViewMatrix(); // get the view matrix at this frame. deprecated if transform is not updated
             [[nodiscard]] const glm::mat4 &getProjectionMatrix() const; // get the projection matrix at this frame. deprecated if transform is not updated
             
             [[nodiscard]] const glm::vec3 &getPosition() const; // get the position at this tick
             
             [[nodiscard]] const glm::vec3 &getRotation() const; // get the rotation at this tick
-            [[nodiscard]] const glm::vec3 &getFront() const; // get the front at this tick
-            [[nodiscard]] const glm::vec3 &getUp() const; // get the up at this tick
-            [[nodiscard]] const glm::vec3 &getRight() const; // get the right at this tick
-            [[nodiscard]] float getRoll() const; // get the roll at this tick
-            [[nodiscard]] float getPitch() const; // get the pitch at this tick
-            [[nodiscard]] float getYaw() const; // get the yaw at this tick
+            //[[nodiscard]] const glm::vec3 &getFront() const; // get the front at this tick
+            //[[nodiscard]] const glm::vec3 &getUp() const; // get the up at this tick
+            //[[nodiscard]] const glm::vec3 &getRight() const; // get the right at this tick
+            //[[nodiscard]] float getRoll() const; // get the roll at this tick
+            //[[nodiscard]] float getPitch() const; // get the pitch at this tick
+            //[[nodiscard]] float getYaw() const; // get the yaw at this tick
 
             [[nodiscard]] float getFov() const; // get the fov at this tick
             [[nodiscard]] float getAspect() const; // get the aspect at this tick

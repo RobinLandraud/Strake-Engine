@@ -5,104 +5,151 @@ namespace ECS {
         setDerivedType(typeid(Transform));
     }
 
-    void Transform::lateUpdate() {
-        if (needUpdate) {
-            updateMatrix();
-            needUpdate = false;
+    const glm::mat4 &Transform::getWorldMatrix() {
+        if (m_worldDirty == true) {
+            updateWorldMatrix();
+        }
+        return m_worldMatrix;
+    }
+
+    const glm::mat4 &Transform::getLocalMatrix() {
+        if (m_localDirty == true) {
+            updateLocalMatrix();
+        }
+        return m_localMatrix;
+    }
+
+    void Transform::setWorldDirty() {
+        m_worldDirty = true;
+        for (auto &child : getParent().getChildren()) {
+            child.second->getTransform().setWorldDirty();
         }
     }
 
-    void Transform::updateEulerAngles() {
-        glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)) * // Yaw
-                                   glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)) * // Pitch
-                                   glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));  // Roll
-        m_front = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f)));
-        m_right = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-        m_up = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)));
+    /////////////////////////////////////////////////////
+    /// Local Space
+    /////////////////////////////////////////////////////
+
+    const glm::vec3 &Transform::getLocalPosition() const {
+        return m_localPosition;
     }
 
-    void Transform::updateMatrix() {
-        m_matrix = glm::lookAt(m_position, m_position + m_front, m_up);
-        m_matrix = glm::scale(m_matrix, m_scale);
+    const glm::vec3 &Transform::getLocalRotation() const {
+        return m_localRotation;
     }
 
-    void Transform::setPosition(const glm::vec3 &position) {
-        m_position = position;
-        needUpdate = true;
+    const glm::vec3 &Transform::getLocalFront() const {
+        return m_localFront;
     }
 
-    void Transform::setRotation(const glm::vec3 &rotation) {
-        m_rotation = rotation;
+    const glm::vec3 &Transform::getLocalUp() const {
+        return m_localUp;
+    }
+
+    const glm::vec3 &Transform::getLocalRight() const {
+        return m_localRight;
+    }
+
+    const glm::vec3 &Transform::getLocalScale() const {
+        return m_localScale;
+    }
+
+    void Transform::setLocalPosition(const glm::vec3 &position) {
+        m_localPosition = position;
+        m_localDirty = true;
+        setWorldDirty();
+    }
+
+    void Transform::translateLocal(const glm::vec3 &translation) {
+        m_localPosition += translation.x * m_localRight;
+        m_localPosition += translation.y * m_localUp;
+        m_localPosition += translation.z * m_localFront;
+        m_localDirty = true;
+        setWorldDirty();
+    }
+
+    void Transform::setLocalRotation(const glm::vec3 &rotation) {
+        m_localRotation = rotation;
+        m_localDirty = true;
+        setWorldDirty();
         updateEulerAngles();
-        needUpdate = true;
     }
 
-    void Transform::setRoll(float roll) {
-        m_rotation.x = roll;
+    void Transform::rotateLocal(const glm::vec3 &rotation) {
+        m_localRotation += rotation;
+        m_localDirty = true;
+        setWorldDirty();
         updateEulerAngles();
-        needUpdate = true;
     }
 
-    void Transform::setPitch(float pitch) {
-        m_rotation.y = pitch;
+    void Transform::setLocalRoll(float roll) {
+        m_localRotation.x = roll;
+        m_localDirty = true;
+        setWorldDirty();
         updateEulerAngles();
-        needUpdate = true;
     }
 
-    void Transform::setYaw(float yaw) {
-        m_rotation.z = yaw;
+    void Transform::setLocalPitch(float pitch) {
+        m_localRotation.y = pitch;
+        m_localDirty = true;
+        setWorldDirty();
         updateEulerAngles();
-        needUpdate = true;
     }
 
-    void Transform::setScale(const glm::vec3 &scale) {
-        m_scale = scale;
-        needUpdate = true;
+    void Transform::setLocalYaw(float yaw) {
+        m_localRotation.z = yaw;
+        m_localDirty = true;
+        setWorldDirty();
+        updateEulerAngles();
     }
 
-    void Transform::translate(const glm::vec3 &translation) {
-        m_position += translation.x * m_right;
-        m_position += translation.y * m_up;
-        m_position += translation.z * m_front;
-        needUpdate = true;
+    void Transform::setLocalScale(const glm::vec3 &scale) {
+        m_localScale = scale;
+        m_localDirty = true;
+        setWorldDirty();
     }
+
+    void Transform::scaleLocal(const glm::vec3 &scale) {
+        m_localScale *= scale;
+        m_localDirty = true;
+        setWorldDirty();
+    }
+
+    void Transform::updateLocalMatrix() {
+        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), m_localPosition);
+        glm::mat4 rotationMatrixX = glm::rotate(glm::mat4(1.0f), glm::radians(m_localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 rotationMatrixY = glm::rotate(glm::mat4(1.0f), glm::radians(m_localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 rotationMatrixZ = glm::rotate(glm::mat4(1.0f), glm::radians(m_localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::mat4 rotationMatrix = rotationMatrixZ * rotationMatrixY * rotationMatrixX;
+        glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), m_localScale);
+        m_localMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+    }
+
+    /////////////////////////////////////////////////////
+    /// World Space
+    /////////////////////////////////////////////////////
 
     void Transform::rotate(const glm::vec3 &rotation) {
-        m_rotation += rotation;
-        updateEulerAngles();
-        needUpdate = true;
+        // do after
     }
 
-    void Transform::scale(const glm::vec3 &scaleFactor) {
-        m_scale *= scaleFactor;
-        needUpdate = true;
+    void Transform::updateWorldMatrix() {
+        GameObject &parent = getParent();
+        if (parent.hasParent() == false) {
+            m_worldMatrix = getLocalMatrix();
+        } else {
+            m_worldMatrix = parent.getParent().getTransform().getWorldMatrix() * getLocalMatrix();
+        }
+        m_worldDirty = false;
     }
 
-    const glm::mat4 &Transform::getMatrix() {
-        return m_matrix;
-    }
-
-    const glm::vec3 &Transform::getPosition() const {
-        return m_position;
-    }
-
-    const glm::vec3 &Transform::getRotation() const {
-        return m_rotation;
-    }
-
-    const glm::vec3 &Transform::getFront() const {
-        return m_front;
-    }
-
-    const glm::vec3 &Transform::getUp() const {
-        return m_up;
-    }
-
-    const glm::vec3 &Transform::getRight() const {
-        return m_right;
-    }
-
-    const glm::vec3 &Transform::getScale() const {
-        return m_scale;
+    void Transform::updateEulerAngles() {
+        // local 
+        glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f)) * // Yaw
+                                   glm::rotate(glm::mat4(1.0f), glm::radians(m_localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f)) * // Pitch
+                                   glm::rotate(glm::mat4(1.0f), glm::radians(m_localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));  // Roll
+        m_localFront = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f)));
+        m_localRight = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+        m_localUp = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)));
     }
 }

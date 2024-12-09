@@ -51,7 +51,7 @@ std::string Shader::get_file_content(const std::string &filename)
     }
     if (!validExt)
     {
-        std::cout << "Invalid file extension" << std::endl;
+        throw std::runtime_error("Invalid file extension: " + ext);
         return "";
     }
 
