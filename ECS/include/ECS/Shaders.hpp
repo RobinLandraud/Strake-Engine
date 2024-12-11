@@ -35,6 +35,10 @@ namespace ECS {
             ShaderProgram& operator=(ShaderProgram&&) = delete;
             ShaderProgram(ShaderProgram&&) = delete;
 
+            float getUniformFloat(const std::string &name) const;
+            int getUniformInt(const std::string &name) const;
+            glm::vec3 getUniformVec3(const std::string &name) const;
+
             void use() const;
             void setUniform(const std::string &name, const glm::mat4 &value) const;
             void setUniform(const std::string &name, const glm::vec3 &value) const;

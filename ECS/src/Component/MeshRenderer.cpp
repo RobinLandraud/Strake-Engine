@@ -87,7 +87,6 @@ namespace ECS {
 
     void MeshRenderer::render(Camera &camera)
     {
-        std::cout << "Rendering " << getParent().getName() << std::endl;
         m_material.bind();
 
         m_material.getShaderProgram().setUniform("model", getParent().getComponent<Transform>().getWorldMatrix());
@@ -97,9 +96,23 @@ namespace ECS {
             m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
         }
         camera.resetUpdateFlags();
+
+        std::cout << "DEBUG:" << std::endl;
+        std::cout << "Rendering object: " << getParent().getName() << std::endl;
+        std::cout << "light.position: " << m_material.getShaderProgram().getUniformVec3("light.position").x << " " << m_material.getShaderProgram().getUniformVec3("light.position").y << " " << m_material.getShaderProgram().getUniformVec3("light.position").z << std::endl;
+        std::cout << "light.color: " << m_material.getShaderProgram().getUniformVec3("light.color").x << " " << m_material.getShaderProgram().getUniformVec3("light.color").y << " " << m_material.getShaderProgram().getUniformVec3("light.color").z << std::endl;
+        std::cout << "light.intensity: " << m_material.getShaderProgram().getUniformFloat("light.intensity") << std::endl;
+        std::cout << "textureSampler: " << m_material.getShaderProgram().getUniformInt("textureSampler") << std::endl;
+        std::cout << "alphaThreshold: " << m_material.getShaderProgram().getUniformFloat("alphaThreshold") << std::endl;
+        std::cout << "shiniess: " << m_material.getShaderProgram().getUniformFloat("shininess") << std::endl;
+        std::cout << "ambientIntensity: " << m_material.getShaderProgram().getUniformFloat("ambientIntensity") << "\n" << std::endl;
         
         glBindVertexArray(m_VAO);
         glDrawElements(GL_TRIANGLES, m_meshFilter.getIndices().size(), GL_UNSIGNED_INT, nullptr);
+        GLenum err = glGetError();
+        if (err != GL_NO_ERROR) {
+            std::cout << "OpenGL Error: " << err << std::endl;
+        }
         glBindVertexArray(0);
         m_material.unbind();
     }

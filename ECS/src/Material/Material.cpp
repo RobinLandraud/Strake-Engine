@@ -41,7 +41,7 @@ namespace ECS {
     }
 
     void Material::bind() const {
-        m_shaderProgram.use();
+        getShaderProgram().use();
         int textureUnit = 0;
         for (const auto &pair : m_textures) {
             if (!pair.second.has_value()) {
@@ -54,6 +54,8 @@ namespace ECS {
             pair.second.value().get().bind();
             // Set the uniform to the texture unit
             m_shaderProgram.setUniform(pair.first, textureUnit);
+            std::cout << "Texture " << pair.second.value().get().getID() << " bind to texture unit " << textureUnit << std::endl;
+            std::cout << "Binding texture " << pair.first << " to shader unit " << textureUnit << std::endl;
             textureUnit++;
         }
     }

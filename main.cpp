@@ -190,14 +190,18 @@ int main()
     barelMaterial.addTexture(textureBarel, "textureSampler");
     barelMaterial.setShininess(32.0f);
 
+    ECS::Material barelMaterial2;
+    barelMaterial2.addTexture(textureBarel, "textureSampler");
+    barelMaterial2.setShininess(32.0f);
+
     ECS::Material metalMaterial;
     metalMaterial.addTexture(textureMetal, "textureSampler");
     metalMaterial.setShininess(256.0f);
 
-    planeObject.addComponent<ECS::MeshRenderer>(barelMaterial);
-    child.addComponent<ECS::MeshRenderer>(barelMaterial);
-    childChild.addComponent<ECS::MeshRenderer>(barelMaterial);
-    floor.addComponent<ECS::MeshRenderer>(barelMaterial);
+    planeObject.addComponent<ECS::MeshRenderer>(barelMaterial2);
+    child.addComponent<ECS::MeshRenderer>(metalMaterial);
+    childChild.addComponent<ECS::MeshRenderer>(barelMaterial2);
+    floor.addComponent<ECS::MeshRenderer>(barelMaterial2);
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);
