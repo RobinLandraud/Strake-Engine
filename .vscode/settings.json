@@ -1,4 +1,13 @@
 {
+    "cmake.generator": "Ninja",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.configureOnOpen": true,
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.cmakePath": "/usr/bin/cmake",
+    "cmake.configureArgs": [
+        "-DCMAKE_C_COMPILER=/usr/bin/clang",
+        "-DCMAKE_CXX_COMPILER=/usr/bin/clang++"
+    ],
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",
@@ -13,6 +22,7 @@
         "cstdint": "cpp",
         "cstdio": "cpp",
         "cstdlib": "cpp",
+        "cstring": "cpp",
         "ctime": "cpp",
         "cwchar": "cpp",
         "cwctype": "cpp",
@@ -49,8 +59,6 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeindex": "cpp",
-        "typeinfo": "cpp",
-        "cstring": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "disabled"
+        "typeinfo": "cpp"
+    }
 }
