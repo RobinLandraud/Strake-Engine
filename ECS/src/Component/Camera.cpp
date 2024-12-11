@@ -120,6 +120,11 @@ namespace ECS {
         return m_viewMatrix;
     }
 
+    const glm::vec3 Camera::getPosition()
+    {
+        return m_transform.getWorldPosition();
+    }
+
     const glm::mat4 &Camera::getProjectionMatrix() const
     {
         return m_projectionMatrix;

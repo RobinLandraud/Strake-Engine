@@ -44,14 +44,21 @@ namespace ECS {
         std::vector<float> vertexData;
         const auto& vertices = m_meshFilter.getVertices();
         const auto& uvs = m_meshFilter.getUVs();
-        vertexData.reserve(vertices.size() * 5); // 3 for position + 2 for texture coordinates
+        const auto& normals = m_meshFilter.getNormals();
+        vertexData.reserve(vertices.size() * 8); // 3 for position + 2 for texture coordinates + 3 for normals
 
         for (size_t i = 0; i < vertices.size(); ++i) {
+            //position
             vertexData.push_back(vertices[i].x);
             vertexData.push_back(vertices[i].y);
             vertexData.push_back(vertices[i].z);
+            //texture coordinates
             vertexData.push_back(uvs[i].x);
             vertexData.push_back(uvs[i].y);
+            //normals
+            vertexData.push_back(normals[i].x);
+            vertexData.push_back(normals[i].y);
+            vertexData.push_back(normals[i].z);
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -61,12 +68,16 @@ namespace ECS {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshFilter.getIndices().size() * sizeof(unsigned int), m_meshFilter.getIndices().data(), GL_STATIC_DRAW);
 
         // Vertex positions
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
         // Texture coordinates
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
+
+        // Normals
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+        glEnableVertexAttribArray(2);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -76,10 +87,12 @@ namespace ECS {
 
     void MeshRenderer::render(Camera &camera)
     {
+        std::cout << "Rendering " << getParent().getName() << std::endl;
         m_material.bind();
 
         m_material.getShaderProgram().setUniform("model", getParent().getComponent<Transform>().getWorldMatrix());
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
+        m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         if (camera.hasChangedProjection()) {
             m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
         }

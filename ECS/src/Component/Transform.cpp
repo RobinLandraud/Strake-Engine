@@ -152,4 +152,8 @@ namespace ECS {
         m_localRight = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
         m_localUp = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)));
     }
+
+    const glm::vec3 Transform::getWorldPosition() {
+        return glm::vec3(getWorldMatrix()[3]);
+    }
 }

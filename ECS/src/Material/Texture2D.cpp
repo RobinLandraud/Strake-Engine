@@ -17,6 +17,17 @@ namespace ECS {
         unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
         
         if (data != nullptr) {
+            if (nrChannels == 1) {
+                unsigned char* rgb_data = new unsigned char[width * height * 3];
+                for (int i = 0; i < width * height; i++) {
+                    rgb_data[i * 3] = data[i];
+                    rgb_data[i * 3 + 1] = data[i];
+                    rgb_data[i * 3 + 2] = data[i];
+                }
+                stbi_image_free(data);
+                data = rgb_data;
+                nrChannels = 3;
+            }
             GLenum format = (nrChannels == 3) ? GL_RGB : GL_RGBA;
             glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D); // Generate mipmaps after loading the texture

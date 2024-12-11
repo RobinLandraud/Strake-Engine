@@ -51,7 +51,7 @@ namespace ECS {
             [[nodiscard]] const glm::vec3 &getLocalRight() const; // get the right at this tick
             [[nodiscard]] const glm::mat4 &getLocalMatrix(); // get the matrix at this frame. deprecated if transform is not updated
 
-            //[[nodiscard]] const glm::vec3 &getPosition() const; // get the position in world space
+            [[nodiscard]] const glm::vec3 getWorldPosition(); // get the position in world space
             //[[nodiscard]] const glm::vec3 &getRotation() const; // get the rotation in world space
             //[[nodiscard]] const glm::vec3 &getScale() const; // get the scale in world space
             //[[nodiscard]] const glm::vec3 &getFront() const; // get the front at this tick

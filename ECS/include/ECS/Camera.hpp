@@ -35,7 +35,8 @@ namespace ECS {
             
             [[nodiscard]] const glm::mat4 &getViewMatrix(); // get the view matrix at this frame. deprecated if transform is not updated
             [[nodiscard]] const glm::mat4 &getProjectionMatrix() const; // get the projection matrix at this frame. deprecated if transform is not updated
-            
+            [[nodiscard]] const glm::vec3 getPosition(); // get the projection view matrix at this frame. deprecated if transform is not updated
+
             [[nodiscard]] const glm::vec3 &getPosition() const; // get the position at this tick
             
             [[nodiscard]] const glm::vec3 &getRotation() const; // get the rotation at this tick

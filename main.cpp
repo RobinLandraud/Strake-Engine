@@ -167,17 +167,37 @@ int main()
     floor.addComponent<ECS::Cube>();
     floor.getTransform().setLocalScale(glm::vec3(40.0f, 0.1f, 40.0f));
 
-    ECS::Texture2D texture("assets/map.png");
-    if (!texture.isLoaded()) {
+    ECS::Texture2D textureBarel("assets/map.png");
+    if (!textureBarel.isLoaded()) {
         std::cout << "Failed to load texture" << std::endl;
     }
 
-    ECS::Material material;
-    material.addTexture(texture, "textureSampler");
-    planeObject.addComponent<ECS::MeshRenderer>(material);
-    child.addComponent<ECS::MeshRenderer>(material);
-    childChild.addComponent<ECS::MeshRenderer>(material);
-    floor.addComponent<ECS::MeshRenderer>(material);
+    ECS::Texture2D textureMetal("assets/metal.png");
+    if (!textureMetal.isLoaded()) {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+
+    ECS::Texture2D texturePlastic("assets/plastic.jpg");
+    if (!texturePlastic.isLoaded()) {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+
+    ECS::Material plasticMaterial;
+    plasticMaterial.addTexture(texturePlastic, "textureSampler");
+    plasticMaterial.setShininess(32.0f);
+
+    ECS::Material barelMaterial;
+    barelMaterial.addTexture(textureBarel, "textureSampler");
+    barelMaterial.setShininess(32.0f);
+
+    ECS::Material metalMaterial;
+    metalMaterial.addTexture(textureMetal, "textureSampler");
+    metalMaterial.setShininess(256.0f);
+
+    planeObject.addComponent<ECS::MeshRenderer>(barelMaterial);
+    child.addComponent<ECS::MeshRenderer>(barelMaterial);
+    childChild.addComponent<ECS::MeshRenderer>(barelMaterial);
+    floor.addComponent<ECS::MeshRenderer>(barelMaterial);
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);
