@@ -25,13 +25,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ECS/include)
 
 cmake_policy(SET CMP0072 NEW) # FindOpenGL prefers GLVND by default when available
 
-find_package(Threads REQUIRED)
+# find_package(Threads REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
-
-if (WIN32)
-    find_package(glfw3 REQUIRED)
-endif()
 
 add_subdirectory(ECS)
 

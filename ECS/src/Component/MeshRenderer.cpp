@@ -92,9 +92,7 @@ namespace ECS {
         m_material.getShaderProgram().setUniform("model", getParent().getComponent<Transform>().getWorldMatrix());
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
-        if (camera.hasChangedProjection()) {
-            m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
-        }
+        m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
         camera.resetUpdateFlags();
 
         std::cout << "DEBUG:" << std::endl;
