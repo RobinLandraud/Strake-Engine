@@ -70,20 +70,20 @@ class CharacterController: public ECS::Script
             ECS::Transform &transform = this->transform.value();
             //std::cout << "Mouse: " << mouse.x << " " << mouse.y << std::endl;
             if (ECS::EventHandler::isKeyHeld(ECS::Key::W)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed));
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed * ECS::Time::getDeltaTime()));
                 //std::cout << "Z key pressed" << std::endl;
             } else if (ECS::EventHandler::isKeyHeld(ECS::Key::S)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed));
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed * ECS::Time::getDeltaTime()));
             }
             if (ECS::EventHandler::isKeyHeld(ECS::Key::A)) {
-                transform.translateLocal(glm::vec3(-m_speed, 0.0f, 0.0f));
+                transform.translateLocal(glm::vec3(-m_speed * ECS::Time::getDeltaTime(), 0.0f, 0.0f));
             } else if (ECS::EventHandler::isKeyHeld(ECS::Key::D)) {
-                transform.translateLocal(glm::vec3(m_speed, 0.0f, 0.0f));
+                transform.translateLocal(glm::vec3(m_speed * ECS::Time::getDeltaTime(), 0.0f, 0.0f));
             }
             if (ECS::EventHandler::isKeyHeld(ECS::Key::Space)) {
-                transform.translateLocal(glm::vec3(0.0f, m_speed, 0.0f));
+                transform.translateLocal(glm::vec3(0.0f, m_speed * ECS::Time::getDeltaTime(), 0.0f));
             } else if (ECS::EventHandler::isKeyHeld(ECS::Key::LeftShift)) {
-                transform.translateLocal(glm::vec3(0.0f, -m_speed, 0.0f));
+                transform.translateLocal(glm::vec3(0.0f, -m_speed * ECS::Time::getDeltaTime(), 0.0f));
             }
             //look at mouse
             float yaw = mouse.x;
@@ -94,7 +94,7 @@ class CharacterController: public ECS::Script
         }
     private:
         std::optional<std::reference_wrapper<ECS::Transform>> transform;
-        const float m_speed = 0.05f;
+        const float m_speed = 10.0f;
 };
 
 void printComponent(ECS::GameObject &go, int depth)
@@ -210,7 +210,7 @@ int main()
     scene.awake();
     scene.start();
 
-    ECS::Loop loop(100);
+    ECS::Loop loop(1000);
     loop.run(window, scene, true);
 
     //destroy singletons

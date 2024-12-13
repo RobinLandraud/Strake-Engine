@@ -72,6 +72,7 @@ namespace ECS {
             pair.second.value().get().unbind();
             textureUnit++;
         }
+        getShaderProgram().unuse(); // only for debug
     }
 
     void Material::addTexture(Texture &texture, const std::string &uniformName) {

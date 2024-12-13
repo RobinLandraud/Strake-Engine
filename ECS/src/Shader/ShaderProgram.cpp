@@ -39,6 +39,10 @@ namespace ECS {
         }
     }
 
+    void ShaderProgram::unuse() const {
+        glUseProgram(0);
+    }
+
     float ShaderProgram::getUniformFloat(const std::string &name) const {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
@@ -69,6 +73,17 @@ namespace ECS {
         }
         glm::vec3 value;
         glGetUniformfv(m_program, location, &value[0]);
+        return value;
+    }
+
+    glm::mat4 ShaderProgram::getUniformMat4(const std::string &name) const {
+        GLint location = glGetUniformLocation(m_program, name.c_str());
+        if (location == -1) {
+            std::cerr << "Failed to find uniform: " << name << std::endl;
+            return glm::mat4(1.0f);
+        }
+        glm::mat4 value;
+        glGetUniformfv(m_program, location, &value[0][0]);
         return value;
     }
 

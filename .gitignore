@@ -1,5 +1,6 @@
 # build folder
 build/
+vcpkg/
 
 # tests forlder (is a sandbox)
 
@@ -36,3 +37,4 @@ build/
 *.exe
 *.out
 *.app
+*.pdb

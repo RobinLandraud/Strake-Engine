@@ -1,10 +1,11 @@
 set windows-shell := ["powershell.exe", "-Command"]
 set shell := ["sh", "-c"]
+vcpkg := "C:/Users/robin/Documents/Engine/vcpkg"
 
 build:
     - mkdir -p ./build && rm -rf ./build/* && cd build; cmake .. -GNinja; ninja; cd ..
 build-windows:
-    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -GNinja; ninja; cd .."
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -GNinja -DVCPKG_ROOT='{{ vcpkg }}'; ninja; cd .."
 format:
     - find . -type f -name "*.cpp" -o -name "*.h" | xargs clang-format -i
 build-prod:

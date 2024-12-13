@@ -6,8 +6,10 @@ project(ECS)
 # Set the directory for ECS headers
 include_directories(include)
 
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
-find_package(Threads REQUIRED)
+# find_package(Threads REQUIRED)
+
+set(CMAKE_TOOLCHAIN_FILE "./vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "vcpkg toolchain file")
+
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -62,9 +64,6 @@ target_link_libraries(MeshFilter PUBLIC Component)
 target_link_libraries(MeshRenderer PUBLIC Component MeshFilter)
 
 target_link_libraries(Window PUBLIC
-    sfml-system
-    sfml-window
-    sfml-graphics
     Threads::Threads
     GLEW::GLEW
     OpenGL::GL
