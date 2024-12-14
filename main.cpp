@@ -124,10 +124,13 @@ int main()
 {
     GLuint error = 0;
 
+    const int WIN_WIDTH = 1400;
+    const int WIN_HEIGHT = 900;
+
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
 
-    ECS::Window window(1000, 800, "Strake Engine V0.1.0");
+    ECS::Window window(WIN_WIDTH, WIN_HEIGHT, "Strake Engine V0.1.1");
     ECS::init();
     window.setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
 
@@ -140,7 +143,7 @@ int main()
     ECS::GameObject &player = scene.addGameObject("Main Camera");
     player.addComponent<ECS::Camera>();
     ECS::Camera &cam = player.getComponent<ECS::Camera>();
-    cam.setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
+    cam.setProjection(45.0f, static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT), 0.1f, 100.0f);
     //cam.setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
     player.getTransform().setLocalPosition(glm::vec3(0.0f, 2.0f, 5.0f));
     player.addComponent<CharacterController>();
@@ -200,8 +203,8 @@ int main()
 
     planeObject.addComponent<ECS::MeshRenderer>(barelMaterial2);
     child.addComponent<ECS::MeshRenderer>(metalMaterial);
-    childChild.addComponent<ECS::MeshRenderer>(barelMaterial2);
-    floor.addComponent<ECS::MeshRenderer>(barelMaterial2);
+    childChild.addComponent<ECS::MeshRenderer>(plasticMaterial);
+    floor.addComponent<ECS::MeshRenderer>(plasticMaterial);
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);
