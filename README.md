@@ -102,15 +102,13 @@ Additionally, ensure you have:
 
    Once the dependencies are installed, you can proceed to compile the engine:
 
-<br>
-
    - **On Linux**:  
      Open a terminal, navigate to the project directory, and build the project with justfile:
      ```bash
      just build
      ```
      After the build is complete, the executable will be available at the root of the project under the name **Strake.out**
-<br>
+
    - **On Windows**:  
      Open a terminal or command prompt, navigate to the project directory, and build the project with justfile:
      ```bash
