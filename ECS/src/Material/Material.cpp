@@ -54,8 +54,6 @@ namespace ECS {
             pair.second.value().get().bind();
             // Set the uniform to the texture unit
             m_shaderProgram.setUniform(pair.first, textureUnit);
-            std::cout << "Texture " << pair.second.value().get().getID() << " bind to texture unit " << textureUnit << std::endl;
-            std::cout << "Binding texture " << pair.first << " to shader unit " << textureUnit << std::endl;
             textureUnit++;
         }
     }
