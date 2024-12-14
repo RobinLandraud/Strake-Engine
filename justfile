@@ -1,6 +1,6 @@
 set windows-shell := ["powershell.exe", "-Command"]
 set shell := ["sh", "-c"]
-vcpkg := "C:/Users/robin/Documents/Engine/vcpkg"
+vcpkg := "C:/Users/robin/Documents/Prog/Strake-Engine/vcpkg"
 
 build:
     - mkdir -p ./build && rm -rf ./build/* && cd build; cmake .. -GNinja; ninja; cd ..
