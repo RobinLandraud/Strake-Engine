@@ -32,10 +32,14 @@ namespace ECS
             void setBgColor(const glm::vec4 &color);
             [[nodiscard]] glm::vec4 getBgColor() const;
 
+            void setCursorEnabled(bool enabled);
+            [[nodiscard]] bool isCursorEnabled() const;
+
         private:
             std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> m_window;
             glm::vec4 m_bgColor;
             int m_width;
             int m_height;
+            bool m_cursorEnabled;
     };
 }
