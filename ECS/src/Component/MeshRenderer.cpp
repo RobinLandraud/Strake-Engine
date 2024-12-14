@@ -101,26 +101,9 @@ namespace ECS {
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
         camera.resetUpdateFlags();
-
-        std::cout << "DEBUG:" << std::endl;
-        std::cout << "Rendering object: " << getParent().getName() << std::endl;
-        std::cout << "Rendering object: " << getParent().getName() << std::endl;
-        std::cout << "light.position: " << m_material.getShaderProgram().getUniformVec3("light.position").x << " " << m_material.getShaderProgram().getUniformVec3("light.position").y << " " << m_material.getShaderProgram().getUniformVec3("light.position").z << std::endl;
-        std::cout << "light.color: " << m_material.getShaderProgram().getUniformVec3("light.color").x << " " << m_material.getShaderProgram().getUniformVec3("light.color").y << " " << m_material.getShaderProgram().getUniformVec3("light.color").z << std::endl;
-        std::cout << "light.intensity: " << m_material.getShaderProgram().getUniformFloat("light.intensity") << std::endl;
-        std::cout << "textureSampler: " << m_material.getShaderProgram().getUniformInt("textureSampler") << std::endl;
-        std::cout << "alphaThreshold: " << m_material.getShaderProgram().getUniformFloat("alphaThreshold") << std::endl;
-        std::cout << "shiniess: " << m_material.getShaderProgram().getUniformFloat("shininess") << std::endl;
-        std::cout << "ambientIntensity: " << m_material.getShaderProgram().getUniformFloat("ambientIntensity") << std::endl;
-        std::cout << "viewPos: " << m_material.getShaderProgram().getUniformVec3("viewPos").x << " " << m_material.getShaderProgram().getUniformVec3("viewPos").y << " " << m_material.getShaderProgram().getUniformVec3("viewPos").z << std::endl;
-        std::cout << "model: " << m_material.getShaderProgram().getUniformMat4("model")[0][0] << " " << m_material.getShaderProgram().getUniformMat4("model")[0][1] << " " << m_material.getShaderProgram().getUniformMat4("model")[0][2] << " " << m_material.getShaderProgram().getUniformMat4("model")[0][3] << std::endl;
-        std::cout << "projection: " << m_material.getShaderProgram().getUniformMat4("projection")[0][0] << " " << m_material.getShaderProgram().getUniformMat4("projection")[0][1] << " " << m_material.getShaderProgram().getUniformMat4("projection")[0][2] << " " << m_material.getShaderProgram().getUniformMat4("projection")[0][3] << std::endl;
-        std::cout << "view: " << m_material.getShaderProgram().getUniformMat4("view")[0][0] << " " << m_material.getShaderProgram().getUniformMat4("view")[0][1] << " " << m_material.getShaderProgram().getUniformMat4("view")[0][2] << " " << m_material.getShaderProgram().getUniformMat4("view")[0][3] << std::endl;
-        std::cout << "Binding VAO: " << m_VAO << std::endl;
-        std::cout << "DEBUG END\n" << std::endl;
         
         glBindVertexArray(m_VAO);
-        glDrawElements(GL_TRIANGLES, m_meshFilter.getIndices().size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_meshFilter.getIndices().size()), GL_UNSIGNED_INT, nullptr);
         GLenum err = glGetError();
         if (err != GL_NO_ERROR) {
             std::cout << "OpenGL Error: " << err << std::endl;
