@@ -268,9 +268,19 @@ ECS::exit()
 - **v0.1**: Initial stable release with ECS and basic rendering
 
 ### License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+
 ### Contact
+
+GitHub: [RobinLandraud](https://github.com/RobinLandraud)  
+LinkedIn: [robin-landraud](https://www.linkedin.com/in/robin-landraud/)
+
 ### Acknowledgments
 
-![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
-
-![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=for-the-badge&logo=cmake&logoColor=white)
+- OpenGL: For enabling cross-platform graphics rendering.
+- GLEW: For handling OpenGL extensions.
+- GLFW: For managing windows and input.
+- GLM: For providing math utilities for 3D transformations.
+- STB Image: For image loading and texture handling.
+- CMake: For simplifying the build process across platforms.
