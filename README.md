@@ -101,7 +101,9 @@ Additionally, ensure you have:
 3. **Compile the Project**
 
    Once the dependencies are installed, you can proceed to compile the engine:
+
 <br>
+
    - **On Linux**:  
      Open a terminal, navigate to the project directory, and build the project with justfile:
      ```bash
