@@ -169,8 +169,7 @@ ECS::GameObject &player = scene.addGameObject("Main Camera");
 player.addComponent<ECS::Camera>();
 ECS::Camera &cam = player.getComponent<ECS::Camera>();
 cam.setProjection(45.0f, static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT), 0.1f, 100.0f);
-cam.setPosition(glm::vec3(x, y, z));
-player.getTransform().setLocalPosition(glm::vec3(0.0f, 2.0f, 5.0f));
+player.getTransform().setLocalPosition(glm::vec3(x, y, z));
 scene.setMainCamera(cam);
 ```
 
