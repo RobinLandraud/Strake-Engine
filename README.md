@@ -131,7 +131,7 @@ ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, FPS);
 
 ### 2. Create a texure
 ```bash
-ECS::Texture &plasticTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.jpg");
+ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.jpg");
 ```
 
 ### 3. Create a material
