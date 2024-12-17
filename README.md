@@ -122,35 +122,31 @@ These steps will ensure the engine is properly compiled and ready to run on your
 ## Usage
 
 To begin, we create a window and initialize the ECS system. You can set up your scene and add objects within it.
-### 1. Create a window and initialize ECS
+
+### 1. Create the Application
 
 ```bash
-ECS::Window window(WIN_WIDTH, WIN_HEIGHT, "Strake Engine Example");
-ECS::init();
+ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, FPS);
 ```
 
-### 2. Setup the singletons
+### 2. Create a texure
 ```bash
-ECS::EventHandler::init(window);
-ECS::Time::init();
+ECS::Texture &plasticTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.jpg");
 ```
 
 ### 3. Create a material
 
 ```bash
-ECS::Texture2D texture("path/to/image")
-if (!textureBarel.isLoaded()) {
-    std::cout << "Failed to load texture" << std::endl;
-}
-ECS::Material plasticMaterial;
-metalicMaterial.addTexture(texture, "textureSampler");
+ECS::Material &metalicMaterial = app.getMaterialManager().addMaterial("metal");
+metalicMaterial.addTexture(metalTexture, "textureSampler");
 metalicMaterial.setShininess(256.0f);
 ```
 
 ### 4. Create a Scene
 
 ```bash
-ECS::Scene scene;
+CS::Scene &scene = app.getSceneManager().addScene("Main Scene");
+app.getSceneManager().setCurrentScene("Main Scene");
 ```
 
 ### 5. Add a Gameobject with Mesh
@@ -206,29 +202,15 @@ class CharacterController: public ECS::Script
 player.addComponent<CharacterController>();
 ```
 
-### 8. Run the Scene
+### 8. Run the Application
 
 ```bash
-scene.awake();
-scene.start()
-ECS::Loop loop(fps);
-loop.run(window, scene, false);
-```
-
-### 9. Destroy the singletons
-
-```bash
-ECS::EventHandler::destroy();
-ECS::Time::destroy();
-```
-
-### 10. Exit the engine
-
-```bash
-ECS::exit()
+app.run();
 ```
 
 ## Roadmap
+
+### Current Features
 
 ### Current Features
 
@@ -238,7 +220,11 @@ ECS::exit()
   - **Materials**: Supports textures for customizable appearances.
   - **Scenes**: Manages hierarchical game objects and components.
   - **GameObjects and Components**: Core structure for building and organizing entities in the engine.
-  - **Window Management**: Provides robust cross-platform window creation and handling.
+  - **Application**: Manages key systems for application functionality:
+    - **Window**: Handles display management and user interactions.
+    - **Material Manager**: Manages creation and reuse of materials.
+    - **Texture Manager**: Loads, stores, and retrieves textures efficiently.
+    - **Scene Manager**: Switches and manages active scenes seamlessly.
 
 - **Components**:
   - **Camera**: Fully functional component for rendering scenes.

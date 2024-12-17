@@ -1,4 +1,6 @@
 #include <ECS/Window.hpp>
+#include <ECS/EventHandler.hpp>
+#include <ECS/Time.hpp>
 
 namespace ECS
 {
@@ -33,11 +35,18 @@ namespace ECS
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+        // Initialize the event handler and time singletons
+        EventHandler::init(*this);
+        Time::init();
     }
 
     Window::~Window()
     {
         glfwDestroyWindow(m_window.get());
+        //destroy singletons
+        EventHandler::destroy();
+        Time::destroy();
     }
 
     int Window::getWidth() const

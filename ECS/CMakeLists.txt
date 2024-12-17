@@ -26,7 +26,10 @@ add_library(Shader STATIC
     src/Shader/Shader.cpp
     src/Shader/ShaderProgram.cpp
 )
-add_library(Loop STATIC src/Loop/Loop.cpp)
+add_library(Application STATIC
+    src/Application/GameLoop.cpp
+    src/Application/Application.cpp
+)
 add_library(Window STATIC src/Window/Window.cpp)
 add_library(EventHandler STATIC src/Window/EventHandler.cpp)
 add_library(GameObject STATIC src/GameObject/GameObject.cpp)
@@ -43,9 +46,9 @@ add_library(Scene STATIC src/Scene/Scene.cpp)
 
 # dependencies for the libraries
 target_link_libraries(Window PUBLIC Config)
-target_link_libraries(Loop PUBLIC Window)
-target_link_libraries(Loop PUBLIC Time)
-target_link_libraries(Loop PUBLIC Scene)
+target_link_libraries(Application PUBLIC Window)
+target_link_libraries(Application PUBLIC Time)
+target_link_libraries(Application PUBLIC Scene)
 target_link_libraries(EventHandler PUBLIC Window)
 target_link_libraries(Component PUBLIC GameObject)
 
@@ -80,7 +83,6 @@ target_link_libraries(ECS PUBLIC
     Time
     Material
     Shader
-    Loop
     Window
     EventHandler
     Component
@@ -91,4 +93,5 @@ target_link_libraries(ECS PUBLIC
     MeshRenderer
     Scene
     GameObject
+    Application
 )
