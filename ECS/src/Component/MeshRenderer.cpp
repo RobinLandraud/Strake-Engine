@@ -100,6 +100,7 @@ namespace ECS {
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
+        getParent().getEventDispatcher().broadcast(EventData<MeshRenderer>(*this, "updateRendererLights"));
         camera.resetUpdateFlags();
         
         glBindVertexArray(m_VAO);

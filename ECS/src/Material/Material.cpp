@@ -17,9 +17,9 @@ namespace ECS {
         getShaderProgram().setUniform("shininess", 32.0f);
         getShaderProgram().setUniform("alphaThreshold", 0.01f);
         // Set default light (To be removed)
-        getShaderProgram().setUniform("light.position", glm::vec3(10.0f, 1.0f, 0.0f));
+        getShaderProgram().setUniform("light.position", glm::vec3(0.0f, 0.0f, 0.0f));
         getShaderProgram().setUniform("light.color", glm::vec3(1.0f, 1.0f, 1.0f));
-        getShaderProgram().setUniform("light.intensity", 1.0f);
+        getShaderProgram().setUniform("light.intensity", 0.0f);
     }
 
     Material::Material(const std::string &vertexPath, const std::string &fragmentPath) :
@@ -29,15 +29,14 @@ namespace ECS {
     {
         getShaderProgram().use();
         getShaderProgram().setUniform("textureSampler", 0); // default texture unit
-
         getShaderProgram().setUniform("ambientIntensity", 0.1f); // global to every object
-        
-        getShaderProgram().setUniform("shininess", 32.0f);
-        getShaderProgram().setUniform("alphaThreshold", 0.01f);
+        getShaderProgram().setUniform("shininess", 32.0f); // default shininess
+        getShaderProgram().setUniform("alphaThreshold", 0.01f); // default alpha threshold
+
         // Set default light (To be removed)
-        getShaderProgram().setUniform("light.position", glm::vec3(10.0f, 1.0f, 0.0f));
+        getShaderProgram().setUniform("light.position", glm::vec3(0.0f, 0.0f, 0.0f));
         getShaderProgram().setUniform("light.color", glm::vec3(1.0f, 1.0f, 1.0f));
-        getShaderProgram().setUniform("light.intensity", 1.0f);
+        getShaderProgram().setUniform("light.intensity", 0.0f);
     }
 
     void Material::bind() const {

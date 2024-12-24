@@ -1,6 +1,7 @@
 # build folder
 build/
 vcpkg/
+assets/
 
 # tests forlder (is a sandbox)
 

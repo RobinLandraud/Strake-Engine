@@ -13,6 +13,13 @@ namespace ECS {
         m_intensity(1.0f) // full intensity
     {
         setDerivedType(typeid(Light)); // a game object cannot have several lights
+        EventData<Light> eventData(*this, "addLight");
+        parent.getEventDispatcher().broadcast(eventData);
+    }
+
+    Light::~Light() {
+        EventData<Light> eventData(*this, "removeLight");
+        getParent().getEventDispatcher().broadcast(eventData);
     }
 
     void Light::setColor(const glm::vec3 &color) {
@@ -60,8 +67,8 @@ namespace ECS {
         m_quadratic = quadratic;
     }
 
-    const glm::vec3 &PointLight::getPosition() const {
-        return r_transform.getLocalPosition();
+    const glm::vec3 PointLight::getPosition() const {
+        return r_transform.getWorldPosition();
     }
 
     float PointLight::getConstant() const {

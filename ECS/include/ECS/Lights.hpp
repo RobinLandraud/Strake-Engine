@@ -2,6 +2,7 @@
 
 #include <ECS/Component.hpp>
 #include <ECS/Transform.hpp>
+#include <ECS/EventDispatcher.hpp>
 
 namespace ECS {
     enum class LightType {
@@ -22,6 +23,7 @@ namespace ECS {
         protected:
 
             explicit Light(GameObject &parent, LightType type);
+            ~Light() override;
 
             LightType m_type;
             glm::vec3 m_color;
@@ -38,7 +40,7 @@ namespace ECS {
             void setLinear(float linear);
             void setQuadratic(float quadratic);
 
-            [[nodiscard]] const glm::vec3 &getPosition() const;
+            [[nodiscard]] const glm::vec3 getPosition() const;
             [[nodiscard]] float getConstant() const;
             [[nodiscard]] float getLinear() const;
             [[nodiscard]] float getQuadratic() const;

@@ -125,7 +125,7 @@ ECS::Scene createScene(int width, int height)
     return ECS::Scene();
 }
 
-int main()
+int game()
 {
     GLuint error = 0;
 
@@ -155,6 +155,12 @@ int main()
     ECS::MeshFilter &meshFilter = barrel.getComponent<ECS::MeshFilter>();
     barrel.addComponent<PlaneRotator>(1.0f);
     barrel.addComponent<PlaneScaler>();
+
+    ECS::GameObject &light = barrel.addChild("Light");
+    light.addComponent<ECS::PointLight>();
+    light.getTransform().setLocalPosition(glm::vec3(5.0f, 1.0f, 5.0f));
+    light.getComponent<ECS::PointLight>().setColor(glm::vec3(1.0f, 0.1f, 0.1f));
+
     ECS::GameObject &child = barrel.addChild("Plane Child");
     child.getTransform().setLocalPosition(glm::vec3(8.0f, 0.5f, 0.0f));
     child.addComponent<ECS::Cube>();
@@ -196,4 +202,11 @@ int main()
 
     app.run();
     return 0;
+}
+
+int main()
+{
+    int out = game();
+    std::cout << "Game exited with code: " << out << std::endl;
+    return out;
 }

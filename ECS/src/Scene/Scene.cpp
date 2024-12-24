@@ -1,13 +1,15 @@
 #include <ECS/Scene.hpp>
 
 namespace ECS {
-    Scene::Scene()
+    Scene::Scene() :
+        m_eventDispatcher(),
+        m_lightManager(m_eventDispatcher)
     {
     }
 
     GameObject &Scene::addGameObject(const std::string &name)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name);
+        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher);
         return *m_gameObjects[name];
     }
 

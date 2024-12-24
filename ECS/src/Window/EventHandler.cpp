@@ -19,6 +19,7 @@ namespace ECS
     {
         if (m_instance == nullptr)
         {
+            // new because constructor is private (canno't use make_unique)
             m_instance = std::unique_ptr<EventHandler>(new EventHandler(window));
         }
     }

@@ -3,6 +3,7 @@
 #include <ECS/Component.hpp>
 #include <ECS/GameObject.hpp>
 #include <ECS/Camera.hpp>
+#include <ECS/LightManager.hpp>
 #include <functional>
 #include <optional>
 
@@ -33,6 +34,10 @@ namespace ECS {
             void render();
 
         private:
+            // order is important
+            EventDispatcher m_eventDispatcher;
+            LightManager m_lightManager;
+
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_gameObjects;
             std::optional<std::reference_wrapper<Camera>> m_mainCamera;
     };

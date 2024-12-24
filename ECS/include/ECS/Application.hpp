@@ -2,6 +2,7 @@
 #include <ECS/Material.hpp>
 #include <ECS/Window.hpp>
 #include <ECS/init.hpp>
+#include <ECS/EventDispatcher.hpp>
 
 namespace ECS {
     class MaterialManager {
@@ -68,6 +69,7 @@ namespace ECS {
         private:
             Window m_window;
             GameLoop m_gameLoop;
+
             MaterialManager m_materialManager;
             TextureManager m_textureManager;
             SceneManager m_sceneManager;
