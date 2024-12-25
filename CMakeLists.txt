@@ -54,10 +54,12 @@ if (WIN32)
     include_directories(${GLM_INCLUDE_DIRS})
 endif()
 
-find_package(glfw3 CONFIG REQUIRED)
+find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(assimp REQUIRED)
+
 message("Found Packages")
 
 add_subdirectory(ECS)
@@ -72,6 +74,31 @@ if (WIN32)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${VCPKG_ROOT}/installed/x64-windows/bin/glfw3.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${VCPKG_ROOT}/installed/x64-windows/bin/assimp-vc143-mt.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${VCPKG_ROOT}/installed/x64-windows/bin/minizip.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${VCPKG_ROOT}/installed/x64-windows/bin/zlib1.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${VCPKG_ROOT}/installed/x64-windows/bin/pugixml.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${VCPKG_ROOT}/installed/x64-windows/bin/poly2tri.dll"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
     )
     if (CMAKE_BUILD_TYPE STREQUAL "Release")

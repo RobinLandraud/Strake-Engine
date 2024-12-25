@@ -16,10 +16,10 @@
 #include <iostream>
 #include <memory>
 
-class PlaneRotator : public ECS::Script
+class Rotator : public ECS::Script
 {
     public:
-        PlaneRotator(ECS::GameObject &parent, float speed) :
+        Rotator(ECS::GameObject &parent, float speed) :
             ECS::Script(parent),
             m_speed(speed)
         {
@@ -29,14 +29,14 @@ class PlaneRotator : public ECS::Script
             r_transform = getParent().getTransform();
         }
         void fixedUpdate() override {
-            r_transform->get().rotateLocal(glm::vec3(0.0f, m_speed, 0.0f));
+            r_transform->get().rotateLocal(glm::vec3(0.0f, 0.0f, m_speed));
         }
     private:
         std::optional<std::reference_wrapper<ECS::Transform>> r_transform;
         float m_speed;
 };
 
-class PlaneScaler : public ECS::Script
+class Scaler : public ECS::Script
 {
     public:
         using ECS::Script::Script;
@@ -135,10 +135,36 @@ int game()
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
 
-    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 60);
+    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 200);
     app.getWindow().setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
 
     ECS::Scene &scene = app.getSceneManager().addScene("Main Scene");
+
+    ECS::Texture &plasticTexture = app.getTextureManager().addTexture<ECS::Texture2D>("plastic", "assets/plastic.jpg");
+    ECS::Material &plasticMaterial = app.getMaterialManager().addMaterial("plastic");
+    plasticMaterial.addTexture(plasticTexture, "textureSampler");
+    plasticMaterial.setShininess(32.0f);
+
+    ECS::Texture &barelTexture = app.getTextureManager().addTexture<ECS::Texture2D>("barel", "assets/map.png");
+    ECS::Material &barelMaterial = app.getMaterialManager().addMaterial("barel");
+    barelMaterial.addTexture(barelTexture, "textureSampler");
+    barelMaterial.setShininess(32.0f);
+
+    ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.png");
+    ECS::Material &metalMaterial = app.getMaterialManager().addMaterial("metal");
+    metalMaterial.addTexture(metalTexture, "textureSampler");
+    metalMaterial.setShininess(256.0f);
+
+    ECS::Texture &grassTexture = app.getTextureManager().addTexture<ECS::Texture2D>("grass", "assets/grass.png");
+    ECS::Material &grassMaterial = app.getMaterialManager().addMaterial("grass");
+    grassMaterial.addTexture(grassTexture, "textureSampler");
+    grassMaterial.setShininess(10.0f);
+
+    ECS::GameObject &floor = scene.addGameObject("Floor");
+    floor.addComponent<ECS::Cube>();
+    floor.getTransform().setLocalScale(glm::vec3(20.0f, 0.1f, 20.0f));
+    floor.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    floor.addComponent<ECS::MeshRenderer>(grassMaterial);
 
     ECS::GameObject &player = scene.addGameObject("Main Camera");
     player.addComponent<ECS::Camera>();
@@ -149,58 +175,49 @@ int game()
     scene.setMainCamera(cam);
 
     ECS::GameObject &barrel = scene.addGameObject("Barrel");
-    barrel.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    barrel.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
     barrel.addComponent<ECS::MeshFilter>();
-    barrel.getComponent<ECS::MeshFilter>().loadFromOBJ("assets/barrel.obj");
+    barrel.getComponent<ECS::MeshFilter>().loadFromFile("assets/barrel.obj");
     ECS::MeshFilter &meshFilter = barrel.getComponent<ECS::MeshFilter>();
-    barrel.addComponent<PlaneRotator>(1.0f);
-    barrel.addComponent<PlaneScaler>();
-
-    ECS::GameObject &light = barrel.addChild("Light");
-    light.addComponent<ECS::PointLight>();
-    light.getTransform().setLocalPosition(glm::vec3(5.0f, 1.0f, 5.0f));
-    light.getComponent<ECS::PointLight>().setColor(glm::vec3(1.0f, 0.1f, 0.1f));
-
-    ECS::GameObject &child = barrel.addChild("Plane Child");
-    child.getTransform().setLocalPosition(glm::vec3(8.0f, 0.5f, 0.0f));
-    child.addComponent<ECS::Cube>();
-    child.addComponent<PlaneRotator>(1.0f);
-    ECS::GameObject &childChild = child.addChild("Plane Child Child");
-    childChild.getTransform().setLocalPosition(glm::vec3(2.0f, 0.0f, 0.0f));
-    childChild.addComponent<ECS::Cube>();
-    childChild.addComponent<PlaneRotator>(2.0f);
-    ECS::GameObject &floor = scene.addGameObject("Floor");
-    floor.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    floor.addComponent<ECS::Cube>();
-    floor.getTransform().setLocalScale(glm::vec3(40.0f, 0.1f, 40.0f));
-
-    ECS::Texture &barelTexture = app.getTextureManager().addTexture<ECS::Texture2D>("barel", "assets/map.png");
-    ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.png");
-    ECS::Texture &plasticTexture = app.getTextureManager().addTexture<ECS::Texture2D>("plastic", "assets/plastic.jpg");
-
-    ECS::Material &barelMaterial = app.getMaterialManager().addMaterial("barel");
-    barelMaterial.addTexture(barelTexture, "textureSampler");
-    barelMaterial.setShininess(32.0f);
-
-    ECS::Material &metalMaterial = app.getMaterialManager().addMaterial("metal");
-    metalMaterial.addTexture(metalTexture, "textureSampler");
-    metalMaterial.setShininess(256.0f);
-
-    ECS::Material &plasticMaterial = app.getMaterialManager().addMaterial("plastic");
-    plasticMaterial.addTexture(plasticTexture, "textureSampler");
-    plasticMaterial.setShininess(32.0f);
-
-
     barrel.addComponent<ECS::MeshRenderer>(barelMaterial);
-    child.addComponent<ECS::MeshRenderer>(metalMaterial);
-    childChild.addComponent<ECS::MeshRenderer>(plasticMaterial);
-    floor.addComponent<ECS::MeshRenderer>(plasticMaterial);
+
+    ECS::GameObject &metalBox = scene.addGameObject("Metal Box");
+    metalBox.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.5f, -4.0f));
+    metalBox.addComponent<ECS::Cube>();
+    metalBox.addComponent<ECS::MeshRenderer>(metalMaterial);
+
+    ECS::GameObject &tree = scene.addGameObject("Tree");
+    tree.getTransform().setLocalPosition(glm::vec3(4.0f, 0.0f, -3.0f));
+    tree.addComponent<ECS::MeshFilter>();
+    tree.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Tree.obj");
+    tree.addComponent<ECS::MeshRenderer>(grassMaterial);
+
+    ECS::GameObject &bush = scene.addGameObject("Bush");
+    bush.getTransform().setLocalPosition(glm::vec3(-4.0f, 0.0f, 3.0f));
+    bush.addComponent<ECS::MeshFilter>();
+    bush.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Bush.obj");
+    bush.addComponent<ECS::MeshRenderer>(grassMaterial);
+
+    ECS::GameObject &spruce = scene.addGameObject("Spruce");
+    spruce.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    spruce.addComponent<ECS::MeshFilter>();
+    spruce.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Spruce.obj");
+    spruce.addComponent<ECS::MeshRenderer>(grassMaterial);
+
+    ECS::GameObject &sun = scene.addGameObject("Sun");
+    sun.addComponent<Rotator>(0.2f);
+
+    ECS::GameObject &light = sun.addChild("Light");
+    light.addComponent<ECS::PointLight>();
+    light.getTransform().setLocalPosition(glm::vec3(30.0f, 0.0f, 0.0f));
+    light.getComponent<ECS::PointLight>().setIntensity(0.5f);
+    light.getComponent<ECS::PointLight>().setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);
     }
 
-    app.run();
+    app.run(true);
     return 0;
 }
 

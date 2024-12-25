@@ -96,6 +96,10 @@ namespace ECS {
     }
 
     void Application::run() {
+        run(false);
+    }
+
+    void Application::run(bool debug) {
         for (auto &scene : m_sceneManager.getScenes()) {
             scene.second->awake();
         }
@@ -103,6 +107,6 @@ namespace ECS {
         if (!scene.has_value()) {
             throw std::runtime_error("No scene set");
         }
-        m_gameLoop.run(m_window, scene->second.get(), false);
+        m_gameLoop.run(m_window, scene->second.get(), debug);
     }
 }

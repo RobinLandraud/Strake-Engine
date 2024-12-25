@@ -13,6 +13,7 @@ set(CMAKE_TOOLCHAIN_FILE "./vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(assimp REQUIRED)
 
 add_library(Config STATIC src/Config/Config.cpp)
 add_library(Time STATIC src/Time/Time.cpp)
@@ -87,12 +88,13 @@ target_link_libraries(Script PUBLIC Component)
 target_link_libraries(MeshFilter PUBLIC Component)
 target_link_libraries(MeshRenderer PUBLIC Component MeshFilter)
 
-target_link_libraries(Window PUBLIC
+target_link_libraries(Application PUBLIC
     Threads::Threads
     GLEW::GLEW
     OpenGL::GL
     OpenGL::GLU
     glfw
+    assimp::assimp
 ) # Window depends on SFML
 
 add_library(ECS STATIC

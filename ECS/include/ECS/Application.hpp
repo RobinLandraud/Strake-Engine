@@ -61,6 +61,7 @@ namespace ECS {
             Application(std::string &&title, int width, int height, int fps);
             ~Application();
             void run();
+            void run(bool debug);
             MaterialManager &getMaterialManager();
             TextureManager &getTextureManager();
             SceneManager &getSceneManager();

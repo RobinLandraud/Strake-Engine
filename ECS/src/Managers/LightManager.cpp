@@ -24,10 +24,15 @@ namespace ECS {
             if (getLights().empty()) {
                 return;
             }
-            const PointLight &light = static_cast<const PointLight &>(getLights().front().get());
-            program.setUniform("light.position", light.getPosition());
-            program.setUniform("light.color", light.getColor());
-            program.setUniform("light.intensity", light.getIntensity());
+            int numLights = std::min(static_cast<int>(getLights().size()), 8);
+            program.setUniform("numLights", numLights);
+
+            for (int i = 0; i < numLights; ++i) {
+                const PointLight &light = static_cast<const PointLight &>(getLights()[i].get());
+                program.setUniform("lights[" + std::to_string(i) + "].position", light.getPosition());
+                program.setUniform("lights[" + std::to_string(i) + "].color", light.getColor());
+                program.setUniform("lights[" + std::to_string(i) + "].intensity", light.getIntensity());
+            }
         });
     }
 

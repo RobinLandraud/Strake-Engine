@@ -6,6 +6,11 @@
 #include <ECS/LightManager.hpp>
 #include <functional>
 #include <optional>
+#include <ECS/MeshFilter.hpp>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 namespace ECS {
     class Scene {
