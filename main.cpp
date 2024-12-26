@@ -135,7 +135,7 @@ int game()
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
 
-    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 200);
+    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 60);
     app.getWindow().setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
 
     ECS::Scene &scene = app.getSceneManager().addScene("Main Scene");

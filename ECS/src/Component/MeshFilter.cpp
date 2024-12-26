@@ -92,12 +92,12 @@ namespace ECS
             aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            std::cerr << "Error loading model: " << importer.GetErrorString() << std::endl;
+            throw std::runtime_error("Failed to load mesh file: " + path);
             return;
         }
 
         if (scene->mNumMeshes == 0) {
-            std::cerr << "No meshes found in file: " << path << std::endl;
+            throw std::runtime_error("No meshes found in file: " + path);
             return;
         }
 
