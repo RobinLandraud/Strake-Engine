@@ -8,6 +8,7 @@
 #include <ECS/Material.hpp>
 #include <ECS/Camera.hpp>
 #include <ECS/Transform.hpp>
+#include <ECS/Lights.hpp>
 
 namespace ECS {
     class MeshRenderer : public Component
@@ -16,7 +17,7 @@ namespace ECS {
             MeshRenderer(GameObject &parent, MeshFilter &meshFilter, Material &material);
             MeshRenderer(GameObject &parent, Material &material);
 
-            MeshRenderer(const MeshRenderer &other) = delete;   
+            MeshRenderer(const MeshRenderer &other) = delete;
             MeshRenderer(MeshRenderer &&other) = delete;
             MeshRenderer &operator=(const MeshRenderer &other) = delete;
             MeshRenderer &operator=(MeshRenderer &&other) = delete;

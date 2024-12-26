@@ -34,28 +34,30 @@ namespace ECS {
 
     void MeshRenderer::setupMesh()
     {
+        const auto& vertices = m_meshFilter.getVertices();
+        const auto& uvs = m_meshFilter.getUVs();
+        const auto& normals = m_meshFilter.getNormals();
+
+        // Validate data
+        if (vertices.empty() || vertices.size() != uvs.size() || vertices.size() != normals.size()) {
+            throw std::runtime_error("Invalid mesh data");
+        }
+
         glGenVertexArrays(1, &m_VAO);
         glBindVertexArray(m_VAO);
 
         glGenBuffers(1, &m_VBO);
         glGenBuffers(1, &m_EBO);
 
-        // Combine vertex positions and texture coordinates into a single buffer
         std::vector<float> vertexData;
-        const auto& vertices = m_meshFilter.getVertices();
-        const auto& uvs = m_meshFilter.getUVs();
-        const auto& normals = m_meshFilter.getNormals();
-        vertexData.reserve(vertices.size() * 8); // 3 for position + 2 for texture coordinates + 3 for normals
+        vertexData.reserve(vertices.size() * 8);
 
         for (size_t i = 0; i < vertices.size(); ++i) {
-            //position
             vertexData.push_back(vertices[i].x);
             vertexData.push_back(vertices[i].y);
             vertexData.push_back(vertices[i].z);
-            //texture coordinates
             vertexData.push_back(uvs[i].x);
             vertexData.push_back(uvs[i].y);
-            //normals
             vertexData.push_back(normals[i].x);
             vertexData.push_back(normals[i].y);
             vertexData.push_back(normals[i].z);
@@ -64,8 +66,13 @@ namespace ECS {
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
         glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), vertexData.data(), GL_STATIC_DRAW);
 
+        const auto& indices = m_meshFilter.getIndices();
+        if (indices.empty()) {
+            throw std::runtime_error("No indices provided");
+        }
+
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshFilter.getIndices().size() * sizeof(unsigned int), m_meshFilter.getIndices().data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
         // Vertex positions
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -93,20 +100,11 @@ namespace ECS {
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
+        getParent().getEventDispatcher().broadcast(EventData<MeshRenderer>(*this, "updateRendererLights"));
         camera.resetUpdateFlags();
-
-        std::cout << "DEBUG:" << std::endl;
-        std::cout << "Rendering object: " << getParent().getName() << std::endl;
-        std::cout << "light.position: " << m_material.getShaderProgram().getUniformVec3("light.position").x << " " << m_material.getShaderProgram().getUniformVec3("light.position").y << " " << m_material.getShaderProgram().getUniformVec3("light.position").z << std::endl;
-        std::cout << "light.color: " << m_material.getShaderProgram().getUniformVec3("light.color").x << " " << m_material.getShaderProgram().getUniformVec3("light.color").y << " " << m_material.getShaderProgram().getUniformVec3("light.color").z << std::endl;
-        std::cout << "light.intensity: " << m_material.getShaderProgram().getUniformFloat("light.intensity") << std::endl;
-        std::cout << "textureSampler: " << m_material.getShaderProgram().getUniformInt("textureSampler") << std::endl;
-        std::cout << "alphaThreshold: " << m_material.getShaderProgram().getUniformFloat("alphaThreshold") << std::endl;
-        std::cout << "shiniess: " << m_material.getShaderProgram().getUniformFloat("shininess") << std::endl;
-        std::cout << "ambientIntensity: " << m_material.getShaderProgram().getUniformFloat("ambientIntensity") << "\n" << std::endl;
         
         glBindVertexArray(m_VAO);
-        glDrawElements(GL_TRIANGLES, m_meshFilter.getIndices().size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_meshFilter.getIndices().size()), GL_UNSIGNED_INT, nullptr);
         GLenum err = glGetError();
         if (err != GL_NO_ERROR) {
             std::cout << "OpenGL Error: " << err << std::endl;

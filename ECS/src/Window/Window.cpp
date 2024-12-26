@@ -1,4 +1,6 @@
 #include <ECS/Window.hpp>
+#include <ECS/EventHandler.hpp>
+#include <ECS/Time.hpp>
 
 namespace ECS
 {
@@ -6,7 +8,8 @@ namespace ECS
         m_window(nullptr, glfwDestroyWindow),
         m_bgColor(0.0f, 0.0f, 0.0f, 1.0f),
         m_width(width),
-        m_height(height)
+        m_height(height),
+        m_cursorEnabled(false)
     {
         if (glfwInit() == 0) {
             throw std::runtime_error("Failed to initialize GLFW");
@@ -31,12 +34,19 @@ namespace ECS
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        //glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
+        glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+        // Initialize the event handler and time singletons
+        EventHandler::init(*this);
+        Time::init();
     }
 
     Window::~Window()
     {
         glfwDestroyWindow(m_window.get());
+        //destroy singletons
+        EventHandler::destroy();
+        Time::destroy();
     }
 
     int Window::getWidth() const
@@ -83,5 +93,20 @@ namespace ECS
     glm::vec4 Window::getBgColor() const
     {
         return m_bgColor;
+    }
+
+    void Window::setCursorEnabled(bool enabled)
+    {
+        m_cursorEnabled = enabled;
+        if (enabled == true) {
+            glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        } else {
+            glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+    }
+
+    bool Window::isCursorEnabled() const
+    {
+        return m_cursorEnabled;
     }
 }

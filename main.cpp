@@ -1,7 +1,7 @@
 #include <ECS/Camera.hpp>
 #include <ECS/Component.hpp>
 #include <ECS/Config.hpp>
-#include <ECS/Loop.hpp>
+#include <ECS/GameLoop.hpp>
 #include <ECS/Script.hpp>
 #include <ECS/Shaders.hpp>
 #include <ECS/Material.hpp>
@@ -11,15 +11,15 @@
 #include <ECS/init.hpp>
 #include <ECS/Scene.hpp>
 #include <ECS/EventHandler.hpp>
+#include <ECS/Application.hpp>
 #include <array>
 #include <iostream>
+#include <memory>
 
-#define ECS_EXIT() { glfwTerminate(); exit(0); }
-
-class PlaneRotator : public ECS::Script
+class Rotator : public ECS::Script
 {
     public:
-        PlaneRotator(ECS::GameObject &parent, float speed) :
+        Rotator(ECS::GameObject &parent, float speed) :
             ECS::Script(parent),
             m_speed(speed)
         {
@@ -29,14 +29,14 @@ class PlaneRotator : public ECS::Script
             r_transform = getParent().getTransform();
         }
         void fixedUpdate() override {
-            r_transform->get().rotateLocal(glm::vec3(0.0f, m_speed, 0.0f));
+            r_transform->get().rotateLocal(glm::vec3(0.0f, 0.0f, m_speed));
         }
     private:
         std::optional<std::reference_wrapper<ECS::Transform>> r_transform;
         float m_speed;
 };
 
-class PlaneScaler : public ECS::Script
+class Scaler : public ECS::Script
 {
     public:
         using ECS::Script::Script;
@@ -70,20 +70,20 @@ class CharacterController: public ECS::Script
             ECS::Transform &transform = this->transform.value();
             //std::cout << "Mouse: " << mouse.x << " " << mouse.y << std::endl;
             if (ECS::EventHandler::isKeyHeld(ECS::Key::W)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed));
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed * ECS::Time::getDeltaTime()));
                 //std::cout << "Z key pressed" << std::endl;
             } else if (ECS::EventHandler::isKeyHeld(ECS::Key::S)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed));
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed * ECS::Time::getDeltaTime()));
             }
             if (ECS::EventHandler::isKeyHeld(ECS::Key::A)) {
-                transform.translateLocal(glm::vec3(-m_speed, 0.0f, 0.0f));
+                transform.translateLocal(glm::vec3(-m_speed * ECS::Time::getDeltaTime(), 0.0f, 0.0f));
             } else if (ECS::EventHandler::isKeyHeld(ECS::Key::D)) {
-                transform.translateLocal(glm::vec3(m_speed, 0.0f, 0.0f));
+                transform.translateLocal(glm::vec3(m_speed * ECS::Time::getDeltaTime(), 0.0f, 0.0f));
             }
             if (ECS::EventHandler::isKeyHeld(ECS::Key::Space)) {
-                transform.translateLocal(glm::vec3(0.0f, m_speed, 0.0f));
+                transform.translateLocal(glm::vec3(0.0f, m_speed * ECS::Time::getDeltaTime(), 0.0f));
             } else if (ECS::EventHandler::isKeyHeld(ECS::Key::LeftShift)) {
-                transform.translateLocal(glm::vec3(0.0f, -m_speed, 0.0f));
+                transform.translateLocal(glm::vec3(0.0f, -m_speed * ECS::Time::getDeltaTime(), 0.0f));
             }
             //look at mouse
             float yaw = mouse.x;
@@ -94,7 +94,7 @@ class CharacterController: public ECS::Script
         }
     private:
         std::optional<std::reference_wrapper<ECS::Transform>> transform;
-        const float m_speed = 0.05f;
+        const float m_speed = 10.0f;
 };
 
 void printComponent(ECS::GameObject &go, int depth)
@@ -120,102 +120,110 @@ void printComponent(ECS::GameObject &go, int depth)
     std::cout << "}" << std::endl;
 }
 
-int main()
+ECS::Scene createScene(int width, int height)
+{
+    return ECS::Scene();
+}
+
+int game()
 {
     GLuint error = 0;
+
+    const int WIN_WIDTH = 1400;
+    const int WIN_HEIGHT = 900;
 
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
 
-    ECS::Window window(1000, 800, "Strake Engine V0.1.0");
-    ECS::init();
-    window.setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
+    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 60);
+    app.getWindow().setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
 
-    // create singletons
-    ECS::EventHandler::init(window);
-    ECS::Time::init();
+    ECS::Scene &scene = app.getSceneManager().addScene("Main Scene");
 
-    ECS::Scene scene;
+    ECS::Texture &plasticTexture = app.getTextureManager().addTexture<ECS::Texture2D>("plastic", "assets/plastic.jpg");
+    ECS::Material &plasticMaterial = app.getMaterialManager().addMaterial("plastic");
+    plasticMaterial.addTexture(plasticTexture, "textureSampler");
+    plasticMaterial.setShininess(32.0f);
+
+    ECS::Texture &barelTexture = app.getTextureManager().addTexture<ECS::Texture2D>("barel", "assets/map.png");
+    ECS::Material &barelMaterial = app.getMaterialManager().addMaterial("barel");
+    barelMaterial.addTexture(barelTexture, "textureSampler");
+    barelMaterial.setShininess(32.0f);
+
+    ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.png");
+    ECS::Material &metalMaterial = app.getMaterialManager().addMaterial("metal");
+    metalMaterial.addTexture(metalTexture, "textureSampler");
+    metalMaterial.setShininess(256.0f);
+
+    ECS::Texture &grassTexture = app.getTextureManager().addTexture<ECS::Texture2D>("grass", "assets/grass.png");
+    ECS::Material &grassMaterial = app.getMaterialManager().addMaterial("grass");
+    grassMaterial.addTexture(grassTexture, "textureSampler");
+    grassMaterial.setShininess(10.0f);
+
+    ECS::GameObject &floor = scene.addGameObject("Floor");
+    floor.addComponent<ECS::Cube>();
+    floor.getTransform().setLocalScale(glm::vec3(20.0f, 0.1f, 20.0f));
+    floor.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    floor.addComponent<ECS::MeshRenderer>(grassMaterial);
 
     ECS::GameObject &player = scene.addGameObject("Main Camera");
     player.addComponent<ECS::Camera>();
     ECS::Camera &cam = player.getComponent<ECS::Camera>();
-    cam.setProjection(45.0f, 1000.0f / 800.0f, 0.1f, 100.0f);
-    //cam.setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
+    cam.setProjection(45.0f, static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT), 0.1f, 100.0f);
     player.getTransform().setLocalPosition(glm::vec3(0.0f, 2.0f, 5.0f));
     player.addComponent<CharacterController>();
     scene.setMainCamera(cam);
 
-    ECS::GameObject &planeObject = scene.addGameObject("Plane");
-    planeObject.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    //planeObject.addComponent<ECS::Cube>();
-    planeObject.addComponent<ECS::MeshFilter>();
-    planeObject.getComponent<ECS::MeshFilter>().loadFromOBJ("assets/barrel.obj");
-    ECS::MeshFilter &meshFilter = planeObject.getComponent<ECS::MeshFilter>();
-    planeObject.addComponent<PlaneRotator>(1.0f);
-    planeObject.addComponent<PlaneScaler>();
-    ECS::GameObject &child = planeObject.addChild("Plane Child");
-    child.getTransform().setLocalPosition(glm::vec3(8.0f, 0.5f, 0.0f));
-    child.addComponent<ECS::Cube>();
-    child.addComponent<PlaneRotator>(1.0f);
-    ECS::GameObject &childChild = child.addChild("Plane Child Child");
-    childChild.getTransform().setLocalPosition(glm::vec3(2.0f, 0.0f, 0.0f));
-    childChild.addComponent<ECS::Cube>();
-    childChild.addComponent<PlaneRotator>(2.0f);
-    ECS::GameObject &floor = scene.addGameObject("Floor");
-    floor.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    floor.addComponent<ECS::Cube>();
-    floor.getTransform().setLocalScale(glm::vec3(40.0f, 0.1f, 40.0f));
+    ECS::GameObject &barrel = scene.addGameObject("Barrel");
+    barrel.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
+    barrel.addComponent<ECS::MeshFilter>();
+    barrel.getComponent<ECS::MeshFilter>().loadFromFile("assets/barrel.obj");
+    ECS::MeshFilter &meshFilter = barrel.getComponent<ECS::MeshFilter>();
+    barrel.addComponent<ECS::MeshRenderer>(barelMaterial);
 
-    ECS::Texture2D textureBarel("assets/map.png");
-    if (!textureBarel.isLoaded()) {
-        std::cout << "Failed to load texture" << std::endl;
-    }
+    ECS::GameObject &metalBox = scene.addGameObject("Metal Box");
+    metalBox.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.5f, -4.0f));
+    metalBox.addComponent<ECS::Cube>();
+    metalBox.addComponent<ECS::MeshRenderer>(metalMaterial);
 
-    ECS::Texture2D textureMetal("assets/metal.png");
-    if (!textureMetal.isLoaded()) {
-        std::cout << "Failed to load texture" << std::endl;
-    }
+    ECS::GameObject &tree = scene.addGameObject("Tree");
+    tree.getTransform().setLocalPosition(glm::vec3(4.0f, 0.0f, -3.0f));
+    tree.addComponent<ECS::MeshFilter>();
+    tree.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Tree.obj");
+    tree.addComponent<ECS::MeshRenderer>(grassMaterial);
 
-    ECS::Texture2D texturePlastic("assets/plastic.jpg");
-    if (!texturePlastic.isLoaded()) {
-        std::cout << "Failed to load texture" << std::endl;
-    }
+    ECS::GameObject &bush = scene.addGameObject("Bush");
+    bush.getTransform().setLocalPosition(glm::vec3(-4.0f, 0.0f, 3.0f));
+    bush.addComponent<ECS::MeshFilter>();
+    bush.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Bush.obj");
+    bush.addComponent<ECS::MeshRenderer>(grassMaterial);
 
-    ECS::Material plasticMaterial;
-    plasticMaterial.addTexture(texturePlastic, "textureSampler");
-    plasticMaterial.setShininess(32.0f);
+    ECS::GameObject &spruce = scene.addGameObject("Spruce");
+    spruce.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    spruce.addComponent<ECS::MeshFilter>();
+    spruce.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Spruce.obj");
+    spruce.addComponent<ECS::MeshRenderer>(grassMaterial);
 
-    ECS::Material barelMaterial;
-    barelMaterial.addTexture(textureBarel, "textureSampler");
-    barelMaterial.setShininess(32.0f);
+    ECS::GameObject &sun = scene.addGameObject("Sun");
+    sun.addComponent<Rotator>(0.2f);
 
-    ECS::Material barelMaterial2;
-    barelMaterial2.addTexture(textureBarel, "textureSampler");
-    barelMaterial2.setShininess(32.0f);
-
-    ECS::Material metalMaterial;
-    metalMaterial.addTexture(textureMetal, "textureSampler");
-    metalMaterial.setShininess(256.0f);
-
-    planeObject.addComponent<ECS::MeshRenderer>(barelMaterial2);
-    child.addComponent<ECS::MeshRenderer>(metalMaterial);
-    childChild.addComponent<ECS::MeshRenderer>(barelMaterial2);
-    floor.addComponent<ECS::MeshRenderer>(barelMaterial2);
+    ECS::GameObject &light = sun.addChild("Light");
+    light.addComponent<ECS::PointLight>();
+    light.getTransform().setLocalPosition(glm::vec3(30.0f, 0.0f, 0.0f));
+    light.getComponent<ECS::PointLight>().setIntensity(0.5f);
+    light.getComponent<ECS::PointLight>().setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);
     }
 
-    scene.awake();
-    scene.start();
+    app.run(true);
+    return 0;
+}
 
-    ECS::Loop loop(100);
-    loop.run(window, scene, true);
-
-    //destroy singletons
-    ECS::EventHandler::destroy();
-    ECS::Time::destroy();
-
-    ECS_EXIT();
+int main()
+{
+    int out = game();
+    std::cout << "Game exited with code: " << out << std::endl;
+    return out;
 }

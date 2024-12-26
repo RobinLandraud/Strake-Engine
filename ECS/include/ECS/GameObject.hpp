@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <ECS/EventDispatcher.hpp>
 
 namespace ECS {
     class Component;
@@ -15,7 +16,7 @@ namespace ECS {
 
     class GameObject {
         public:
-            explicit GameObject(std::string name);
+            explicit GameObject(std::string name, EventDispatcher &eventDispatcher);
             ~GameObject();
             GameObject(const GameObject&) = delete;
             GameObject& operator=(const GameObject&) = delete;
@@ -149,6 +150,8 @@ namespace ECS {
             void lateUpdate();
             void render(Camera &camera);
 
+            EventDispatcher &getEventDispatcher();
+
         private:
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
             std::vector<std::type_index> m_derivedTypes;
@@ -157,5 +160,6 @@ namespace ECS {
             const std::string m_name;
             std::optional<std::reference_wrapper<Transform>> m_transform;
             std::optional<std::reference_wrapper<GameObject>> m_parent;
+            EventDispatcher &m_eventDispatcher;
     };
 }

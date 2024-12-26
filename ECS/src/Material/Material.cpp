@@ -2,24 +2,11 @@
 
 namespace ECS {
     Material::Material() :
-    m_shaderProgram(
-        ShaderProgram(
+        Material(
             "ECS/src/Shader/glsl/texture2D/vertex.glsl",
             "ECS/src/Shader/glsl/texture2D/fragment.glsl"
         )
-    )
     {
-        getShaderProgram().use();
-        getShaderProgram().setUniform("textureSampler", 0); // default texture unit
-
-        getShaderProgram().setUniform("ambientIntensity", 0.1f); // global to every object
-        
-        getShaderProgram().setUniform("shininess", 32.0f);
-        getShaderProgram().setUniform("alphaThreshold", 0.01f);
-        // Set default light (To be removed)
-        getShaderProgram().setUniform("light.position", glm::vec3(10.0f, 1.0f, 0.0f));
-        getShaderProgram().setUniform("light.color", glm::vec3(1.0f, 1.0f, 1.0f));
-        getShaderProgram().setUniform("light.intensity", 1.0f);
     }
 
     Material::Material(const std::string &vertexPath, const std::string &fragmentPath) :
@@ -29,15 +16,9 @@ namespace ECS {
     {
         getShaderProgram().use();
         getShaderProgram().setUniform("textureSampler", 0); // default texture unit
-
         getShaderProgram().setUniform("ambientIntensity", 0.1f); // global to every object
-        
-        getShaderProgram().setUniform("shininess", 32.0f);
-        getShaderProgram().setUniform("alphaThreshold", 0.01f);
-        // Set default light (To be removed)
-        getShaderProgram().setUniform("light.position", glm::vec3(10.0f, 1.0f, 0.0f));
-        getShaderProgram().setUniform("light.color", glm::vec3(1.0f, 1.0f, 1.0f));
-        getShaderProgram().setUniform("light.intensity", 1.0f);
+        getShaderProgram().setUniform("shininess", 32.0f); // default shininess
+        getShaderProgram().setUniform("alphaThreshold", 0.01f); // default alpha threshold
     }
 
     void Material::bind() const {
@@ -54,8 +35,6 @@ namespace ECS {
             pair.second.value().get().bind();
             // Set the uniform to the texture unit
             m_shaderProgram.setUniform(pair.first, textureUnit);
-            std::cout << "Texture " << pair.second.value().get().getID() << " bind to texture unit " << textureUnit << std::endl;
-            std::cout << "Binding texture " << pair.first << " to shader unit " << textureUnit << std::endl;
             textureUnit++;
         }
     }
@@ -72,6 +51,7 @@ namespace ECS {
             pair.second.value().get().unbind();
             textureUnit++;
         }
+        getShaderProgram().unuse(); // only for debug
     }
 
     void Material::addTexture(Texture &texture, const std::string &uniformName) {

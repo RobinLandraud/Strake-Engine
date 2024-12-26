@@ -18,6 +18,30 @@ namespace ECS
         setDerivedType(typeid(MeshFilter));
     }
 
+    MeshFilter::MeshFilter(const MeshFilter &other) : Component(other)
+    {
+        m_vertices = other.m_vertices;
+        m_normals = other.m_normals;
+        m_uvs = other.m_uvs;
+        m_indices = other.m_indices;
+        m_isUpdated = true;
+    }
+
+    MeshFilter &MeshFilter::operator=(const MeshFilter &other)
+    {
+        if (this == &other) {
+            return *this;
+        }
+
+        m_vertices = other.m_vertices;
+        m_normals = other.m_normals;
+        m_uvs = other.m_uvs;
+        m_indices = other.m_indices;
+        m_isUpdated = true;
+
+        return *this;
+    }
+
     void MeshFilter::setVertices(const std::vector<glm::vec3> &vertices)
     {
         m_vertices = vertices;
@@ -62,131 +86,56 @@ namespace ECS
         return m_indices;
     }
 
-    void MeshFilter::loadFromOBJ(const std::string &path) {
-        std::vector<glm::vec3> vertices;
-        std::vector<glm::vec3> normals;
-        std::vector<glm::vec2> uvs;
-        std::vector<unsigned int> indices;
+    void ECS::MeshFilter::loadFromFile(const std::string &path, short index) {
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(path,
+            aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
 
-        std::map<PackedVertex, unsigned int> vertexToIndexMap;
-        std::vector<glm::vec3> orderedVertices;
-        std::vector<glm::vec2> orderedUVs;
-        std::vector<glm::vec3> orderedNormals;
-        std::vector<unsigned int> newIndices;
-
-        FILE *file = fopen(path.c_str(), "r");
-        if (file == nullptr) {
-            std::cerr << "Failed to open file: " << path << std::endl;
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            throw std::runtime_error("Failed to load mesh file: " + path);
             return;
         }
 
-        while (true) {
-            char lineHeader[128];
-            int res = fscanf(file, "%s", lineHeader);
-            if (res == EOF) {
-                break;
+        if (scene->mNumMeshes == 0) {
+            throw std::runtime_error("No meshes found in file: " + path);
+            return;
+        }
+
+        aiMesh* mesh = scene->mMeshes[index];
+        m_vertices.clear();
+        m_normals.clear();
+        m_uvs.clear();
+        m_indices.clear();
+
+        // Extract vertices
+        for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+            m_vertices.emplace_back(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+
+            if (mesh->HasNormals()) {
+                m_normals.emplace_back(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
             }
 
-            if (strcmp(lineHeader, "v") == 0) {
-                glm::vec3 vertex;
-                fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-                vertices.push_back(vertex);
-            } else if (strcmp(lineHeader, "vt") == 0) {
-                glm::vec2 uv;
-                fscanf(file, "%f %f\n", &uv.x, &uv.y);
-                uv.y = 1.0f - uv.y; // Flip V-coordinate for OpenGL
-                uvs.push_back(uv);
-            } else if (strcmp(lineHeader, "vn") == 0) {
-                glm::vec3 normal;
-                fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-                normals.push_back(normal);
-            }else if (strcmp(lineHeader, "f") == 0) {
-                unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
-                int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n",
-                                    &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-                                    &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-                                    &vertexIndex[2], &uvIndex[2], &normalIndex[2],
-                                    &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
-
-                if (matches == 9) { // Triangle face
-                    for (int i = 0; i < 3; i++) {
-                        PackedVertex packed = {
-                            vertices[vertexIndex[i] - 1],
-                            uvs[uvIndex[i] - 1],
-                            normals[normalIndex[i] - 1]
-                        };
-
-                        auto it = vertexToIndexMap.find(packed);
-                        if (it != vertexToIndexMap.end()) {
-                            newIndices.push_back(it->second);
-                        } else {
-                            orderedVertices.push_back(packed.position);
-                            orderedUVs.push_back(packed.uv);
-                            orderedNormals.push_back(packed.normal);
-                            unsigned int newIndex = (unsigned int)orderedVertices.size() - 1;
-                            newIndices.push_back(newIndex);
-                            vertexToIndexMap[packed] = newIndex;
-                        }
-                    }
-                } else if (matches == 12) { // Quad face
-                    // First triangle: v1, v2, v3
-                    for (int i = 0; i < 3; i++) {
-                        PackedVertex packed = {
-                            vertices[vertexIndex[i] - 1],
-                            uvs[uvIndex[i] - 1],
-                            normals[normalIndex[i] - 1]
-                        };
-
-                        auto it = vertexToIndexMap.find(packed);
-                        if (it != vertexToIndexMap.end()) {
-                            newIndices.push_back(it->second);
-                        } else {
-                            orderedVertices.push_back(packed.position);
-                            orderedUVs.push_back(packed.uv);
-                            orderedNormals.push_back(packed.normal);
-                            unsigned int newIndex = (unsigned int)orderedVertices.size() - 1;
-                            newIndices.push_back(newIndex);
-                            vertexToIndexMap[packed] = newIndex;
-                        }
-                    }
-
-                    // Second triangle: v1, v3, v4
-                    for (int i : {0, 2, 3}) {
-                        PackedVertex packed = {
-                            vertices[vertexIndex[i] - 1],
-                            uvs[uvIndex[i] - 1],
-                            normals[normalIndex[i] - 1]
-                        };
-
-                        auto it = vertexToIndexMap.find(packed);
-                        if (it != vertexToIndexMap.end()) {
-                            newIndices.push_back(it->second);
-                        } else {
-                            orderedVertices.push_back(packed.position);
-                            orderedUVs.push_back(packed.uv);
-                            orderedNormals.push_back(packed.normal);
-                            unsigned int newIndex = (unsigned int)orderedVertices.size() - 1;
-                            newIndices.push_back(newIndex);
-                            vertexToIndexMap[packed] = newIndex;
-                        }
-                    }
-                } else {
-                    std::cerr << "Unsupported face format in OBJ file" << std::endl;
-                    fclose(file);
-                    return;
-                }
+            if (mesh->HasTextureCoords(0)) {
+                m_uvs.emplace_back(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
             }
         }
 
-        fclose(file);
-        // Pass the ordered data to your mesh
-        setVertices(orderedVertices);
-        setNormals(orderedNormals);
-        setUVs(orderedUVs);
-        setIndices(newIndices);
+        // Extract indices
+        for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
+            aiFace face = mesh->mFaces[i];
+            for (unsigned int j = 0; j < face.mNumIndices; ++j) {
+                m_indices.push_back(face.mIndices[j]);
+            }
+        }
 
-        m_isUpdated = true;
+        m_isUpdated = true; // Mark the mesh as updated
     }
+
+    void ECS::MeshFilter::loadFromFile(const std::string &path)
+    {
+        loadFromFile(path, 0);
+    }
+
 
     void MeshFilter::setUpdated(bool updated)
     {

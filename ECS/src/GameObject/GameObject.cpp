@@ -1,12 +1,14 @@
 #include <ECS/Component.hpp>
 #include <ECS/GameObject.hpp>
+#include <ECS/Scene.hpp>
 #include <ECS/Script.hpp>
 #include <ECS/Transform.hpp>
 
 namespace ECS {
 
-    GameObject::GameObject(std::string name) :
-        m_name(std::move(name))
+    GameObject::GameObject(std::string name, EventDispatcher &eventDispatcher) :
+        m_name(std::move(name)),
+        m_eventDispatcher(eventDispatcher)
     {
         m_components[typeid(Transform)] = std::make_unique<Transform>(*this);
         m_transform = static_cast<Transform &>(*m_components[typeid(Transform)]);
@@ -29,7 +31,7 @@ namespace ECS {
         if (m_children.find(name) != m_children.end()) {
             throw std::runtime_error("Child already exists: " + name);
         }
-        m_children[name] = std::make_unique<GameObject>(name);
+        m_children[name] = std::make_unique<GameObject>(name, m_eventDispatcher);
         m_children[name].get()->m_parent = *this;
         return *m_children[name];
     }
@@ -132,5 +134,9 @@ namespace ECS {
 
     bool GameObject::isScript(std::type_index type) const {
         return std::type_index(typeid(Script)) == type;
+    }
+
+    EventDispatcher &GameObject::getEventDispatcher() {
+        return m_eventDispatcher;
     }
 }

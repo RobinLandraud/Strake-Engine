@@ -1,10 +1,17 @@
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS // for fopen, fscanf, etc.
+
 #include <ECS/Component.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <cstring>
 #include <map>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 
 namespace ECS
 {
@@ -12,6 +19,9 @@ namespace ECS
     {
         public:
             MeshFilter(GameObject &parent);
+
+            MeshFilter(const MeshFilter &other);
+            MeshFilter &operator=(const MeshFilter &other);
 
             void setVertices(const std::vector<glm::vec3> &vertices);
             void setNormals(const std::vector<glm::vec3> &normals);
@@ -23,7 +33,8 @@ namespace ECS
             [[nodiscard]] const std::vector<glm::vec2> &getUVs() const;
             [[nodiscard]] const std::vector<unsigned int> &getIndices() const;
 
-            void loadFromOBJ(const std::string &path);
+            void loadFromFile(const std::string &path);
+            void loadFromFile(const std::string &path, short index);
 
             [[nodiscard]] bool isUpdated() const;
             void setUpdated(bool updated);

@@ -8,10 +8,10 @@
 #include <cmath>
 
 namespace ECS {
-    class Loop {
+    class GameLoop {
         public:
-            explicit Loop(int fps = 60);
-            ~Loop() = default;
+            explicit GameLoop(int fps = 60);
+            ~GameLoop() = default;
             void run(Window& window, Scene &scene, bool debug = false);
             void stop();
         private:

@@ -35,8 +35,12 @@ namespace ECS {
         glUseProgram(m_program);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            std::cerr << "OpenGL error: " << error << std::endl;
+            std::cerr << "[Shader use] OpenGL error: " << error << std::endl;
         }
+    }
+
+    void ShaderProgram::unuse() const {
+        glUseProgram(0);
     }
 
     float ShaderProgram::getUniformFloat(const std::string &name) const {
@@ -72,6 +76,17 @@ namespace ECS {
         return value;
     }
 
+    glm::mat4 ShaderProgram::getUniformMat4(const std::string &name) const {
+        GLint location = glGetUniformLocation(m_program, name.c_str());
+        if (location == -1) {
+            std::cerr << "Failed to find uniform: " << name << std::endl;
+            return glm::mat4(1.0f);
+        }
+        glm::mat4 value;
+        glGetUniformfv(m_program, location, &value[0][0]);
+        return value;
+    }
+
     void ShaderProgram::setUniform(const std::string &name, const glm::mat4 &value) const {
         GLint location = glGetUniformLocation(m_program, name.c_str());
         if (location == -1) {
@@ -81,7 +96,7 @@ namespace ECS {
         glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            std::cerr << "OpenGL error: " << error << std::endl;
+            std::cerr << "[Shader set uniform] OpenGL error: " << error << std::endl;
         }
     }
 
@@ -94,7 +109,7 @@ namespace ECS {
         glUniform3fv(location, 1, &value[0]);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            std::cerr << "OpenGL error: " << error << std::endl;
+            std::cerr << "[Shader set uniform] OpenGL error: " << error << std::endl;
         }
     }
 
@@ -107,7 +122,7 @@ namespace ECS {
         glUniform4fv(location, 1, &value[0]);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            std::cerr << "OpenGL error: " << error << std::endl;
+            std::cerr << "[Shader set uniform] OpenGL error: " << error << std::endl;
         }
     }
 
@@ -133,7 +148,7 @@ namespace ECS {
         glUniform1i(location, value);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            std::cerr << "Shader OpenGL error: " << error << std::endl;
+            std::cerr << "[Shader set uniform] Shader OpenGL error: " << error << std::endl;
         }
     }
 }

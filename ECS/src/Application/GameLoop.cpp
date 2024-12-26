@@ -1,7 +1,7 @@
-#include <ECS/Loop.hpp>
+#include <ECS/GameLoop.hpp>
 
 namespace ECS {
-    Loop::Loop(int fps)
+    GameLoop::GameLoop(int fps)
         : m_isRunning(false),
         m_fps(fps),
         m_fixedTime(0.02f), // 50 Hz
@@ -10,7 +10,8 @@ namespace ECS {
         m_fpsDelta(0.0f)
     {
     }
-    void Loop::run(Window& window, Scene &scene, bool debug)
+    
+    void GameLoop::run(Window& window, Scene &scene, bool debug)
     {
         m_isRunning = true;
 
@@ -23,6 +24,9 @@ namespace ECS {
         std::vector<float> fps_buffer;
         bool is_updated = false;
         bool is_fixed_updated = false;
+
+        scene.awake();
+        scene.start(); // only for active game objects
 
         while (m_isRunning)
         {
@@ -83,25 +87,25 @@ namespace ECS {
         }
     }
 
-    void Loop::stop()
+    void GameLoop::stop()
     {
         m_isRunning = false;
         glfwTerminate();
     }
 
-    void Loop::update(Scene &scene)
+    void GameLoop::update(Scene &scene)
     {
         scene.update();
     }
-    void Loop::fixedUpdate(Scene &scene)
+    void GameLoop::fixedUpdate(Scene &scene)
     {
         scene.fixedUpdate();
     }
-    void Loop::lateUpdate(Scene &scene)
+    void GameLoop::lateUpdate(Scene &scene)
     {
         scene.lateUpdate();
     }
-    void Loop::render(Scene &scene)
+    void GameLoop::render(Scene &scene)
     {
         scene.render();
     }

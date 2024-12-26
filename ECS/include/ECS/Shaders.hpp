@@ -38,8 +38,10 @@ namespace ECS {
             float getUniformFloat(const std::string &name) const;
             int getUniformInt(const std::string &name) const;
             glm::vec3 getUniformVec3(const std::string &name) const;
+            glm::mat4 getUniformMat4(const std::string &name) const;
 
             void use() const;
+            void unuse() const;
             void setUniform(const std::string &name, const glm::mat4 &value) const;
             void setUniform(const std::string &name, const glm::vec3 &value) const;
             void setUniform(const std::string &name, const glm::vec4 &value) const;

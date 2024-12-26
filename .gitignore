@@ -1,5 +1,7 @@
 # build folder
 build/
+vcpkg/
+assets/
 
 # tests forlder (is a sandbox)
 
@@ -11,7 +13,7 @@ build/
 *.slo
 *.lo
 *.o
-*.obj
+# *.obj
 
 # Precompiled Headers
 *.gch
@@ -36,3 +38,4 @@ build/
 *.exe
 *.out
 *.app
+*.pdb
