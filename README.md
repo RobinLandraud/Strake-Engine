@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <h3 align="center">Strake Engine</h3>
-  <img src="https://lh3.googleusercontent.com/a/ACg8ocIsjIU3xM7l5ABRwugyCarsL4uCXD2IcIKEhLyz3cdW5tCOCyEd=s288-c-no" alt="Circular Image" width="150" height="150" style="border-radius: 50%; overflow: hidden;">
+  <img src="logo.png" alt="Circular Image" width="150" height="150" style="border-radius: 50%; overflow: hidden;">
   <p align="center">
     A full designed GameObject Component System with OpenGL
     <br />
