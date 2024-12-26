@@ -52,6 +52,7 @@ Our engine is built using a combination of powerful and flexible technologies to
 - **GLM**: The **GLM** library is utilized for math operations, providing essential functions for handling vectors, matrices, and transformations in 3D space.
 - **GLFW**: For managing windows, input, and context creation, **GLFW** provides a simple and cross-platform solution.
 - **STB Image**: **STB Image** handles texture loading, making it easy to import and work with various image formats in our rendering pipeline.
+- **Assimp**: **Assimp** (Open Asset Import Library) is used to import and process various 3D model formats, ensuring that the engine can work with a wide range of asset types and integrate external 3D models with ease.
 - **CMake**: Our build system is powered by **CMake**, simplifying the process of building the engine and its dependencies across different platforms.
 
 These technologies come together to create an engine that is both powerful and easy to extend, providing a solid foundation for game development, simulation, and other interactive applications.
@@ -72,7 +73,7 @@ Before you begin, ensure you have the following installed:
 - **GLEW**: OpenGL Extension Wrangler. [GLEW](http://glew.sourceforge.net/).
 - **GLFW**: A library for window and input management. [GLFW](https://www.glfw.org/).
 - **GLM**: Header-only math library. [GLM](https://github.com/g-truc/glm).
-- **STB Image**: Header-only library for image loading. Typically included in the project.
+- **Assimp**: A library for importing and processing various 3D model formats. [Assimp](http://www.assimp.org/).
 
 Additionally, ensure you have:
 
@@ -91,11 +92,17 @@ Additionally, ensure you have:
 
    Ensure all prerequisite libraries are installed before compiling the project.
 
-   - **On Linux**: Libraries are typically managed through your package manager and located via the `PATH` environment variable. Ensure all required libraries are properly installed and accessible.
+   - **On Linux**:
+   Libraries are typically managed through your package manager and located via the `PATH` environment variable. Ensure all required libraries are properly installed and accessible.
 
-   - **On Windows**: Dependencies are managed using **vcpkg**. You need to update the `vcpkg` variable in the `justfile` located in the root directory of the project. Set this variable to the path of your vcpkg installation to handle the prerequisite libraries. For example:
+   - **On Windows**:
+   Dependencies are managed using **vcpkg**. You need to update the `vcpkg` variable in the `justfile` located in the root directory of the project. Set this variable to the path of your vcpkg installation to handle the prerequisite libraries. For example:
      ```bash
      vcpkg := "C:/path/to/vcpkg"
+     ```
+     If prerequisites are not yet installed, use the command:
+     ```bash
+     just install-windows
      ```
 
 3. **Compile the Project**
@@ -269,4 +276,5 @@ LinkedIn: [robin-landraud](https://www.linkedin.com/in/robin-landraud/)
 - GLFW: For managing windows and input.
 - GLM: For providing math utilities for 3D transformations.
 - STB Image: For image loading and texture handling.
+- Assimp: For importing and processing various 3D model formats.
 - CMake: For simplifying the build process across platforms.
