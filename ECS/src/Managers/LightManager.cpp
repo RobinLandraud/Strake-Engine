@@ -37,7 +37,7 @@ namespace ECS {
             if (getLights().empty()) {
                 return;
             }
-            std::vector<std::reference_wrapper<Light>> lights = getLights();
+            std::vector<std::reference_wrapper<const Light>> &lights = renderer.getLights();
             int numLights = std::min(static_cast<int>(lights.size()), 8);
             program.setUniform("numLights", numLights);
 
@@ -66,6 +66,8 @@ namespace ECS {
                     }
                 }
             }
+
+            renderer.clearLights();
         });
     }
 

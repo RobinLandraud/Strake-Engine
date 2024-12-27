@@ -149,4 +149,9 @@ namespace ECS {
     {
         m_lights.clear();
     }
+
+    std::vector<std::reference_wrapper<const Light>> &MeshRenderer::getLights()
+    {
+        return m_lights;
+    }
 }
