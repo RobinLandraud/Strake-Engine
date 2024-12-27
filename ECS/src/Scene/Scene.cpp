@@ -124,4 +124,15 @@ namespace ECS {
             gameObject.second->render(m_mainCamera.value().get());
         }
     }
+
+    void Scene::shadowRender(int width, int height)
+    {
+        if (!m_mainCamera.has_value()) {
+            return;
+        }
+        for (auto &light : m_lightManager.getLights()) { // must check if light is in renderer of object (is important for shadow)
+            break;
+        }
+        glViewport(0, 0, width, height);
+    }
 }

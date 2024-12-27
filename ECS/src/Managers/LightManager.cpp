@@ -5,12 +5,12 @@ namespace ECS {
         m_eventDispatcher(eventDispatcher)
     {
         m_eventDispatcher.subscribe("addLight", [this](const Event &event) {
-            const Light &light = static_cast<const EventData<Light> &>(event).getValue();
+            Light &light = static_cast<const EventData<Light> &>(event).getValue();
             addLight(light);
         });
 
         m_eventDispatcher.subscribe("removeLight", [this](const Event &event) {
-            const Light &light = static_cast<const EventData<Light> &>(event).getValue();
+            Light &light = static_cast<const EventData<Light> &>(event).getValue();
             removeLight(light);
         });
 
@@ -19,16 +19,31 @@ namespace ECS {
         });
 
         m_eventDispatcher.subscribe("updateRendererLights", [this](const Event &event) {
-            const MeshRenderer &renderer = static_cast<const EventData<MeshRenderer> &>(event).getValue();
-            ShaderProgram &program = renderer.getMaterial().getShaderProgram();
+            MeshRenderer &renderer = static_cast<const EventData<MeshRenderer> &>(event).getValue();
             if (getLights().empty()) {
                 return;
             }
             int numLights = std::min(static_cast<int>(getLights().size()), 8);
+            for (int i = 0; i < numLights; ++i) {
+                Light &light = getLights()[i].get();
+                renderer.addLight(light);
+                light.getShadowMap().addObject(renderer.getParent());
+            }
+        });
+
+        m_eventDispatcher.subscribe("applyRendererLights", [this](const Event &event) {
+            MeshRenderer &renderer = static_cast<const EventData<MeshRenderer> &>(event).getValue();
+            ShaderProgram &program = renderer.getMaterial().getShaderProgram();
+            if (getLights().empty()) {
+                return;
+            }
+            std::vector<std::reference_wrapper<Light>> lights = getLights();
+            int numLights = std::min(static_cast<int>(lights.size()), 8);
             program.setUniform("numLights", numLights);
 
             for (int i = 0; i < numLights; ++i) {
-                const Light &light = getLights()[i].get();
+                const Light &light = lights[i].get();
+
                 program.setUniform("lights[" + std::to_string(i) + "].type", static_cast<int>(light.getType()));
                 program.setUniform("lights[" + std::to_string(i) + "].color", light.getColor());
                 program.setUniform("lights[" + std::to_string(i) + "].intensity", light.getIntensity());
@@ -54,12 +69,12 @@ namespace ECS {
         });
     }
 
-    void LightManager::addLight(const Light &light)
+    void LightManager::addLight(Light &light)
     {
         m_lights.push_back(light);
     }
 
-    void LightManager::removeLight(const Light &light)
+    void LightManager::removeLight(Light &light)
     {
         auto it = std::find_if(m_lights.begin(), m_lights.end(),
             [&light](const std::reference_wrapper<const Light>& ref) {
@@ -76,7 +91,7 @@ namespace ECS {
         m_lights.clear();
     }
 
-    std::vector<std::reference_wrapper<const Light>> &LightManager::getLights()
+    std::vector<std::reference_wrapper<Light>> &LightManager::getLights()
     {
         return m_lights;
     }

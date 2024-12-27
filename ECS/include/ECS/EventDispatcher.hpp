@@ -32,7 +32,7 @@ namespace ECS {
                 m_value(value)
             {}
 
-            [[nodiscard]] const T &getValue() const {
+            [[nodiscard]] T &getValue() const {
                 return m_value.get();
             }
 

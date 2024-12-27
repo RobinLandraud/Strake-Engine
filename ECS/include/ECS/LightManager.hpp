@@ -14,13 +14,13 @@ namespace ECS {
             LightManager &operator=(const LightManager &other) = delete;
             LightManager &operator=(LightManager &&other) = delete;
 
-            void addLight(const Light &light);
-            void removeLight(const Light &light);
+            void addLight(Light &light);
+            void removeLight(Light &light);
             void clear();
-            [[nodiscard]] std::vector<std::reference_wrapper<const Light>> &getLights();
+            [[nodiscard]] std::vector<std::reference_wrapper<Light>> &getLights();
 
         private:
-            std::vector<std::reference_wrapper<const Light>> m_lights;
+            std::vector<std::reference_wrapper<Light>> m_lights;
             EventDispatcher &m_eventDispatcher;
     };
 }

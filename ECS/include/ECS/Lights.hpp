@@ -3,12 +3,38 @@
 #include <ECS/Component.hpp>
 #include <ECS/Transform.hpp>
 #include <ECS/EventDispatcher.hpp>
+#include <ECS/Shaders.hpp>
 
 namespace ECS {
     enum class LightType {
         Directional,
         Point,
         Spot
+    };
+
+    class ShadowMap
+    {
+        public:
+            ShadowMap();
+            ~ShadowMap();
+
+            [[nodiscard]] GLuint getShadowMap() const;
+            [[nodiscard]] GLuint getShadowFBO() const;
+            [[nodiscard]] const glm::mat4 &getLightProjection() const;
+            [[nodiscard]] glm::vec2 getSize() const;
+
+            void addObject(GameObject &object);
+            [[nodiscard]] const std::vector<std::reference_wrapper<GameObject>> &getObjects() const;
+            void clearObjects();
+
+            void bind();
+            void unbind();
+        private:
+            GLuint m_shadowFBO;
+            GLuint m_shadowMap;
+            glm::ivec2 m_size;
+            glm::mat4 m_lightProjection;
+            std::vector<std::reference_wrapper<GameObject>> m_objects;
     };
 
     class Light: public Component
@@ -23,6 +49,9 @@ namespace ECS {
             [[nodiscard]] const glm::vec3 &getColor() const;
             [[nodiscard]] LightType getType() const;
 
+            void update() override;
+            ShadowMap &getShadowMap();
+
         protected:
 
             explicit Light(GameObject &parent, LightType type);
@@ -33,6 +62,8 @@ namespace ECS {
             glm::vec3 m_color;
             float m_intensity;
             float m_minIntensity;
+
+            ShadowMap m_shadowMap;
     };
 
     class PointLight : public Light

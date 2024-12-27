@@ -37,6 +37,7 @@ namespace ECS {
             void update();
             void fixedUpdate();
             void lateUpdate();
+            void shadowRender(int width, int height);
             void render();
 
         private:

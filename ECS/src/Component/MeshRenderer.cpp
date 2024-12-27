@@ -101,6 +101,7 @@ namespace ECS {
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
         getParent().getEventDispatcher().broadcast(EventData<MeshRenderer>(*this, "updateRendererLights"));
+        getParent().getEventDispatcher().broadcast(EventData<MeshRenderer>(*this, "applyRendererLights"));
         camera.resetUpdateFlags();
         
         glBindVertexArray(m_VAO);
@@ -137,5 +138,15 @@ namespace ECS {
     const Material &MeshRenderer::getMaterial() const
     {
         return m_material;
+    }
+
+    void MeshRenderer::addLight(const Light &light)
+    {
+        m_lights.push_back(light);
+    }
+
+    void MeshRenderer::clearLights()
+    {
+        m_lights.clear();
     }
 }

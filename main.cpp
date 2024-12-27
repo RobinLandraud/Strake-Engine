@@ -135,7 +135,7 @@ int game()
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
 
-    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 60);
+    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 150);
     app.getWindow().setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
 
     ECS::Scene &scene = app.getSceneManager().addScene("Main Scene");
@@ -158,7 +158,7 @@ int game()
     ECS::Texture &treeBlobTexture = app.getTextureManager().addTexture<ECS::Texture2D>("treeBlob", "assets/Low_Poly_Forest/tex/treeBlob.png");
     ECS::Material &treeBlobMaterial = app.getMaterialManager().addMaterial("treeBlob");
     treeBlobMaterial.addTexture(treeBlobTexture, "textureSampler");
-    treeBlobMaterial.setShininess(10.0f);
+    treeBlobMaterial.setShininess(256.0f);
 
     ECS::GameObject &floor = scene.addGameObject("Floor");
     floor.addComponent<ECS::Cube>();
@@ -199,34 +199,21 @@ int game()
         go.second->getTransform().setLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
     }
 
-    //ECS::GameObject &bush = scene.addGameObject("Bush");
-    //bush.getTransform().setLocalPosition(glm::vec3(-4.0f, 0.0f, 3.0f));
-    //bush.addComponent<ECS::MeshFilter>();
-    //bush.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Bush.obj");
-    //bush.addComponent<ECS::MeshRenderer>(grassMaterial);
+    ECS::GameObject &Moon = scene.addGameObject("Moon");
+    Moon.getTransform().setLocalRotation(glm::vec3(0.0f, 0.0f, 180.0f));
+    Moon.addComponent<Rotator>(0.2f);
 
-    //ECS::GameObject &spruce = scene.addGameObject("Spruce");
-    //spruce.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    //spruce.addComponent<ECS::MeshFilter>();
-    //spruce.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Spruce.obj");
-    //spruce.addComponent<ECS::MeshRenderer>(grassMaterial);
-
-
-
-    ECS::GameObject &lamp = scene.addGameObject("Lamp");
-    lamp.addComponent<Rotator>(0.4f);
-
-    ECS::GameObject &light = lamp.addChild("Light");
+    ECS::GameObject &light = Moon.addChild("Light");
     light.addComponent<ECS::PointLight>();
-    light.getTransform().setLocalPosition(glm::vec3(30.0f, 0.0f, 0.0f));
+    light.getTransform().setLocalPosition(glm::vec3(0.0f, 30.0f, 0.0f));
     light.getComponent<ECS::PointLight>().setIntensity(0.5f);
-    light.getComponent<ECS::PointLight>().setColor(glm::vec3(1.0f, 0.1f, 0.1f));
+    light.getComponent<ECS::PointLight>().setColor(glm::vec3(0.1f, 0.1f, 1.0f));
 
     ECS::GameObject &sun = scene.addGameObject("Sun");
     sun.addComponent<Rotator>(0.2f);
     sun.addComponent<ECS::DirectionalLight>();
-    sun.getComponent<ECS::DirectionalLight>().setIntensity(0.5f);
-    sun.getComponent<ECS::DirectionalLight>().setColor(glm::vec3(0.1f, 0.1f, 1.0f));
+    sun.getComponent<ECS::DirectionalLight>().setIntensity(1.0f);
+    sun.getComponent<ECS::DirectionalLight>().setColor(glm::vec3(1.0f, 1.0f, 0.1f));
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);

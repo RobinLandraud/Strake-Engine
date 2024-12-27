@@ -81,7 +81,7 @@ namespace ECS {
             if (is_updated) {
                 lateUpdate(scene);
                 ECS::Window::clear();
-                render(scene);
+                render(scene, window);
                 window.display();
             }
         }
@@ -105,8 +105,9 @@ namespace ECS {
     {
         scene.lateUpdate();
     }
-    void GameLoop::render(Scene &scene)
+    void GameLoop::render(Scene &scene, Window &window)
     {
+        scene.shadowRender(window.getWidth(), window.getHeight());
         scene.render();
     }
 }

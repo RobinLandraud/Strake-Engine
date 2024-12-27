@@ -24,6 +24,6 @@ namespace ECS {
             void update(Scene &scene);
             void fixedUpdate(Scene &scene);
             void lateUpdate(Scene &scene);
-            void render(Scene &scene);
+            void render(Scene &scene, Window &window);
     };
 }

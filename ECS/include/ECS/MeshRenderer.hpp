@@ -30,12 +30,18 @@ namespace ECS {
             [[nodiscard]] const MeshFilter &getMeshFilter() const;
             [[nodiscard]] const Material &getMaterial() const;
 
+            void addLight(const Light &light);
+            void clearLights();
+            std::vector<std::reference_wrapper<const Light>> &getLights();
+
         private:
             GLuint m_VAO;
             GLuint m_VBO;
             GLuint m_EBO;
             MeshFilter &m_meshFilter;
             Material &m_material;
+
+            std::vector<std::reference_wrapper<const Light>> m_lights;
 
             void setupMesh();
     };
