@@ -28,10 +28,28 @@ namespace ECS {
             program.setUniform("numLights", numLights);
 
             for (int i = 0; i < numLights; ++i) {
-                const PointLight &light = static_cast<const PointLight &>(getLights()[i].get());
-                program.setUniform("lights[" + std::to_string(i) + "].position", light.getPosition());
+                const Light &light = getLights()[i].get();
+                program.setUniform("lights[" + std::to_string(i) + "].type", static_cast<int>(light.getType()));
                 program.setUniform("lights[" + std::to_string(i) + "].color", light.getColor());
                 program.setUniform("lights[" + std::to_string(i) + "].intensity", light.getIntensity());
+                program.setUniform("lights[" + std::to_string(i) + "].ambient", light.getMinIntensity());
+
+                switch (light.getType()) {
+                    case LightType::Point: {
+                        const PointLight &pointLight = static_cast<const PointLight &>(light);
+                        program.setUniform("lights[" + std::to_string(i) + "].position", pointLight.getPosition());
+                        break;
+                    }
+                    case LightType::Directional: {
+                        const DirectionalLight &directionalLight = static_cast<const DirectionalLight &>(light);
+                        program.setUniform("lights[" + std::to_string(i) + "].direction", directionalLight.getDirection());
+                        break;
+                    }
+                    case LightType::Spot: {
+                        // TODO
+                        break;
+                    }
+                }
             }
         });
     }

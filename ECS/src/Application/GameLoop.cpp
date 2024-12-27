@@ -26,7 +26,7 @@ namespace ECS {
         bool is_fixed_updated = false;
 
         scene.awake();
-        scene.start(); // only for active game objects
+        std::cout << "Scene started" << std::endl;
 
         while (m_isRunning)
         {

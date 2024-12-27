@@ -86,7 +86,7 @@ namespace ECS
         return m_indices;
     }
 
-    void ECS::MeshFilter::loadFromFile(const std::string &path, short index) {
+    void ECS::MeshFilter::loadFromFile(const std::string &path, unsigned int index) {
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile(path,
             aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
@@ -100,7 +100,12 @@ namespace ECS
             throw std::runtime_error("No meshes found in file: " + path);
             return;
         }
-
+        if (index >= scene->mNumMeshes) {
+            throw std::runtime_error("Index out of bounds: " + std::to_string(index));
+            return;
+        }
+        std::cout << "path: " << path << std::endl;
+        std::cout << "num meshes: " << scene->mNumMeshes << std::endl;
         aiMesh* mesh = scene->mMeshes[index];
         m_vertices.clear();
         m_normals.clear();
@@ -131,9 +136,66 @@ namespace ECS
         m_isUpdated = true; // Mark the mesh as updated
     }
 
-    void ECS::MeshFilter::loadFromFile(const std::string &path)
+    std::vector<std::reference_wrapper<ECS::GameObject>> ECS::MeshFilter::loadFromFile(const std::string &path)
     {
-        loadFromFile(path, 0);
+        std::vector<std::reference_wrapper<ECS::GameObject>> objects;
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(path,
+            aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            throw std::runtime_error("Failed to load mesh file: " + path);
+        }
+
+        if (scene->mNumMeshes == 0) {
+            throw std::runtime_error("No meshes found in file: " + path);
+        }
+        std::cout << "path: " << path << std::endl;
+        std::cout << "num meshes: " << scene->mNumMeshes << std::endl;
+        for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
+            aiMesh* mesh = scene->mMeshes[i];
+            std::vector<glm::vec3> vertices;
+            std::vector<glm::vec3> normals;
+            std::vector<glm::vec2> uvs;
+            std::vector<unsigned int> indices;
+
+            std::string name = static_cast<std::string>(scene->mMeshes[i]->mName.C_Str());
+            ECS::GameObject &obj = getParent().addChild(name);
+            obj.addComponent<ECS::MeshFilter>();
+
+            // Extract vertices
+            for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+                vertices.emplace_back(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+
+                if (mesh->HasNormals()) {
+                    normals.emplace_back(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+                }
+
+                if (mesh->HasTextureCoords(0)) {
+                    uvs.emplace_back(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+                }
+            }
+
+            // Extract indices
+            for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
+                aiFace face = mesh->mFaces[i];
+                for (unsigned int j = 0; j < face.mNumIndices; ++j) {
+                    indices.push_back(face.mIndices[j]);
+                }
+            }
+
+            obj.getComponent<ECS::MeshFilter>().setVertices(vertices);
+            obj.getComponent<ECS::MeshFilter>().setNormals(normals);
+            obj.getComponent<ECS::MeshFilter>().setUVs(uvs);
+            obj.getComponent<ECS::MeshFilter>().setIndices(indices);
+
+            obj.getComponent<ECS::MeshFilter>().setUpdated(true);
+
+            objects.push_back(obj);
+        }
+        getParent().removeComponent<MeshFilter>();
+
+        return objects;
     }
 
 

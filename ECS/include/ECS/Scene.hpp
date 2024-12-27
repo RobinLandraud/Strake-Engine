@@ -23,6 +23,7 @@ namespace ECS {
             Scene &operator=(Scene &&other) = delete;
 
             GameObject &addGameObject(const std::string &name);
+            GameObject &loadFromFile(const std::string &path);
             void removeGameObject(const std::string &name);
             void removeGameObject(GameObject &gameObject);
             GameObject &getGameObject(const std::string &name);

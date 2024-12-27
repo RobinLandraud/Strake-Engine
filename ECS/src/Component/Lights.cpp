@@ -1,3 +1,6 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
+
 #include <ECS/Lights.hpp>
 
 namespace ECS {
@@ -10,7 +13,8 @@ namespace ECS {
         Component(parent),
         m_type(std::move(type)),
         m_color(1.0f), // white
-        m_intensity(1.0f) // full intensity
+        m_intensity(1.0f), // full intensity
+        m_minIntensity(0.0f) // no minimum intensity
     {
         setDerivedType(typeid(Light)); // a game object cannot have several lights
         EventData<Light> eventData(*this, "addLight");
@@ -30,12 +34,24 @@ namespace ECS {
         m_intensity = intensity;
     }
 
+    void Light::setMinIntensity(float minIntensity) {
+        m_minIntensity = minIntensity;
+    }
+
     float Light::getIntensity() const {
         return m_intensity;
     }
 
+    float Light::getMinIntensity() const {
+        return m_minIntensity;
+    }
+
     const glm::vec3 &Light::getColor() const {
         return m_color;
+    }
+
+    LightType Light::getType() const {
+        return m_type;
     }
 
     ///////////////////////////////
@@ -44,9 +60,6 @@ namespace ECS {
 
     PointLight::PointLight(GameObject &parent) :
         Light(parent, LightType::Point),
-        m_constant(1.0f),
-        m_linear(0.09f),
-        m_quadratic(0.032f),
         r_transform(parent.getTransform())
     {
     }
@@ -55,31 +68,34 @@ namespace ECS {
         r_transform.setLocalPosition(position);
     }
 
-    void PointLight::setConstant(float constant) {
-        m_constant = constant;
-    }
-
-    void PointLight::setLinear(float linear) {
-        m_linear = linear;
-    }
-
-    void PointLight::setQuadratic(float quadratic) {
-        m_quadratic = quadratic;
-    }
-
     const glm::vec3 PointLight::getPosition() const {
         return r_transform.getWorldPosition();
     }
 
-    float PointLight::getConstant() const {
-        return m_constant;
+    ///////////////////////////////
+    /// DirectionalLight
+    ///////////////////////////////
+
+    DirectionalLight::DirectionalLight(GameObject &parent) :
+        Light(parent, LightType::Directional),
+        r_transform(parent.getTransform())
+    {
     }
 
-    float PointLight::getLinear() const {
-        return m_linear;
+    void DirectionalLight::setRotation(const glm::vec3 &rotation) {
+        // set the rotation in local space
+        r_transform.setLocalRotation(rotation);
     }
 
-    float PointLight::getQuadratic() const {
-        return m_quadratic;
+    void DirectionalLight::setDirection(const glm::vec3 &direction) {
+        r_transform.setLocalPitch(glm::degrees(asin(direction.y)));
+        r_transform.setLocalYaw(glm::degrees(atan2(direction.x, direction.z)));
+    }
+
+    glm::vec3 DirectionalLight::getDirection() const {
+        const glm::mat4 &mat = r_transform.getWorldMatrix();
+        return glm::normalize(-glm::vec3( // mustn be transform class value (only updated if needed)
+            mat[1][0], mat[1][1], mat[1][2]
+        ));
     }
 }

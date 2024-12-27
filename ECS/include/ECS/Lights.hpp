@@ -16,9 +16,12 @@ namespace ECS {
         public:
             void setColor(const glm::vec3 &color);
             void setIntensity(float intensity);
+            void setMinIntensity(float minIntensity);
 
             [[nodiscard]] float getIntensity() const;
+            [[nodiscard]] float getMinIntensity() const;
             [[nodiscard]] const glm::vec3 &getColor() const;
+            [[nodiscard]] LightType getType() const;
 
         protected:
 
@@ -26,8 +29,10 @@ namespace ECS {
             ~Light() override;
 
             LightType m_type;
+
             glm::vec3 m_color;
             float m_intensity;
+            float m_minIntensity;
     };
 
     class PointLight : public Light
@@ -36,21 +41,24 @@ namespace ECS {
             PointLight(GameObject &parent);
 
             void setPosition(const glm::vec3 &position);
-            void setConstant(float constant);
-            void setLinear(float linear);
-            void setQuadratic(float quadratic);
 
             [[nodiscard]] const glm::vec3 getPosition() const;
-            [[nodiscard]] float getConstant() const;
-            [[nodiscard]] float getLinear() const;
-            [[nodiscard]] float getQuadratic() const;
 
         private:
-            Transform &r_transform;
+            Transform &r_transform; // for position
+    };
 
-            // Attenuation : I = 1 / (constant + linear * d + quadratic * d^2)
-            float m_constant; //  base factor that does not change with distance
-            float m_linear; // factor that is multiplied by the distance
-            float m_quadratic; // factor that is multiplied by the square of the distance
+    class DirectionalLight : public Light
+    {
+        public:
+            DirectionalLight(GameObject &parent);
+
+            void setRotation(const glm::vec3 &rotation);
+            void setDirection(const glm::vec3 &direction);
+
+            [[nodiscard]] glm::vec3 getDirection() const;
+
+        private:
+            Transform &r_transform; // for rotation
     };
 }

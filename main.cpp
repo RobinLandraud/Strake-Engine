@@ -140,15 +140,10 @@ int game()
 
     ECS::Scene &scene = app.getSceneManager().addScene("Main Scene");
 
-    ECS::Texture &plasticTexture = app.getTextureManager().addTexture<ECS::Texture2D>("plastic", "assets/plastic.jpg");
-    ECS::Material &plasticMaterial = app.getMaterialManager().addMaterial("plastic");
-    plasticMaterial.addTexture(plasticTexture, "textureSampler");
-    plasticMaterial.setShininess(32.0f);
-
     ECS::Texture &barelTexture = app.getTextureManager().addTexture<ECS::Texture2D>("barel", "assets/map.png");
     ECS::Material &barelMaterial = app.getMaterialManager().addMaterial("barel");
     barelMaterial.addTexture(barelTexture, "textureSampler");
-    barelMaterial.setShininess(32.0f);
+    //barelMaterial.setShininess(32.0f);
 
     ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.png");
     ECS::Material &metalMaterial = app.getMaterialManager().addMaterial("metal");
@@ -159,6 +154,11 @@ int game()
     ECS::Material &grassMaterial = app.getMaterialManager().addMaterial("grass");
     grassMaterial.addTexture(grassTexture, "textureSampler");
     grassMaterial.setShininess(10.0f);
+
+    ECS::Texture &treeBlobTexture = app.getTextureManager().addTexture<ECS::Texture2D>("treeBlob", "assets/Low_Poly_Forest/tex/treeBlob.png");
+    ECS::Material &treeBlobMaterial = app.getMaterialManager().addMaterial("treeBlob");
+    treeBlobMaterial.addTexture(treeBlobTexture, "textureSampler");
+    treeBlobMaterial.setShininess(10.0f);
 
     ECS::GameObject &floor = scene.addGameObject("Floor");
     floor.addComponent<ECS::Cube>();
@@ -177,46 +177,60 @@ int game()
     ECS::GameObject &barrel = scene.addGameObject("Barrel");
     barrel.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
     barrel.addComponent<ECS::MeshFilter>();
-    barrel.getComponent<ECS::MeshFilter>().loadFromFile("assets/barrel.obj");
-    ECS::MeshFilter &meshFilter = barrel.getComponent<ECS::MeshFilter>();
-    barrel.addComponent<ECS::MeshRenderer>(barelMaterial);
+    std::vector<std::reference_wrapper<ECS::GameObject>> nodes = barrel.getComponent<ECS::MeshFilter>().loadFromFile("assets/barrel.obj"); // load all mesh as children nodes
+    for (auto &node : nodes) {
+        node.get().addComponent<ECS::MeshRenderer>(barelMaterial);
+    }
+
+    ECS::GameObject &barrel2 = scene.addGameObject("Barrel2");
+    barrel2.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.0f, -4.0f));
+    barrel2.addComponent<ECS::MeshFilter>();
+    barrel2.getComponent<ECS::MeshFilter>().loadFromFile("assets/barrel.obj", 0); // load the first mesh directly in the game object
+    barrel2.addComponent<ECS::MeshRenderer>(barelMaterial);
 
     ECS::GameObject &metalBox = scene.addGameObject("Metal Box");
-    metalBox.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.5f, -4.0f));
+    metalBox.getTransform().setLocalPosition(glm::vec3(4.0f, 0.5f, -3.0f));
     metalBox.addComponent<ECS::Cube>();
     metalBox.addComponent<ECS::MeshRenderer>(metalMaterial);
 
-    ECS::GameObject &tree = scene.addGameObject("Tree");
-    tree.getTransform().setLocalPosition(glm::vec3(4.0f, 0.0f, -3.0f));
-    tree.addComponent<ECS::MeshFilter>();
-    tree.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Tree.obj");
-    tree.addComponent<ECS::MeshRenderer>(grassMaterial);
+    ECS::GameObject &tree = scene.loadFromFile("assets/Low_Poly_Forest/OBJ/Low_Poly_Forest_tree01.obj");
+    for (auto &go : tree.getChildren()) {
+        go.second->addComponent<ECS::MeshRenderer>(treeBlobMaterial);
+        go.second->getTransform().setLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
+    }
 
-    ECS::GameObject &bush = scene.addGameObject("Bush");
-    bush.getTransform().setLocalPosition(glm::vec3(-4.0f, 0.0f, 3.0f));
-    bush.addComponent<ECS::MeshFilter>();
-    bush.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Bush.obj");
-    bush.addComponent<ECS::MeshRenderer>(grassMaterial);
+    //ECS::GameObject &bush = scene.addGameObject("Bush");
+    //bush.getTransform().setLocalPosition(glm::vec3(-4.0f, 0.0f, 3.0f));
+    //bush.addComponent<ECS::MeshFilter>();
+    //bush.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Bush.obj");
+    //bush.addComponent<ECS::MeshRenderer>(grassMaterial);
 
-    ECS::GameObject &spruce = scene.addGameObject("Spruce");
-    spruce.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    spruce.addComponent<ECS::MeshFilter>();
-    spruce.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Spruce.obj");
-    spruce.addComponent<ECS::MeshRenderer>(grassMaterial);
+    //ECS::GameObject &spruce = scene.addGameObject("Spruce");
+    //spruce.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    //spruce.addComponent<ECS::MeshFilter>();
+    //spruce.getComponent<ECS::MeshFilter>().loadFromFile("assets/obj/Standard/Spruce.obj");
+    //spruce.addComponent<ECS::MeshRenderer>(grassMaterial);
 
-    ECS::GameObject &sun = scene.addGameObject("Sun");
-    sun.addComponent<Rotator>(0.2f);
 
-    ECS::GameObject &light = sun.addChild("Light");
+
+    ECS::GameObject &lamp = scene.addGameObject("Lamp");
+    lamp.addComponent<Rotator>(0.4f);
+
+    ECS::GameObject &light = lamp.addChild("Light");
     light.addComponent<ECS::PointLight>();
     light.getTransform().setLocalPosition(glm::vec3(30.0f, 0.0f, 0.0f));
     light.getComponent<ECS::PointLight>().setIntensity(0.5f);
-    light.getComponent<ECS::PointLight>().setColor(glm::vec3(1.0f, 1.0f, 1.0f));
+    light.getComponent<ECS::PointLight>().setColor(glm::vec3(1.0f, 0.1f, 0.1f));
+
+    ECS::GameObject &sun = scene.addGameObject("Sun");
+    sun.addComponent<Rotator>(0.2f);
+    sun.addComponent<ECS::DirectionalLight>();
+    sun.getComponent<ECS::DirectionalLight>().setIntensity(0.5f);
+    sun.getComponent<ECS::DirectionalLight>().setColor(glm::vec3(0.1f, 0.1f, 1.0f));
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);
     }
-
     app.run(true);
     return 0;
 }

@@ -80,7 +80,7 @@ namespace ECS {
 
             //void updateEulerAngles();
 
-            bool m_worldDirty = false; // if the transform needs to be updated (dirty / lazy update)
+            bool m_worldDirty = true; // if the transform needs to be updated (dirty / lazy update)
             bool m_localDirty = false; // if the transform needs to be updated (dirty / lazy update)
             void setWorldDirty();
             void updateLocalMatrix();

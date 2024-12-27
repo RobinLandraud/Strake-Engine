@@ -16,9 +16,10 @@ namespace ECS {
     {
         getShaderProgram().use();
         getShaderProgram().setUniform("textureSampler", 0); // default texture unit
-        getShaderProgram().setUniform("ambientIntensity", 0.1f); // global to every object
+        getShaderProgram().setUniform("minIntensity", 0.1f); // global to every object
         getShaderProgram().setUniform("shininess", 32.0f); // default shininess
         getShaderProgram().setUniform("alphaThreshold", 0.01f); // default alpha threshold
+        getShaderProgram().unuse(); // only for debug
     }
 
     void Material::bind() const {

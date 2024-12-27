@@ -33,8 +33,8 @@ namespace ECS
             [[nodiscard]] const std::vector<glm::vec2> &getUVs() const;
             [[nodiscard]] const std::vector<unsigned int> &getIndices() const;
 
-            void loadFromFile(const std::string &path);
-            void loadFromFile(const std::string &path, short index);
+            std::vector<std::reference_wrapper<ECS::GameObject>> loadFromFile(const std::string &path);
+            void loadFromFile(const std::string &path, unsigned int index);
 
             [[nodiscard]] bool isUpdated() const;
             void setUpdated(bool updated);
