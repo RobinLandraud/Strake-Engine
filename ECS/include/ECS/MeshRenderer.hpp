@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <ECS/EventDispatcher.hpp>
 #include <ECS/Component.hpp>
 #include <ECS/MeshFilter.hpp>
 #include <glm/glm.hpp>

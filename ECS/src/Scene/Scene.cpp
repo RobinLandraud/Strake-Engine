@@ -7,7 +7,8 @@
 namespace ECS {
     Scene::Scene() :
         m_eventDispatcher(),
-        m_lightManager(m_eventDispatcher)
+        m_lightManager(m_eventDispatcher),
+        m_rendererManager(m_eventDispatcher)
     {
     }
 
@@ -117,11 +118,18 @@ namespace ECS {
 
     void Scene::render()
     {
-        if (!m_mainCamera.has_value()) {
-            return;
-        }
-        for (auto &gameObject : m_gameObjects) {
-            gameObject.second->render(m_mainCamera.value().get());
+        std::vector<std::reference_wrapper<MeshRenderer>> &renderers = m_rendererManager.getRenderers();
+        std::vector<std::reference_wrapper<Light>> &lights = m_lightManager.getLights();
+        int n_light = std::min(static_cast<int>(lights.size()), 8);
+        for (auto &renderer : renderers) {
+            //if (!m_mainCamera.inFrustrum(renderer.get().getParent().getTransform())) {
+            //    continue;
+            //}
+            renderer.get().clearLights();
+            for (int i = 0; i < n_light; ++i) {
+                renderer.get().addLight(lights[i].get());
+            }
+            renderer.get().render(m_mainCamera.value().get());
         }
     }
 

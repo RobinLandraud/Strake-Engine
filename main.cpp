@@ -89,8 +89,6 @@ class CharacterController: public ECS::Script
             float yaw = mouse.x;
             float roll = mouse.y;
             transform.setLocalRotation(glm::vec3(-roll, -yaw, 0.0f));
-            //setmouse to center
-            //std::cout << "Camera Rotation: " << transform.getLocalRotation().x << " " << transform.getLocalRotation().y << " " << transform.getLocalRotation().z << std::endl;
         }
     private:
         std::optional<std::reference_wrapper<ECS::Transform>> transform;
@@ -135,7 +133,7 @@ int game()
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
 
-    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 150);
+    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 300);
     app.getWindow().setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
 
     ECS::Scene &scene = app.getSceneManager().addScene("Main Scene");
@@ -143,7 +141,6 @@ int game()
     ECS::Texture &barelTexture = app.getTextureManager().addTexture<ECS::Texture2D>("barel", "assets/map.png");
     ECS::Material &barelMaterial = app.getMaterialManager().addMaterial("barel");
     barelMaterial.addTexture(barelTexture, "textureSampler");
-    //barelMaterial.setShininess(32.0f);
 
     ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.png");
     ECS::Material &metalMaterial = app.getMaterialManager().addMaterial("metal");
@@ -154,11 +151,6 @@ int game()
     ECS::Material &grassMaterial = app.getMaterialManager().addMaterial("grass");
     grassMaterial.addTexture(grassTexture, "textureSampler");
     grassMaterial.setShininess(10.0f);
-
-    ECS::Texture &treeBlobTexture = app.getTextureManager().addTexture<ECS::Texture2D>("treeBlob", "assets/Low_Poly_Forest/tex/treeBlob.png");
-    ECS::Material &treeBlobMaterial = app.getMaterialManager().addMaterial("treeBlob");
-    treeBlobMaterial.addTexture(treeBlobTexture, "textureSampler");
-    treeBlobMaterial.setShininess(256.0f);
 
     ECS::GameObject &floor = scene.addGameObject("Floor");
     floor.addComponent<ECS::Cube>();
@@ -192,12 +184,6 @@ int game()
     metalBox.getTransform().setLocalPosition(glm::vec3(4.0f, 0.5f, -3.0f));
     metalBox.addComponent<ECS::Cube>();
     metalBox.addComponent<ECS::MeshRenderer>(metalMaterial);
-
-    ECS::GameObject &tree = scene.loadFromFile("assets/Low_Poly_Forest/OBJ/Low_Poly_Forest_tree01.obj");
-    for (auto &go : tree.getChildren()) {
-        go.second->addComponent<ECS::MeshRenderer>(treeBlobMaterial);
-        go.second->getTransform().setLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
-    }
 
     ECS::GameObject &Moon = scene.addGameObject("Moon");
     Moon.getTransform().setLocalRotation(glm::vec3(0.0f, 0.0f, 180.0f));

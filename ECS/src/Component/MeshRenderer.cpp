@@ -11,18 +11,14 @@ namespace ECS {
     {
         setupMesh();
         setDerivedType(typeid(MeshRenderer));
+        EventData<MeshRenderer> eventData(*this, "addRenderer");
+        parent.getEventDispatcher().broadcast(eventData);
+        
     }
 
     MeshRenderer::MeshRenderer(GameObject &parent, Material &material) :
-        Component(parent),
-        m_meshFilter(parent.getComponent<MeshFilter>()),
-        m_material(material),
-        m_VAO(0),
-        m_VBO(0),
-        m_EBO(0)
+        MeshRenderer(parent, parent.getComponent<MeshFilter>(), material)
     {
-        setupMesh();
-        setDerivedType(typeid(MeshRenderer));
     }
 
     MeshRenderer::~MeshRenderer()
@@ -30,6 +26,8 @@ namespace ECS {
         glDeleteVertexArrays(1, &m_VAO);
         glDeleteBuffers(1, &m_VBO);
         glDeleteBuffers(1, &m_EBO);
+        EventData<MeshRenderer> eventData(*this, "removeRenderer");
+        getParent().getEventDispatcher().broadcast(eventData);
     }
 
     void MeshRenderer::setupMesh()
@@ -94,14 +92,39 @@ namespace ECS {
 
     void MeshRenderer::render(Camera &camera)
     {
+        // add renderer to render pipeline
+
+
         m_material.bind();
 
         m_material.getShaderProgram().setUniform("model", getParent().getComponent<Transform>().getWorldMatrix());
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
-        getParent().getEventDispatcher().broadcast(EventData<MeshRenderer>(*this, "updateRendererLights"));
-        getParent().getEventDispatcher().broadcast(EventData<MeshRenderer>(*this, "applyRendererLights"));
+        for (size_t i = 0; i < m_lights.size(); ++i) {
+            const Light &light = m_lights[i].get();
+            m_material.getShaderProgram().setUniform("numLights", static_cast<int>(m_lights.size()));
+            m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].type", static_cast<int>(light.getType()));
+            m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].color", light.getColor());
+            m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].intensity", light.getIntensity());
+            m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].ambient", light.getMinIntensity());
+            switch (light.getType()) {
+                case LightType::Point: {
+                    const PointLight &pointLight = static_cast<const PointLight &>(light);
+                    m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].position", pointLight.getPosition());
+                    break;
+                }
+                case LightType::Directional: {
+                    const DirectionalLight &directionalLight = static_cast<const DirectionalLight &>(light);
+                    m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].direction", directionalLight.getDirection());
+                    break;
+                }
+                case LightType::Spot: {
+                    // TODO
+                    break;
+                }
+            }
+        }
         camera.resetUpdateFlags();
         
         glBindVertexArray(m_VAO);

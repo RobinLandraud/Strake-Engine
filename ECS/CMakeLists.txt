@@ -62,7 +62,10 @@ target_link_libraries(Component PUBLIC
 # ////////////////////////////////////////////////////////////////////////
 
 add_library(Scene STATIC src/Scene/Scene.cpp)
-add_library(LightManager STATIC src/Managers/LightManager.cpp)
+add_library(Managers STATIC
+    src/Managers/LightManager.cpp
+    src/Managers/RendererManager.cpp
+)
 
 # dependencies for the libraries
 target_link_libraries(Window PUBLIC Config)
@@ -76,7 +79,7 @@ target_link_libraries(Scene PUBLIC GameObject)
 target_link_libraries(Scene PUBLIC Component)
 target_link_libraries(Scene PUBLIC Camera)
 target_link_libraries(Scene PUBLIC Transform)
-target_link_libraries(Scene PUBLIC LightManager)
+target_link_libraries(Scene PUBLIC Managers)
 
 target_link_libraries(GameObject PUBLIC Script)
 target_link_libraries(GameObject PUBLIC Scene)
@@ -109,7 +112,7 @@ target_link_libraries(ECS PUBLIC
     Window
     EventHandler
     Component
-    LightManager
+    Managers
     Scene
     GameObject
     Dispatcher

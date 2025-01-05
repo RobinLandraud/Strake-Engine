@@ -4,13 +4,16 @@
 #include <ECS/GameObject.hpp>
 #include <ECS/Camera.hpp>
 #include <ECS/LightManager.hpp>
+#include <ECS/RendererManager.hpp>
 #include <functional>
 #include <optional>
 #include <ECS/MeshFilter.hpp>
 
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
 
 namespace ECS {
     class Scene {
@@ -43,7 +46,10 @@ namespace ECS {
         private:
             // order is important
             EventDispatcher m_eventDispatcher;
+
+            //render pipeline
             LightManager m_lightManager;
+            RendererManager m_rendererManager;
 
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_gameObjects;
             std::optional<std::reference_wrapper<Camera>> m_mainCamera;
