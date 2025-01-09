@@ -49,8 +49,9 @@ namespace ECS {
             [[nodiscard]] const glm::vec3 &getColor() const;
             [[nodiscard]] LightType getType() const;
 
-            void update() override;
-            ShadowMap &getShadowMap();
+            virtual void renderShadowMap(ShaderProgram &shaderProgram);
+            [[nodiscard]] ShadowMap &getShadowMap();
+            [[nodiscard]] const ShadowMap &getShadowMap() const;
 
         protected:
 
@@ -88,6 +89,8 @@ namespace ECS {
             void setDirection(const glm::vec3 &direction);
 
             [[nodiscard]] glm::vec3 getDirection() const;
+            virtual void renderShadowMap(ShaderProgram &shaderProgram) final;
+            glm::mat4 getShadowLightSpaceMatrix() const;
 
         private:
             Transform &r_transform; // for rotation

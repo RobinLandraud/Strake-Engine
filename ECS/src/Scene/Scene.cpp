@@ -6,6 +6,7 @@
 
 namespace ECS {
     Scene::Scene() :
+        m_shadowShaderProgram("ECS/src/Shader/glsl/shadow/vertex.glsl", "ECS/src/Shader/glsl/shadow/fragment.glsl"),
         m_eventDispatcher(),
         m_lightManager(m_eventDispatcher),
         m_rendererManager(m_eventDispatcher)
@@ -116,31 +117,42 @@ namespace ECS {
         }
     }
 
-    void Scene::render()
+    void Scene::render(int winWidth, int winHeight)
     {
         std::vector<std::reference_wrapper<MeshRenderer>> &renderers = m_rendererManager.getRenderers();
         std::vector<std::reference_wrapper<Light>> &lights = m_lightManager.getLights();
+        
         int n_light = std::min(static_cast<int>(lights.size()), 8);
+        
+        for (int i = 0; i < n_light; ++i) {
+            lights[i].get().getShadowMap().clearObjects();
+        }
+
+        std::vector<std::reference_wrapper<MeshRenderer>> in_frustrum_renderers;
         for (auto &renderer : renderers) {
-            //if (!m_mainCamera.inFrustrum(renderer.get().getParent().getTransform())) {
+            //if (!m_mainCamera.value().inFrustrum(renderer.get().getParent().getTransform())) {
             //    continue;
             //}
             renderer.get().clearLights();
+            in_frustrum_renderers.push_back(renderer);
             for (int i = 0; i < n_light; ++i) {
                 renderer.get().addLight(lights[i].get());
+                lights[i].get().getShadowMap().addObject(renderer.get().getParent());
             }
+        }
+
+        // render shadow maps
+
+        glViewport(0, 0, 2048, 2048); // low resolution shadow map
+        m_shadowShaderProgram.use();
+        for (int i = 0; i < lights.size(); ++i) {
+            lights[i].get().renderShadowMap(m_shadowShaderProgram);
+        }
+        glViewport(0, 0, winWidth, winHeight); // reset viewport for rendering
+
+        // render scene
+        for (auto &renderer : in_frustrum_renderers) {
             renderer.get().render(m_mainCamera.value().get());
         }
-    }
-
-    void Scene::shadowRender(int width, int height)
-    {
-        if (!m_mainCamera.has_value()) {
-            return;
-        }
-        for (auto &light : m_lightManager.getLights()) { // must check if light is in renderer of object (is important for shadow)
-            break;
-        }
-        glViewport(0, 0, width, height);
     }
 }

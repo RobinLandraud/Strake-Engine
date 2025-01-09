@@ -25,6 +25,7 @@ namespace ECS {
             ~MeshRenderer() override;
 
             void render(Camera &camera) override;
+            void GLrender();
 
             void lateUpdate() override;
 

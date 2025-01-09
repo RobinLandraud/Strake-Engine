@@ -107,7 +107,6 @@ namespace ECS {
     }
     void GameLoop::render(Scene &scene, Window &window)
     {
-        scene.shadowRender(window.getWidth(), window.getHeight());
-        scene.render();
+        scene.render(window.getWidth(), window.getHeight());
     }
 }

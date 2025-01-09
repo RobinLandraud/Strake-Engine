@@ -17,7 +17,7 @@ namespace ECS {
             Material &operator=(const Material &other) = delete;
             Material &operator=(Material &&other) = delete;
 
-            void bind() const;
+            int bind() const;
             void unbind() const;
 
             void addTexture(Texture &texture, const std::string &uniformName);

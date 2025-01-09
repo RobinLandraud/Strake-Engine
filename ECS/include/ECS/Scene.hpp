@@ -8,6 +8,7 @@
 #include <functional>
 #include <optional>
 #include <ECS/MeshFilter.hpp>
+#include <ECS/Shaders.hpp>
 
 
 #include <assimp/Importer.hpp>
@@ -40,14 +41,14 @@ namespace ECS {
             void update();
             void fixedUpdate();
             void lateUpdate();
-            void shadowRender(int width, int height);
-            void render();
+            void render(int width, int height);
 
         private:
             // order is important
             EventDispatcher m_eventDispatcher;
 
             //render pipeline
+            ShaderProgram m_shadowShaderProgram;
             LightManager m_lightManager;
             RendererManager m_rendererManager;
 

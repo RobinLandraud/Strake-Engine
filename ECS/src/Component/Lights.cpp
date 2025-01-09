@@ -2,6 +2,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <ECS/Lights.hpp>
+#include <ECS/MeshRenderer.hpp> // only for cpp file
 
 namespace ECS {
 
@@ -10,7 +11,7 @@ namespace ECS {
     ///////////////////////////////
 
     ShadowMap::ShadowMap() :
-        m_size(1024, 1024)
+        m_size(2048, 2048)
     {
         glGenFramebuffers(1, &m_shadowFBO);
         glGenTextures(1, &m_shadowMap);
@@ -27,7 +28,10 @@ namespace ECS {
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 20.0f);
+        m_lightProjection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, 1.0f, 50.0f);
+        // 75 for far plane
+        // 1 for near plane
+        // 35 for ortho size
     }
 
     ShadowMap::~ShadowMap() {
@@ -53,12 +57,13 @@ namespace ECS {
 
     void ShadowMap::bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFBO);
-        glViewport(0, 0, m_size.x, m_size.y);
+        //glViewport(0, 0, m_size.x, m_size.y);
         glClear(GL_DEPTH_BUFFER_BIT);
     }
 
     void ShadowMap::unbind() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //glViewport(0, 0, 1400, 900);
     }
 
     void ShadowMap::addObject(GameObject &object) {
@@ -122,11 +127,13 @@ namespace ECS {
         return m_type;
     }
 
-    void Light::update() {
-        m_shadowMap.clearObjects();
+    ShadowMap &Light::getShadowMap() {
+        return m_shadowMap;
     }
 
-    ShadowMap &Light::getShadowMap() {
+    void Light::renderShadowMap(ShaderProgram &shaderProgram) {} // default implementation
+
+    const ShadowMap &Light::getShadowMap() const {
         return m_shadowMap;
     }
 
@@ -170,8 +177,27 @@ namespace ECS {
 
     glm::vec3 DirectionalLight::getDirection() const {
         const glm::mat4 &mat = r_transform.getWorldMatrix();
-        return glm::normalize(-glm::vec3( // mustn be transform class value (only updated if needed)
+        return glm::normalize(-glm::vec3( // must be transform class value (only updated if needed)
             mat[1][0], mat[1][1], mat[1][2]
         ));
+    }
+
+    glm::mat4 DirectionalLight::getShadowLightSpaceMatrix() const {
+        float farPlane = 30.0f;
+        return m_shadowMap.getLightProjection() * glm::lookAt(
+            -getDirection() * farPlane, // position
+            glm::vec3(0.0f), // target
+            glm::vec3(0.0f, 1.0f, 0.0f) // up
+        );
+    }
+
+    void DirectionalLight::renderShadowMap(ShaderProgram &shaderProgram) {
+        m_shadowMap.bind();
+        shaderProgram.setUniform("lightSpaceMatrix", getShadowLightSpaceMatrix());
+        for (auto &object : m_shadowMap.getObjects()) {
+            shaderProgram.setUniform("model", object.get().getTransform().getWorldMatrix());
+            object.get().getComponent<MeshRenderer>().GLrender();
+        }
+        m_shadowMap.unbind();
     }
 }

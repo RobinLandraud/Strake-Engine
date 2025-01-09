@@ -7,12 +7,14 @@ struct Light {
     float ambient;   // Minimal intensity of the light (doesn't depend on distance)
     vec3 position;   // Only for point lights
     vec3 direction;  // Only for directional lights
+    mat4 lightSpaceMatrix; // Light's view-projection matrix (for shadow mapping)
+    int shadowIndex;       // Index of the shadow map in the shadowMaps array (for shadow mapping, directional lights only)
 };
 
 // Lights
-uniform Light lights[8];           // Array of light properties (up to 8 lights)
 uniform int numLights;             // Number of active lights
-
+uniform Light lights[8];           // Array of light properties (up to 8 lights)
+uniform sampler2D shadowMaps[8];        // Shadow map texture
 // Camera
 uniform vec3 viewPos;              // Camera position
 
@@ -28,6 +30,20 @@ in vec3 Normal;           // Normal in world space
 
 out vec4 FragColor;       // Output fragment color
 
+float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
+    // Perspective divide to get normalized light-space coordinates
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5; // Transform to [0, 1]
+
+    // Sample depth from shadow map
+    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+
+    // Check if the fragment is in shadow
+    float bias = 0.005; // Prevent shadow acne
+    return (currentDepth - bias > closestDepth) ? 0.0 : 1.0;
+}
+
 void main() {
     vec4 texColor = texture(textureSampler, TexCoords); // Get the texture color
     if (texColor.a < alphaThreshold) {
@@ -42,9 +58,14 @@ void main() {
     // Iterate through each light and calculate its contribution
     for (int i = 0; i < numLights; i++) {
         vec3 lightDir;
+        float shadow = 1.0; // Default shadow factor
+
+
         if (lights[i].type == 0) {
             // Directional light
             lightDir = normalize(-lights[i].direction); // Direction is fixed
+            vec4 fragPosLightSpace = lights[i].lightSpaceMatrix * vec4(FragPos, 1.0); // GOOD - Transform fragment position to light space
+            shadow = calculateShadow(fragPosLightSpace, shadowMaps[lights[i].shadowIndex]); // Calculate shadow factor
         } else if (lights[i].type == 1) {
             // Point light
             lightDir = normalize(lights[i].position - FragPos); // Direction from the light to the fragment
@@ -52,13 +73,13 @@ void main() {
 
         // Diffuse lighting
         float diff = max(dot(normal, lightDir), 0.0); // Diffuse factor
-        totalDiffuse += lights[i].color * diff * lights[i].intensity; // Accumulate diffuse color
+        totalDiffuse += lights[i].color * diff * lights[i].intensity * shadow; // Accumulate diffuse color
 
         // Specular lighting
         vec3 viewDir = normalize(viewPos - FragPos); // View direction
         vec3 reflectDir = reflect(-lightDir, normal); // Reflection direction
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess); // Specular factor
-        totalSpecular += lights[i].color * spec * lights[i].intensity; // Accumulate specular color
+        totalSpecular += lights[i].color * spec * lights[i].intensity * shadow; // Accumulate specular color
 
         // Ambient lighting
         maxAmbient = max(maxAmbient, lights[i].ambient); // Keep the maximum ambient value

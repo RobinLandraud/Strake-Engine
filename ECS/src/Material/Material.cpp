@@ -22,7 +22,7 @@ namespace ECS {
         getShaderProgram().unuse(); // only for debug
     }
 
-    void Material::bind() const {
+    int Material::bind() const {
         getShaderProgram().use();
         int textureUnit = 0;
         for (const auto &pair : m_textures) {
@@ -38,6 +38,7 @@ namespace ECS {
             m_shaderProgram.setUniform(pair.first, textureUnit);
             textureUnit++;
         }
+        return textureUnit;
     }
 
     void Material::unbind() const {

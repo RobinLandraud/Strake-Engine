@@ -90,14 +90,27 @@ namespace ECS {
         m_meshFilter.setUpdated(false);
     }
 
+    void MeshRenderer::GLrender()
+    {
+        glBindVertexArray(m_VAO);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_meshFilter.getIndices().size()), GL_UNSIGNED_INT, nullptr);
+        GLenum err = glGetError();
+        if (err != GL_NO_ERROR) {
+            std::cout << "OpenGL Error: " << err << std::endl;
+        }
+        glBindVertexArray(0);
+    }
+
     void MeshRenderer::render(Camera &camera)
     {
         // add renderer to render pipeline
 
 
-        m_material.bind();
+        int textureUsed = m_material.bind();
 
-        m_material.getShaderProgram().setUniform("model", getParent().getComponent<Transform>().getWorldMatrix());
+        int nShadowMaps = 0;
+
+        m_material.getShaderProgram().setUniform("model", getParent().getTransform().getWorldMatrix());
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
@@ -117,6 +130,16 @@ namespace ECS {
                 case LightType::Directional: {
                     const DirectionalLight &directionalLight = static_cast<const DirectionalLight &>(light);
                     m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].direction", directionalLight.getDirection());
+                    //also bind shadow map
+                    const ShadowMap &shadowMap = directionalLight.getShadowMap();
+                    m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].shadowIndex", nShadowMaps);
+                    m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].lightSpaceMatrix", directionalLight.getShadowLightSpaceMatrix());
+                    m_material.getShaderProgram().setUniform("shadowMaps[" + std::to_string(nShadowMaps) + "]", textureUsed);
+
+                    glActiveTexture(GL_TEXTURE0 + textureUsed);
+                    glBindTexture(GL_TEXTURE_2D, shadowMap.getShadowMap());
+                    nShadowMaps++;
+                    textureUsed++;
                     break;
                 }
                 case LightType::Spot: {
@@ -126,14 +149,7 @@ namespace ECS {
             }
         }
         camera.resetUpdateFlags();
-        
-        glBindVertexArray(m_VAO);
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_meshFilter.getIndices().size()), GL_UNSIGNED_INT, nullptr);
-        GLenum err = glGetError();
-        if (err != GL_NO_ERROR) {
-            std::cout << "OpenGL Error: " << err << std::endl;
-        }
-        glBindVertexArray(0);
+        GLrender();
         m_material.unbind();
     }
 
