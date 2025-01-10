@@ -11,7 +11,7 @@ namespace ECS {
     ///////////////////////////////
 
     ShadowMap::ShadowMap() :
-        m_size(2048, 2048)
+        m_size(4096, 4096)
     {
         glGenFramebuffers(1, &m_shadowFBO);
         glGenTextures(1, &m_shadowMap);
@@ -28,7 +28,7 @@ namespace ECS {
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        m_lightProjection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, 1.0f, 50.0f);
+        m_lightProjection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, 1.0f, 300.0f);
         // 75 for far plane
         // 1 for near plane
         // 35 for ortho size
@@ -183,7 +183,7 @@ namespace ECS {
     }
 
     glm::mat4 DirectionalLight::getShadowLightSpaceMatrix() const {
-        float farPlane = 30.0f;
+        float farPlane = 150.0f;
         return m_shadowMap.getLightProjection() * glm::lookAt(
             -getDirection() * farPlane, // position
             glm::vec3(0.0f), // target

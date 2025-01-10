@@ -143,12 +143,14 @@ namespace ECS {
 
         // render shadow maps
 
-        glViewport(0, 0, 2048, 2048); // low resolution shadow map
+        glViewport(0, 0, 4096, 4096); // low resolution shadow map
+        //glCullFace(GL_FRONT);
         m_shadowShaderProgram.use();
         for (int i = 0; i < lights.size(); ++i) {
             lights[i].get().renderShadowMap(m_shadowShaderProgram);
         }
         glViewport(0, 0, winWidth, winHeight); // reset viewport for rendering
+        //glCullFace(GL_BACK);
 
         // render scene
         for (auto &renderer : in_frustrum_renderers) {

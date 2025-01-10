@@ -30,19 +30,41 @@ in vec3 Normal;           // Normal in world space
 
 out vec4 FragColor;       // Output fragment color
 
-float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
+float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap, vec3 lightDir, vec3 normal) {
+
+    int kernelSize = 2; // Size of the kernel (for PCF)
+    float maxBias = 0.001; // Maximum bias for the shadow calculation
+    float minBias = 0.0005; // Minimum bias for the shadow calculation
+
     // Perspective divide to get normalized light-space coordinates
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5; // Transform to [0, 1]
+    projCoords = clamp(projCoords, 0.0, 1.0);
 
     // Sample depth from shadow map
     float closestDepth = texture(shadowMap, projCoords.xy).r;
     float currentDepth = projCoords.z;
 
+    // Compute the angle between the light direction and the surface normal
+    float angle = abs(dot(normal, lightDir));
+    angle = clamp(angle, 0.0, 1.0); // Clamp the angle between 0 and 1
+
+    // Adjust bias based on the angle (Slop Scale Depth Bias)
+    float bias = max(maxBias * (1.0 - angle), minBias); // Bias based on angle
+
+    float shadow = 0.0; // Default shadow factor
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0); // Size of a texel, meaning the size of a pixel in the shadow map
+    for (int x = -kernelSize; x <= kernelSize; x++) {
+        for (int y = -kernelSize; y <= kernelSize; y++) {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += (currentDepth - bias) > pcfDepth ? 0.0 : 1.0;
+        }
+    }
+
     // Check if the fragment is in shadow
-    float bias = 0.005; // Prevent shadow acne
-    return (currentDepth - bias > closestDepth) ? 0.0 : 1.0;
+    return shadow / pow(2.0 * float(kernelSize) + 1.0, 2.0);
 }
+
 
 void main() {
     vec4 texColor = texture(textureSampler, TexCoords); // Get the texture color
@@ -60,12 +82,11 @@ void main() {
         vec3 lightDir;
         float shadow = 1.0; // Default shadow factor
 
-
         if (lights[i].type == 0) {
             // Directional light
             lightDir = normalize(-lights[i].direction); // Direction is fixed
             vec4 fragPosLightSpace = lights[i].lightSpaceMatrix * vec4(FragPos, 1.0); // GOOD - Transform fragment position to light space
-            shadow = calculateShadow(fragPosLightSpace, shadowMaps[lights[i].shadowIndex]); // Calculate shadow factor
+            shadow = calculateShadow(fragPosLightSpace, shadowMaps[lights[i].shadowIndex], lightDir, normal); // Calculate shadow factor
         } else if (lights[i].type == 1) {
             // Point light
             lightDir = normalize(lights[i].position - FragPos); // Direction from the light to the fragment

@@ -133,7 +133,11 @@ int game()
     std::cout << ECS::Config::getVersion() << std::endl;
     std::cout << ECS::Config::getGLFWVersion() << std::endl;
 
-    ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, 120);
+    ECS::Application app(
+        "Strake Engine V" + ECS::Config::getVersion(),
+        WIN_WIDTH, WIN_HEIGHT,
+        120
+    );
     app.getWindow().setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
 
     ECS::Scene &scene = app.getSceneManager().addScene("Main Scene");
@@ -151,6 +155,10 @@ int game()
     ECS::Material &grassMaterial = app.getMaterialManager().addMaterial("grass");
     grassMaterial.addTexture(grassTexture, "textureSampler");
     grassMaterial.setShininess(10.0f);
+
+    ECS::Texture &treeTexture = app.getTextureManager().addTexture<ECS::Texture2D>("tree", "assets/tree/textures/tree.png");
+    ECS::Material &treeMaterial = app.getMaterialManager().addMaterial("tree");
+    treeMaterial.addTexture(treeTexture, "textureSampler");
 
     ECS::GameObject &floor = scene.addGameObject("Floor");
     floor.addComponent<ECS::Cube>();
@@ -200,6 +208,13 @@ int game()
     sun.addComponent<ECS::DirectionalLight>();
     sun.getComponent<ECS::DirectionalLight>().setIntensity(1.0f);
     sun.getComponent<ECS::DirectionalLight>().setColor(glm::vec3(1.0f, 1.0f, 0.1f));
+
+    ECS::GameObject &tree = scene.addGameObject("Tree");
+    tree.addComponent<ECS::MeshFilter>();
+    std::cout << "Loading tree" << std::endl;
+    tree.getComponent<ECS::MeshFilter>().loadFromFile("assets/tree/source/tree.obj", 0);
+    std::cout << "Tree loaded" << std::endl;
+    tree.addComponent<ECS::MeshRenderer>(treeMaterial);
 
     for (auto &go : scene.getGameObjects()) {
         printComponent(*go.second, 0);
