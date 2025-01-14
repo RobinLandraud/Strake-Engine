@@ -2,7 +2,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 # Project's name
-PROJECT("Strake" VERSION 0.1.0 LANGUAGES CXX)
+PROJECT("StrakeEngine" VERSION 0.1.0 LANGUAGES CXX)
 
 # Specify the C++ standard
 SET(CMAKE_CXX_STANDARD 20)
@@ -35,8 +35,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Add include directory for ECS
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ECS/include)
+# Add include directory for Strake
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Strake/include)
 
 cmake_policy(SET CMP0072 NEW) # FindOpenGL prefers GLVND by default when available
 
@@ -62,7 +62,7 @@ find_package(assimp REQUIRED)
 
 message("Found Packages")
 
-add_subdirectory(ECS)
+add_subdirectory(Strake)
 
 # Add executable target with source files listed in SOURCE_FILES variable
 ADD_EXECUTABLE(
@@ -116,4 +116,4 @@ if (WIN32)
     endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ECS)
+target_link_libraries(${PROJECT_NAME} PUBLIC Strake)
