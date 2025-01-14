@@ -1,13 +1,13 @@
 #pragma once
 #include <ECS/EventHandler.hpp>
 #include <ECS/Time.hpp>
-#include <ECS/Camera.hpp>
+#include <ECS/Component/Camera.hpp>
 #include <ECS/Scene.hpp>
 #include <chrono>
 #include <iostream>
 #include <cmath>
 
-namespace ECS {
+namespace Strake {
     class GameLoop {
         public:
             explicit GameLoop(int fps = 60);

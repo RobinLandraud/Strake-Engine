@@ -1,12 +1,12 @@
 #pragma once
 
-#include <ECS/Textures.hpp>
-#include <ECS/Shaders.hpp>
+#include <ECS/Texture/Texture.hpp>
+#include <ECS/Shader/ShaderProgram.hpp>
 #include <unordered_map>
 #include <functional>
 #include <optional>
 
-namespace ECS {
+namespace Strake {
     class Material {
         public:
             Material();

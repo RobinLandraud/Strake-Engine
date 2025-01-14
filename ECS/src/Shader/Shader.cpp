@@ -1,6 +1,6 @@
-#include <ECS/Shaders.hpp>
+#include <ECS/Shader/Shader.hpp>
 
-namespace ECS {
+namespace Strake {
     Shader::Shader(const std::string &path, GLenum type) {
         std::ifstream file(path);
         if (!file.is_open()) {

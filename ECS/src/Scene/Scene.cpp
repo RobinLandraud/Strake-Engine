@@ -4,7 +4,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-namespace ECS {
+namespace Strake {
     Scene::Scene() :
         m_shadowShaderProgram("ECS/src/Shader/glsl/shadow/vertex.glsl", "ECS/src/Shader/glsl/shadow/fragment.glsl"),
         m_eventDispatcher(),
@@ -37,13 +37,13 @@ namespace ECS {
         std::string pathName = path.substr(path.find_last_of('/') + 1);
         pathName = pathName.substr(0, pathName.find_last_of('.'));
 
-        ECS::GameObject &mainObj = addGameObject(pathName);
+        Strake::GameObject &mainObj = addGameObject(pathName);
 
         for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
             std::string name = static_cast<std::string>(scene->mMeshes[i]->mName.C_Str());
-            ECS::GameObject &obj = mainObj.addChild(name);
-            obj.addComponent<ECS::MeshFilter>();
-            obj.getComponent<ECS::MeshFilter>().loadFromFile(path, i);
+            Strake::GameObject &obj = mainObj.addChild(name);
+            obj.addComponent<Strake::MeshFilter>();
+            obj.getComponent<Strake::MeshFilter>().loadFromFile(path, i);
         }
 
         return mainObj;

@@ -1,12 +1,14 @@
+#pragma once
+
 #include <vector>
 #include <functional>
-#include <ECS/MeshRenderer.hpp>
+#include <ECS/Component/MeshRenderer.hpp>
 
-namespace ECS {
+namespace Strake {
     class RendererManager {
         public:
             explicit RendererManager(EventDispatcher &eventDispatcher);
-            ~RendererManager() = default;
+            ~RendererManager();
             RendererManager(const RendererManager &other) = delete;
             RendererManager(RendererManager &&other) = delete;
             RendererManager &operator=(const RendererManager &other) = delete;
@@ -19,6 +21,9 @@ namespace ECS {
 
         private:
             std::vector<std::reference_wrapper<MeshRenderer>> m_renderers;
+
             EventDispatcher &m_eventDispatcher;
+            std::unordered_map<EventDispatcher::EventID, std::string> m_subscriptions;
+
     };
 }

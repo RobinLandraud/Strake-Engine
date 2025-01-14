@@ -1,6 +1,6 @@
 #include <ECS/Material.hpp>
 
-namespace ECS {
+namespace Strake {
     Material::Material() :
         Material(
             "ECS/src/Shader/glsl/texture2D/vertex.glsl",

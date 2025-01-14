@@ -1,6 +1,6 @@
 #include <ECS/Component.hpp>
 
-namespace ECS {
+namespace Strake {
     Component::Component(
         GameObject &parent
         )

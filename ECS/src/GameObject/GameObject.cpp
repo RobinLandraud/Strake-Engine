@@ -2,9 +2,9 @@
 #include <ECS/GameObject.hpp>
 #include <ECS/Scene.hpp>
 #include <ECS/Script.hpp>
-#include <ECS/Transform.hpp>
+#include <ECS/Component/Transform.hpp>
 
-namespace ECS {
+namespace Strake {
 
     GameObject::GameObject(std::string name, EventDispatcher &eventDispatcher) :
         m_name(std::move(name)),

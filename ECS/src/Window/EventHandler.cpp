@@ -1,7 +1,7 @@
 #include <ECS/EventHandler.hpp>
 #include <iostream>
 
-namespace ECS
+namespace Strake
 {
     EventHandler::EventHandler(Window& window) :
         m_mouse({0, 0, false, false, false, 0}),

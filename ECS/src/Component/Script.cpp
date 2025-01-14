@@ -1,6 +1,6 @@
 #include <ECS/Script.hpp>
 
-namespace ECS
+namespace Strake
 {
     Script::Script(GameObject &parent) : Component(parent)
     {

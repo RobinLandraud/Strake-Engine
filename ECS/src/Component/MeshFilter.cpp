@@ -1,7 +1,7 @@
-#include <ECS/MeshFilter.hpp>
+#include <ECS/Component/MeshFilter.hpp>
 #include <iostream>
 
-namespace ECS
+namespace Strake
 {
     struct PackedVertex {
         glm::vec3 position;
@@ -86,7 +86,7 @@ namespace ECS
         return m_indices;
     }
 
-    void ECS::MeshFilter::loadFromFile(const std::string &path, unsigned int index) {
+    void Strake::MeshFilter::loadFromFile(const std::string &path, unsigned int index) {
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile(path,
             aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
@@ -136,9 +136,9 @@ namespace ECS
         m_isUpdated = true; // Mark the mesh as updated
     }
 
-    std::vector<std::reference_wrapper<ECS::GameObject>> ECS::MeshFilter::loadFromFile(const std::string &path)
+    std::vector<std::reference_wrapper<Strake::GameObject>> Strake::MeshFilter::loadFromFile(const std::string &path)
     {
-        std::vector<std::reference_wrapper<ECS::GameObject>> objects;
+        std::vector<std::reference_wrapper<Strake::GameObject>> objects;
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile(path,
             aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
@@ -160,8 +160,8 @@ namespace ECS
             std::vector<unsigned int> indices;
 
             std::string name = static_cast<std::string>(scene->mMeshes[i]->mName.C_Str());
-            ECS::GameObject &obj = getParent().addChild(name);
-            obj.addComponent<ECS::MeshFilter>();
+            Strake::GameObject &obj = getParent().addChild(name);
+            obj.addComponent<Strake::MeshFilter>();
 
             // Extract vertices
             for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
@@ -184,12 +184,12 @@ namespace ECS
                 }
             }
 
-            obj.getComponent<ECS::MeshFilter>().setVertices(vertices);
-            obj.getComponent<ECS::MeshFilter>().setNormals(normals);
-            obj.getComponent<ECS::MeshFilter>().setUVs(uvs);
-            obj.getComponent<ECS::MeshFilter>().setIndices(indices);
+            obj.getComponent<Strake::MeshFilter>().setVertices(vertices);
+            obj.getComponent<Strake::MeshFilter>().setNormals(normals);
+            obj.getComponent<Strake::MeshFilter>().setUVs(uvs);
+            obj.getComponent<Strake::MeshFilter>().setIndices(indices);
 
-            obj.getComponent<ECS::MeshFilter>().setUpdated(true);
+            obj.getComponent<Strake::MeshFilter>().setUpdated(true);
 
             objects.push_back(obj);
         }

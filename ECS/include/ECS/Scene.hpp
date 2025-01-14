@@ -2,13 +2,13 @@
 
 #include <ECS/Component.hpp>
 #include <ECS/GameObject.hpp>
-#include <ECS/Camera.hpp>
-#include <ECS/LightManager.hpp>
-#include <ECS/RendererManager.hpp>
+#include <ECS/Component/Camera.hpp>
+#include <ECS/Manager/LightManager.hpp>
+#include <ECS/Manager/RendererManager.hpp>
 #include <functional>
 #include <optional>
-#include <ECS/MeshFilter.hpp>
-#include <ECS/Shaders.hpp>
+#include <ECS/Component/MeshFilter.hpp>
+#include <ECS/Shader/ShaderProgram.hpp>
 
 
 #include <assimp/Importer.hpp>
@@ -16,7 +16,7 @@
 #include <assimp/postprocess.h>
 
 
-namespace ECS {
+namespace Strake {
     class Scene {
         public:
             Scene();

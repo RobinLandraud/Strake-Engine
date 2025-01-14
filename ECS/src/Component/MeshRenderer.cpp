@@ -1,6 +1,6 @@
-#include <ECS/MeshRenderer.hpp>
+#include <ECS/Component/MeshRenderer.hpp>
 
-namespace ECS {
+namespace Strake {
     MeshRenderer::MeshRenderer(GameObject &parent, MeshFilter &meshFilter, Material &material) :
         Component(parent),
         m_meshFilter(meshFilter),

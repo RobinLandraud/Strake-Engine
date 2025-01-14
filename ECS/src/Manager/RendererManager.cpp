@@ -1,22 +1,29 @@
-#include <ECS/RendererManager.hpp>
+#include <ECS/Manager/RendererManager.hpp>
 
-namespace ECS {
+namespace Strake {
     RendererManager::RendererManager(EventDispatcher &eventDispatcher) :
         m_eventDispatcher(eventDispatcher)
     {
-        m_eventDispatcher.subscribe("addRenderer", [this](const Event &event) {
+        m_subscriptions[m_eventDispatcher.subscribe("addRenderer", [this](const Event &event) {
             MeshRenderer &renderer = static_cast<const EventData<MeshRenderer> &>(event).getValue();
             addRenderer(renderer);
-        });
+        })] = "addRenderer";
 
-        m_eventDispatcher.subscribe("removeRenderer", [this](const Event &event) {
+        m_subscriptions[m_eventDispatcher.subscribe("removeRenderer", [this](const Event &event) {
             MeshRenderer &renderer = static_cast<const EventData<MeshRenderer> &>(event).getValue();
             removeRenderer(renderer);
-        });
+        })] = "removeRenderer";
 
-        m_eventDispatcher.subscribe("clearRenderers", [this](const Event &event) {
+        m_subscriptions[m_eventDispatcher.subscribe("clearRenderers", [this](const Event &event) {
             clear();
-        });
+        })] = "clearRenderers";
+    }
+
+    RendererManager::~RendererManager()
+    {
+        for (const auto &[id, event] : m_subscriptions) {
+            m_eventDispatcher.unsubscribe(event, id);
+        }
     }
 
     void RendererManager::addRenderer(MeshRenderer &renderer)

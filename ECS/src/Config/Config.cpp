@@ -1,6 +1,6 @@
 #include <ECS/Config.hpp>
 
-namespace ECS {
+namespace Strake {
     const std::string &Config::getVersion() {
         static const std::string version = std::to_string(ECS_VERSION_MAJOR) + "." + std::to_string(ECS_VERSION_MINOR) + "." + std::to_string(ECS_VERSION_PATCH);
         return version;

@@ -2,7 +2,7 @@
 #include <ECS/EventHandler.hpp>
 #include <ECS/Time.hpp>
 
-namespace ECS
+namespace Strake
 {
     Window::Window( int width, int height, const std::string& title) :
         m_window(nullptr, glfwDestroyWindow),

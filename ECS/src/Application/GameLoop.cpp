@@ -1,6 +1,6 @@
 #include <ECS/GameLoop.hpp>
 
-namespace ECS {
+namespace Strake {
     GameLoop::GameLoop(int fps)
         : m_isRunning(false),
         m_fps(fps),
@@ -80,7 +80,7 @@ namespace ECS {
             }
             if (is_updated) {
                 lateUpdate(scene);
-                ECS::Window::clear();
+                Strake::Window::clear();
                 render(scene, window);
                 window.display();
             }

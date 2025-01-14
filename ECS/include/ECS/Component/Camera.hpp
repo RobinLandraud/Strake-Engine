@@ -2,9 +2,9 @@
 
 #include <ECS/Component.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_Transform.hpp>
 
-namespace ECS {
+namespace Strake {
     class Camera : public Component
     {
         public:

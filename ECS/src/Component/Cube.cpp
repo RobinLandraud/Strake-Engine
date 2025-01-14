@@ -1,6 +1,6 @@
-#include <ECS/MeshFilter.hpp>
+#include <ECS/Component/MeshFilter.hpp>
 
-namespace ECS {
+namespace Strake {
     Cube::Cube(GameObject &parent)
         : MeshFilter(parent)
     {

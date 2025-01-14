@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace ECS {
+namespace Strake {
     enum Key {
         Unknown = GLFW_KEY_UNKNOWN,
         Space = GLFW_KEY_SPACE,

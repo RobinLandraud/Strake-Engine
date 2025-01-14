@@ -1,6 +1,6 @@
-#include <ECS/Textures.hpp>
+#include <ECS/Texture/Texture3D.hpp>
 
-namespace ECS {
+namespace Strake {
     Texture3D::Texture3D(const std::vector<std::string> &paths) {
         glGenTextures(1, &m_texture);
         glBindTexture(GL_TEXTURE_3D, m_texture);

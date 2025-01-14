@@ -3,15 +3,17 @@
 #include <GL/glew.h>
 #include <ECS/EventDispatcher.hpp>
 #include <ECS/Component.hpp>
-#include <ECS/MeshFilter.hpp>
+#include <ECS/Component/MeshFilter.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_Transform.hpp>
 #include <ECS/Material.hpp>
-#include <ECS/Camera.hpp>
-#include <ECS/Transform.hpp>
-#include <ECS/Lights.hpp>
+#include <ECS/Component/Camera.hpp>
+#include <ECS/Component/Transform.hpp>
+#include <ECS/Component/Light/Light.hpp>
+#include <ECS/Component/Light/DirectionalLight.hpp>
+#include <ECS/Component/Light/PointLight.hpp>
 
-namespace ECS {
+namespace Strake {
     class MeshRenderer : public Component
     {
         public:

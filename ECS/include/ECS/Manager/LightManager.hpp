@@ -1,14 +1,16 @@
+#pragma once
+
 #include <vector>
 #include <functional>
-#include <ECS/Lights.hpp>
-#include <ECS/MeshRenderer.hpp>
+#include <ECS/Component/Light/Light.hpp>
+#include <ECS/Component/MeshRenderer.hpp>
 #include <ECS/EventDispatcher.hpp>
 
-namespace ECS {
+namespace Strake {
     class LightManager {
         public:
             explicit LightManager(EventDispatcher &eventDispatcher);
-            ~LightManager() = default;
+            ~LightManager();
             LightManager(const LightManager &other) = delete;
             LightManager(LightManager &&other) = delete;
             LightManager &operator=(const LightManager &other) = delete;
@@ -21,6 +23,8 @@ namespace ECS {
 
         private:
             std::vector<std::reference_wrapper<Light>> m_lights;
+
             EventDispatcher &m_eventDispatcher;
+            std::unordered_map<EventDispatcher::EventID, std::string> m_subscriptions;
     };
 }

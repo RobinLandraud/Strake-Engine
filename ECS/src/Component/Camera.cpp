@@ -1,7 +1,7 @@
-#include <ECS/Camera.hpp>
-#include <ECS/Transform.hpp>
+#include <ECS/Component/Camera.hpp>
+#include <ECS/Component/Transform.hpp>
 
-namespace ECS {
+namespace Strake {
     Camera::Camera(GameObject &parent) :
         Component(parent),
         m_transform(parent.getComponent<Transform>())

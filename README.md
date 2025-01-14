@@ -133,18 +133,18 @@ To begin, we create a window and initialize the ECS system. You can set up your 
 ### 1. Create the Application
 
 ```bash
-ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, FPS);
+Strake::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, FPS);
 ```
 
 ### 2. Create a texure
 ```bash
-ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.jpg");
+Strake::Texture &metalTexture = app.getTextureManager().addTexture<Strake::Texture2D>("metal", "assets/metal.jpg");
 ```
 
 ### 3. Create a material
 
 ```bash
-ECS::Material &metalicMaterial = app.getMaterialManager().addMaterial("metal");
+Strake::Material &metalicMaterial = app.getMaterialManager().addMaterial("metal");
 metalicMaterial.addTexture(metalTexture, "textureSampler");
 metalicMaterial.setShininess(256.0f);
 ```
@@ -159,18 +159,18 @@ app.getSceneManager().setCurrentScene("Main Scene");
 ### 5. Add a Gameobject with Mesh
 
 ```bash
-ECS::GameObject &object = scene.addGameObject("Cube");
+Strake::GameObject &object = scene.addGameObject("Cube");
 object.getTransform().setLocalPosition(glm::vec3(x, y, z));
-object.addComponent<ECS::Cube>();
-object.addComponent<ECS::MeshRenderer>(metalicMaterial);
+object.addComponent<Strake::Cube>();
+object.addComponent<Strake::MeshRenderer>(metalicMaterial);
 ```
 
 ### 6. Add a Camera
 
 ```bash
-ECS::GameObject &player = scene.addGameObject("Main Camera");
-player.addComponent<ECS::Camera>();
-ECS::Camera &cam = player.getComponent<ECS::Camera>();
+Strake::GameObject &player = scene.addGameObject("Main Camera");
+player.addComponent<Strake::Camera>();
+Strake::Camera &cam = player.getComponent<Strake::Camera>();
 cam.setProjection(45.0f, static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT), 0.1f, 100.0f);
 player.getTransform().setLocalPosition(glm::vec3(x, y, z));
 scene.setMainCamera(cam);
@@ -179,20 +179,20 @@ scene.setMainCamera(cam);
 ### 7. Create and add a Script
 
 ```bash
-class CharacterController: public ECS::Script
+class CharacterController: public Strake::Script
 {
     public:
-        using ECS::Script::Script;
+        using Strake::Script::Script;
         void awake() override {
             transform = getParent().getTransform();
         }
         void update() override {
-            const ECS::mouse_t &mouse = ECS::EventHandler::getMouse();
-            ECS::Transform &transform = this->transform.value();
-            if (ECS::EventHandler::isKeyHeld(ECS::Key::W)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed * ECS::Time::getDeltaTime()));
-            } else if (ECS::EventHandler::isKeyHeld(ECS::Key::S)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed * ECS::Time::getDeltaTime()));
+            const Strake::mouse_t &mouse = Strake::EventHandler::getMouse();
+            Strake::Transform &transform = this->transform.value();
+            if (Strake::EventHandler::isKeyHeld(Strake::Key::W)) {
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed * Strake::Time::getDeltaTime()));
+            } else if (Strake::EventHandler::isKeyHeld(Strake::Key::S)) {
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed * Strake::Time::getDeltaTime()));
             }
             ...
             float yaw = mouse.x;
@@ -200,7 +200,7 @@ class CharacterController: public ECS::Script
             transform.setLocalRotation(glm::vec3(-roll, -yaw, 0.0f));
         }
     private:
-        std::optional<std::reference_wrapper<ECS::Transform>> transform;
+        std::optional<std::reference_wrapper<Strake::Transform>> transform;
         const float m_speed = 10.0f;
 };
 ```

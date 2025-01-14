@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 
-namespace ECS {
+namespace Strake {
 
     class Camera;
     class Component {

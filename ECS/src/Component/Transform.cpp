@@ -1,6 +1,6 @@
-#include <ECS/Transform.hpp>
+#include <ECS/Component/Transform.hpp>
 
-namespace ECS {
+namespace Strake {
     Transform::Transform(GameObject &parent) : Component(parent) {
         setDerivedType(typeid(Transform));
     }

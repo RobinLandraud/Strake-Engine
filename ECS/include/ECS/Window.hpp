@@ -7,7 +7,7 @@
 #include <string>
 #include <glm/glm.hpp>
 
-namespace ECS
+namespace Strake
 {
     class Window
     {

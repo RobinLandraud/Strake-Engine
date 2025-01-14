@@ -4,7 +4,7 @@
 
 #include <ECS/Component.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_Transform.hpp>
 #include <cstring>
 #include <map>
 
@@ -13,7 +13,7 @@
 #include <assimp/postprocess.h>
 
 
-namespace ECS
+namespace Strake
 {
     class MeshFilter : public Component
     {
@@ -33,7 +33,7 @@ namespace ECS
             [[nodiscard]] const std::vector<glm::vec2> &getUVs() const;
             [[nodiscard]] const std::vector<unsigned int> &getIndices() const;
 
-            std::vector<std::reference_wrapper<ECS::GameObject>> loadFromFile(const std::string &path);
+            std::vector<std::reference_wrapper<Strake::GameObject>> loadFromFile(const std::string &path);
             void loadFromFile(const std::string &path, unsigned int index);
 
             [[nodiscard]] bool isUpdated() const;
@@ -41,10 +41,10 @@ namespace ECS
 
         protected:
             bool m_isUpdated = false;
-            std::vector<glm::vec3> m_vertices;
-            std::vector<glm::vec3> m_normals;
-            std::vector<glm::vec2> m_uvs;
-            std::vector<unsigned int> m_indices;
+            std::vector<glm::vec3> m_vertices; // position of the vertex
+            std::vector<glm::vec3> m_normals; // direction the vertex is facing
+            std::vector<glm::vec2> m_uvs; // texture coordinates
+            std::vector<unsigned int> m_indices; // indices of the vertices
     };
 
     class Cube : public MeshFilter

@@ -1,6 +1,6 @@
-#include <ECS/Shaders.hpp>
+#include <ECS/Shader/ShaderProgram.hpp>
 
-namespace ECS {
+namespace Strake {
     ShaderProgram::ShaderProgram(const std::string &vertexPath, const std::string &fragmentPath) {
         Shader vertexShader(vertexPath, GL_VERTEX_SHADER);
         Shader fragmentShader(fragmentPath, GL_FRAGMENT_SHADER);

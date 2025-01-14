@@ -15,12 +15,18 @@ find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(assimp REQUIRED)
 
-add_library(Config STATIC src/Config/Config.cpp)
-add_library(Time STATIC src/Time/Time.cpp)
+add_library(Config STATIC
+    src/Config/Config.cpp
+)
+add_library(Time STATIC
+    src/Time/Time.cpp
+)
+add_library(Texture STATIC
+    src/Texture/Texture.cpp
+    src/Texture/Texture2D.cpp
+    src/Texture/Texture3D.cpp
+)
 add_library(Material STATIC
-    src/Material/Texture.cpp
-    src/Material/Texture2D.cpp
-    src/Material/Texture3D.cpp
     src/Material/Material.cpp
 )
 add_library(Shader STATIC
@@ -31,24 +37,46 @@ add_library(Application STATIC
     src/Application/GameLoop.cpp
     src/Application/Application.cpp
 )
-add_library(Dispatcher STATIC src/Dispatcher/EventDispatcher.cpp)
-add_library(Window STATIC src/Window/Window.cpp)
-add_library(EventHandler STATIC src/Window/EventHandler.cpp)
-add_library(GameObject STATIC src/GameObject/GameObject.cpp)
+add_library(Dispatcher STATIC
+    src/Dispatcher/EventDispatcher.cpp
+)
+add_library(Window STATIC
+    src/Window/Window.cpp
+)
+add_library(EventHandler STATIC
+    src/Window/EventHandler.cpp
+)
+add_library(GameObject STATIC
+    src/GameObject/GameObject.cpp
+)
 
 # ////////////////////////////////////////////////////////////////////////
 # Component librarie
-add_library(Component STATIC src/Component/Component.cpp)
-
-add_library(Transform STATIC src/Component/Transform.cpp)
-add_library(Camera STATIC src/Component/Camera.cpp)
-add_library(Script STATIC src/Component/Script.cpp)
+add_library(Component STATIC
+    src/Component/Component.cpp
+)
+add_library(Transform STATIC
+    src/Component/Transform.cpp
+)
+add_library(Camera STATIC
+    src/Component/Camera.cpp
+)
+add_library(Script STATIC
+    src/Component/Script.cpp
+)
 add_library(MeshFilter STATIC
     src/Component/MeshFilter.cpp
     src/Component/Cube.cpp
 )
-add_library(MeshRenderer STATIC src/Component/MeshRenderer.cpp)
-add_library(Light STATIC src/Component/Lights.cpp)
+add_library(MeshRenderer STATIC
+    src/Component/MeshRenderer.cpp
+)
+add_library(Light STATIC
+    src/Component/Light/Light.cpp
+    src/Component/Light/DirectionalLight.cpp
+    src/Component/Light/PointLight.cpp
+    src/Component/Light/ShadowMap.cpp
+)
 
 target_link_libraries(Component PUBLIC
     Transform
@@ -63,8 +91,11 @@ target_link_libraries(Component PUBLIC
 
 add_library(Scene STATIC src/Scene/Scene.cpp)
 add_library(Managers STATIC
-    src/Managers/LightManager.cpp
-    src/Managers/RendererManager.cpp
+    src/Manager/LightManager.cpp
+    src/Manager/RendererManager.cpp
+    src/Manager/MaterialManager.cpp
+    src/Manager/TextureManager.cpp
+    src/Manager/SceneManager.cpp
 )
 
 # dependencies for the libraries
@@ -90,6 +121,7 @@ target_link_libraries(Camera PUBLIC Transform)
 target_link_libraries(Script PUBLIC Component)
 target_link_libraries(MeshFilter PUBLIC Component)
 target_link_libraries(MeshRenderer PUBLIC Component MeshFilter)
+target_link_libraries(Material PUBLIC Texture)
 
 target_link_libraries(Application PUBLIC
     Threads::Threads

@@ -2,10 +2,10 @@
 
 #include <ECS/Component.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_Transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-namespace ECS {
+namespace Strake {
     enum class Space {
         LOCAL,
         WORLD

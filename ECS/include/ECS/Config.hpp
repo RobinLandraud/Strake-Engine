@@ -8,7 +8,7 @@ constexpr int ECS_VERSION_PATCH = 4;
 constexpr int ECS_GLFW_VERSION_MAJOR = 3;
 constexpr int ECS_GLFW_VERSION_MINOR = 3;
 
-namespace ECS {
+namespace Strake {
     class Config {
         public:
             static const std::string &getVersion();

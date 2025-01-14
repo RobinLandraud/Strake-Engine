@@ -1,31 +1,9 @@
-//shader and shaderprogram classes
+#pragma once
 
-#ifndef ECS_SHADERS_HPP
-#define ECS_SHADERS_HPP
-
-#include <GL/glew.h>
-#include <GL/glu.h>
-#include <array>
-#include <fstream>
+#include <ECS/Shader/Shader.hpp>
 #include <glm/glm.hpp>
-#include <iostream>
-#include <string>
 
-namespace ECS {
-    class Shader {
-        public:
-            Shader(const std::string &path, GLenum type);
-            ~Shader();
-            Shader(const Shader&) = delete;
-            Shader& operator=(const Shader&) = delete;
-            Shader& operator=(Shader&&) = delete;
-            Shader(Shader&&) = delete;
-
-            [[nodiscard]] GLuint getID() const;
-        private:
-            GLuint m_shader;
-    };
-
+namespace Strake {
     class ShaderProgram {
         public:
             ShaderProgram(const std::string &vertexPath, const std::string &fragmentPath);
@@ -51,4 +29,3 @@ namespace ECS {
             GLuint m_program;
     };
 }
-#endif //ECS_SHADERS_HPP

@@ -2,7 +2,7 @@
 #include <chrono>
 #include <memory>
 
-namespace ECS {
+namespace Strake {
     class Time {
         public:
             static void init();

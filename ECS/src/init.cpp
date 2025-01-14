@@ -49,7 +49,7 @@ void GLAPIENTRY OpenGLDebugCallback(GLenum source, GLenum type, GLuint id,
     }
 }
 
-int ECS::init() {
+int Strake::init() {
     GL_CHECK(glEnable(GL_DEPTH_TEST)); // Enable depth testing for 3D rendering (occlusion culling)
     GL_CHECK(glDepthFunc(GL_LESS)); // Set depth function to less than or equal to
     GL_CHECK(glEnable(GL_BLEND)); // Enable blending
@@ -65,7 +65,7 @@ int ECS::init() {
     return 0;
 }
 
-int ECS::exit() {
+int Strake::exit() {
     glfwTerminate();
     return 0;
 }

@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <ECS/EventDispatcher.hpp>
 
-namespace ECS {
+namespace Strake {
     class Component;
     class Camera;
     class Transform;

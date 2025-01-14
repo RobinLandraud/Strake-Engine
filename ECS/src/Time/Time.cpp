@@ -1,6 +1,6 @@
 #include <ECS/Time.hpp>
 
-namespace ECS {
+namespace Strake {
     Time::Time() : 
         m_time(std::chrono::high_resolution_clock::now()),
         m_lastTime(std::chrono::high_resolution_clock::now()),

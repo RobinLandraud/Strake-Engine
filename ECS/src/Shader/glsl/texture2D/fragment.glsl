@@ -54,6 +54,7 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap, vec3 lightDir
 
     float shadow = 0.0; // Default shadow factor
     vec2 texelSize = 1.0 / textureSize(shadowMap, 0); // Size of a texel, meaning the size of a pixel in the shadow map
+    // Iterate through the kernel and calculate the shadow factor (PCF)
     for (int x = -kernelSize; x <= kernelSize; x++) {
         for (int y = -kernelSize; y <= kernelSize; y++) {
             float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;

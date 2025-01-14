@@ -1,6 +1,6 @@
 #include <ECS/Component.hpp>
 
-namespace ECS
+namespace Strake
 {
     class Script : public Component
     {

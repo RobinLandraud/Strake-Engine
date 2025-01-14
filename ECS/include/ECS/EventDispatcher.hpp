@@ -11,8 +11,7 @@
 
 #include <iostream>
 
-namespace ECS {
-
+namespace Strake {
     class Event {
         public:
             explicit Event(std::string &&eventType);
@@ -44,13 +43,16 @@ namespace ECS {
         public:
             EventDispatcher() = default;
             ~EventDispatcher() = default;
+            using EventID = size_t;
             using Callback = std::function<void(const Event&)>;
             
-            void subscribe(const std::string& eventType, Callback callback);
+            EventID subscribe(const std::string& eventType, Callback callback);
+            void unsubscribe(const std::string& eventType, EventID id);
             void broadcast(const Event& event);
 
         private:
-            std::unordered_map<std::string, std::vector<Callback>> subscribers;
+            std::unordered_map<std::string, std::vector<std::pair<EventID, Callback>>> m_subscribers;
             mutable std::mutex mtx;
+            std::atomic<EventID> currentID;
     };
 }
