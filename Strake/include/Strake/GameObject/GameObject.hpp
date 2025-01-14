@@ -149,7 +149,6 @@ namespace Strake {
             void update();
             void fixedUpdate();
             void lateUpdate();
-            void render(Camera &camera);
 
             EventDispatcher &getEventDispatcher();
 

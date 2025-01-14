@@ -1,8 +1,8 @@
-#include <Strake/Component/MeshRenderer.hpp>
+#include <Strake/Component/Renderer/MeshRenderer.hpp>
 
 namespace Strake {
     MeshRenderer::MeshRenderer(GameObject &parent, MeshFilter &meshFilter, Material &material) :
-        Component(parent),
+        Renderer(parent, RendererType::MeshRenderer),
         m_meshFilter(meshFilter),
         m_material(material),
         m_VAO(0),
@@ -11,9 +11,6 @@ namespace Strake {
     {
         setupMesh();
         setDerivedType(typeid(MeshRenderer));
-        EventData<MeshRenderer> eventData(*this, "addRenderer");
-        parent.getEventDispatcher().broadcast(eventData);
-        
     }
 
     MeshRenderer::MeshRenderer(GameObject &parent, Material &material) :
@@ -26,8 +23,7 @@ namespace Strake {
         glDeleteVertexArrays(1, &m_VAO);
         glDeleteBuffers(1, &m_VBO);
         glDeleteBuffers(1, &m_EBO);
-        EventData<MeshRenderer> eventData(*this, "removeRenderer");
-        getParent().getEventDispatcher().broadcast(eventData);
+        //renderer destructor is called
     }
 
     void MeshRenderer::setupMesh()
@@ -101,11 +97,24 @@ namespace Strake {
         glBindVertexArray(0);
     }
 
+    void MeshRenderer::preRender()
+    {
+        if (!m_meshFilter.isUpdated()) {
+            return;
+        }
+        glBindVertexArray(m_VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+        glBufferData(GL_ARRAY_BUFFER, m_meshFilter.getVertices().size() * sizeof(glm::vec3), m_meshFilter.getVertices().data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshFilter.getIndices().size() * sizeof(unsigned int), m_meshFilter.getIndices().data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
+        m_meshFilter.setUpdated(false);
+    }
+
     void MeshRenderer::render(Camera &camera)
     {
-        // add renderer to render pipeline
-
-
         int textureUsed = m_material.bind();
 
         int nShadowMaps = 0;
@@ -153,22 +162,6 @@ namespace Strake {
         m_material.unbind();
     }
 
-    void MeshRenderer::lateUpdate()
-    {
-        if (!m_meshFilter.isUpdated()) {
-            return;
-        }
-        glBindVertexArray(m_VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-        glBufferData(GL_ARRAY_BUFFER, m_meshFilter.getVertices().size() * sizeof(glm::vec3), m_meshFilter.getVertices().data(), GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshFilter.getIndices().size() * sizeof(unsigned int), m_meshFilter.getIndices().data(), GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-
-        m_meshFilter.setUpdated(false);
-    }
-
     const MeshFilter &MeshRenderer::getMeshFilter() const
     {
         return m_meshFilter;
@@ -179,9 +172,10 @@ namespace Strake {
         return m_material;
     }
 
-    void MeshRenderer::addLight(const Light &light)
+    void MeshRenderer::addLight(Light &light)
     {
         m_lights.push_back(light);
+        light.getShadowMap().addObject(getParent());
     }
 
     void MeshRenderer::clearLights()

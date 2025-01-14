@@ -22,8 +22,6 @@ namespace Strake {
             virtual void fixedUpdate();
             virtual void lateUpdate();
 
-            virtual void render(Camera &camera);
-
             [[nodiscard]] GameObject &getParent() const;
             [[nodiscard]] std::type_index getDerivedType() const;
 

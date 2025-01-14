@@ -129,10 +129,6 @@ namespace Strake {
     /// World Space
     /////////////////////////////////////////////////////
 
-    void Transform::rotate(const glm::vec3 &rotation) {
-        // do after
-    }
-
     void Transform::updateWorldMatrix() {
         GameObject &parent = getParent();
         if (parent.hasParent() == false) {
@@ -154,6 +150,24 @@ namespace Strake {
     }
 
     const glm::vec3 Transform::getWorldPosition() {
+        if (m_worldDirty == true) {
+            updateWorldMatrix();
+        }
         return glm::vec3(getWorldMatrix()[3]);
+    }
+
+    const glm::vec3 Transform::getWorldRotation() {
+        // TO DO: Implement dirty flag for world rotation
+        if (m_worldDirty) {
+            updateWorldMatrix();
+        }
+        // Return rotation in degrees if needed
+        // Extract the rotation matrix from the world matrix
+        glm::mat4 worldMatrix = getWorldMatrix();
+        glm::mat3 rotationMatrix = glm::mat3(worldMatrix);
+        // Convert the rotation matrix to Euler angles
+        glm::vec3 worldRotation = glm::eulerAngles(glm::quat_cast(rotationMatrix));
+        // Return rotation in degrees if needed
+        return glm::degrees(worldRotation); // Or remove glm::degrees() for radians
     }
 }

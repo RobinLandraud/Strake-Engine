@@ -20,8 +20,8 @@ namespace Strake {
             //void setPosition(const glm::vec3 &position);
             //void translate(const glm::vec3 &translation);
 
-            void setRotation(const glm::vec3 &rotation);
-            void rotate(const glm::vec3 &rotation);
+            //void setRotation(const glm::vec3 &rotation);
+            //void rotate(const glm::vec3 &rotation);
             //void setRoll(float roll);
             //void setPitch(float pitch);
             //void setYaw(float yaw);
@@ -52,7 +52,7 @@ namespace Strake {
             [[nodiscard]] const glm::mat4 &getLocalMatrix(); // get the matrix at this frame. deprecated if transform is not updated
 
             [[nodiscard]] const glm::vec3 getWorldPosition(); // get the position in world space
-            //[[nodiscard]] const glm::vec3 &getRotation() const; // get the rotation in world space
+            [[nodiscard]] const glm::vec3 getWorldRotation(); // get the rotation in world space
             //[[nodiscard]] const glm::vec3 &getScale() const; // get the scale in world space
             //[[nodiscard]] const glm::vec3 &getFront() const; // get the front at this tick
             //[[nodiscard]] const glm::vec3 &getUp() const; // get the up at this tick

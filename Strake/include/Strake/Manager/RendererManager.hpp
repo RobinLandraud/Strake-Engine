@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <functional>
-#include <Strake/Component/MeshRenderer.hpp>
+#include <Strake/Component/Renderer/Renderer.hpp>
 
 namespace Strake {
     class RendererManager {
@@ -14,13 +14,13 @@ namespace Strake {
             RendererManager &operator=(const RendererManager &other) = delete;
             RendererManager &operator=(RendererManager &&other) = delete;
 
-            void addRenderer(MeshRenderer &renderer);
-            void removeRenderer(MeshRenderer &renderer);
+            void addRenderer(Renderer &renderer);
+            void removeRenderer(Renderer &renderer);
             void clear();
-            [[nodiscard]] std::vector<std::reference_wrapper<MeshRenderer>> &getRenderers();
+            [[nodiscard]] std::vector<std::reference_wrapper<Renderer>> &getRenderers();
 
         private:
-            std::vector<std::reference_wrapper<MeshRenderer>> m_renderers;
+            std::vector<std::reference_wrapper<Renderer>> m_renderers;
 
             EventDispatcher &m_eventDispatcher;
             std::unordered_map<EventDispatcher::EventID, std::string> m_subscriptions;

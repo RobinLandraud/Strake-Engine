@@ -1,15 +1,15 @@
 #include <Strake/Config/Config.hpp>
+#include <Strake/Application/Application.hpp>
+#include <Strake/Window/EventHandler.hpp>
 #include <Strake/Application/GameLoop.hpp>
-#include <Strake/Script/Script.hpp>
+#include <Strake/Scene/Scene.hpp>
 #include <Strake/Material/Material.hpp>
-#include <Strake/Component/Component.hpp>
+#include <Strake/Texture/Texture.hpp>
 #include <Strake/Component/Camera.hpp>
 #include <Strake/Component/Transform.hpp>
 #include <Strake/Component/MeshFilter.hpp>
-#include <Strake/Component/MeshRenderer.hpp>
-#include <Strake/Scene/Scene.hpp>
-#include <Strake/Window/EventHandler.hpp>
-#include <Strake/Application/Application.hpp>
+#include <Strake/Component/Renderer/MeshRenderer.hpp>
+#include <Strake/Script/Script.hpp>
 #include <Strake/init.hpp>
 
 class Rotator : public Strake::Script

@@ -2,7 +2,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <Strake/Component/Light/Light.hpp>
-#include <Strake/Component/MeshRenderer.hpp> // only for cpp file
+#include <Strake/Component/Renderer/MeshRenderer.hpp>
 
 namespace Strake {
     Light::Light(GameObject &parent, LightType type) :

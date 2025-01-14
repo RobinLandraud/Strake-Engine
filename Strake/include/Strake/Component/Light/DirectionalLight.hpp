@@ -3,7 +3,7 @@
 #include <Strake/Component/Light/Light.hpp>
 #include <Strake/Component/Light/LightType.hpp>
 #include <Strake/Component/Transform.hpp>
-#include <Strake/Component/MeshRenderer.hpp>
+#include <Strake/Component/Renderer/MeshRenderer.hpp>
 
 namespace Strake {
     class DirectionalLight : public Light

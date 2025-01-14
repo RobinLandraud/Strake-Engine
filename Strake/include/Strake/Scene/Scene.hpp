@@ -9,6 +9,7 @@
 #include <optional>
 #include <Strake/Component/MeshFilter.hpp>
 #include <Strake/Shader/ShaderProgram.hpp>
+#include <Strake/Component/Renderer/MeshRenderer.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -39,6 +40,7 @@ namespace Strake {
             void update();
             void fixedUpdate();
             void lateUpdate();
+
             void render(int width, int height);
 
         private:
@@ -46,11 +48,13 @@ namespace Strake {
             EventDispatcher m_eventDispatcher;
 
             //render pipeline
-            ShaderProgram m_shadowShaderProgram;
             LightManager m_lightManager;
             RendererManager m_rendererManager;
 
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_gameObjects;
             std::optional<std::reference_wrapper<Camera>> m_mainCamera;
+            
+            //method for rendering
+            std::vector<std::reference_wrapper<Renderer>> setupInFrustrumRenderers();
     };
 }

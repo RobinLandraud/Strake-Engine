@@ -2,6 +2,7 @@
 
 namespace Strake {
     LightManager::LightManager(EventDispatcher &eventDispatcher) :
+        m_shadowShaderProgram("Strake/src/Shader/glsl/shadow/vertex.glsl", "Strake/src/Shader/glsl/shadow/fragment.glsl"),
         m_eventDispatcher(eventDispatcher)
     {
         m_subscriptions[m_eventDispatcher.subscribe("addLight", [this](const Event &event) {
@@ -51,5 +52,22 @@ namespace Strake {
     std::vector<std::reference_wrapper<Light>> &LightManager::getLights()
     {
         return m_lights;
+    }
+
+    void LightManager::clearObjects()
+    {
+        for (auto &light : m_lights) {
+            light.get().getShadowMap().clearObjects();
+        }
+    }
+
+    void LightManager::renderShadowMaps(int winWidth, int winHeight)
+    {
+        glViewport(0, 0, 4096, 4096);
+        m_shadowShaderProgram.use();
+        for (auto &light : m_lights) {
+            light.get().renderShadowMap(m_shadowShaderProgram);
+        }
+        glViewport(0, 0, winWidth, winHeight);
     }
 }

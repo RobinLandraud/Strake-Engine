@@ -13,7 +13,6 @@ namespace Strake {
     void Component::update() {}
     void Component::fixedUpdate() {}
     void Component::lateUpdate() {}
-    void Component::render(Camera &camera) {}
 
     void Component::setDerivedType(const std::type_index &type) {
         m_derivedType = type;

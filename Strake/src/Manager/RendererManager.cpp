@@ -5,12 +5,12 @@ namespace Strake {
         m_eventDispatcher(eventDispatcher)
     {
         m_subscriptions[m_eventDispatcher.subscribe("addRenderer", [this](const Event &event) {
-            MeshRenderer &renderer = static_cast<const EventData<MeshRenderer> &>(event).getValue();
+            Renderer &renderer = static_cast<const EventData<Renderer> &>(event).getValue();
             addRenderer(renderer);
         })] = "addRenderer";
 
         m_subscriptions[m_eventDispatcher.subscribe("removeRenderer", [this](const Event &event) {
-            MeshRenderer &renderer = static_cast<const EventData<MeshRenderer> &>(event).getValue();
+            Renderer &renderer = static_cast<const EventData<Renderer> &>(event).getValue();
             removeRenderer(renderer);
         })] = "removeRenderer";
 
@@ -26,14 +26,14 @@ namespace Strake {
         }
     }
 
-    void RendererManager::addRenderer(MeshRenderer &renderer)
+    void RendererManager::addRenderer(Renderer &renderer)
     {
         m_renderers.push_back(renderer);
     }
 
-    void RendererManager::removeRenderer(MeshRenderer &renderer)
+    void RendererManager::removeRenderer(Renderer &renderer)
     {
-        auto it = std::find_if(m_renderers.begin(), m_renderers.end(), [&renderer](const MeshRenderer &r) {
+        auto it = std::find_if(m_renderers.begin(), m_renderers.end(), [&renderer](const Renderer &r) {
             return &r == &renderer;
         });
 
@@ -47,7 +47,7 @@ namespace Strake {
         m_renderers.clear();
     }
 
-    std::vector<std::reference_wrapper<MeshRenderer>> &RendererManager::getRenderers()
+    std::vector<std::reference_wrapper<Renderer>> &RendererManager::getRenderers()
     {
         return m_renderers;
     }

@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_Transform.hpp>
 #include <Strake/Material/Material.hpp>
-#include <Strake/Component/Component.hpp>
+#include <Strake/Component/Renderer/Renderer.hpp>
 #include <Strake/Component/MeshFilter.hpp>
 #include <Strake/Component/Camera.hpp>
 #include <Strake/Component/Transform.hpp>
@@ -15,7 +15,7 @@
 #include <Strake/Component/Light/PointLight.hpp>
 
 namespace Strake {
-    class MeshRenderer : public Component
+    class MeshRenderer : public Renderer
     {
         public:
             MeshRenderer(GameObject &parent, MeshFilter &meshFilter, Material &material);
@@ -27,15 +27,14 @@ namespace Strake {
             MeshRenderer &operator=(MeshRenderer &&other) = delete;
             ~MeshRenderer() override;
 
-            void render(Camera &camera) override;
+            virtual void preRender() final;
+            virtual void render(Camera &camera) final;
             void GLrender();
-
-            void lateUpdate() override;
 
             [[nodiscard]] const MeshFilter &getMeshFilter() const;
             [[nodiscard]] const Material &getMaterial() const;
 
-            void addLight(const Light &light);
+            void addLight(Light &light);
             void clearLights();
             std::vector<std::reference_wrapper<const Light>> &getLights();
 

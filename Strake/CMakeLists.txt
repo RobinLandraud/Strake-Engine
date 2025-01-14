@@ -69,8 +69,9 @@ add_library(MeshFilter STATIC
     src/Component/MeshFilter.cpp
     src/Component/Cube.cpp
 )
-add_library(MeshRenderer STATIC
-    src/Component/MeshRenderer.cpp
+add_library(Renderer STATIC
+    src/Component/Renderer/Renderer.cpp
+    src/Component/Renderer/MeshRenderer.cpp
 )
 add_library(Light STATIC
     src/Component/Light/Light.cpp
@@ -78,13 +79,17 @@ add_library(Light STATIC
     src/Component/Light/PointLight.cpp
     src/Component/Light/ShadowMap.cpp
 )
+add_library(Collider STATIC
+    src/Component/Collider/Collider.cpp
+    src/Component/Collider/BoxCollider.cpp
+)
 
 target_link_libraries(Component PUBLIC
     Transform
     Camera
     Script
     MeshFilter
-    MeshRenderer
+    Renderer
     Light
 )
 
@@ -121,7 +126,6 @@ target_link_libraries(Camera PUBLIC Component)
 target_link_libraries(Camera PUBLIC Transform)
 target_link_libraries(Script PUBLIC Component)
 target_link_libraries(MeshFilter PUBLIC Component)
-target_link_libraries(MeshRenderer PUBLIC Component MeshFilter)
 target_link_libraries(Material PUBLIC Texture)
 
 target_link_libraries(Application PUBLIC

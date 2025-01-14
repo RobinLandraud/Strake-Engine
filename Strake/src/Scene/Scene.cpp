@@ -6,7 +6,6 @@
 
 namespace Strake {
     Scene::Scene() :
-        m_shadowShaderProgram("Strake/src/Shader/glsl/shadow/vertex.glsl", "Strake/src/Shader/glsl/shadow/fragment.glsl"),
         m_eventDispatcher(),
         m_lightManager(m_eventDispatcher),
         m_rendererManager(m_eventDispatcher)
@@ -117,44 +116,48 @@ namespace Strake {
         }
     }
 
-    void Scene::render(int winWidth, int winHeight)
+    std::vector<std::reference_wrapper<Renderer>> Scene::setupInFrustrumRenderers()
     {
-        std::vector<std::reference_wrapper<MeshRenderer>> &renderers = m_rendererManager.getRenderers();
         std::vector<std::reference_wrapper<Light>> &lights = m_lightManager.getLights();
-        
-        int n_light = std::min(static_cast<int>(lights.size()), 8);
-        
-        for (int i = 0; i < n_light; ++i) {
-            lights[i].get().getShadowMap().clearObjects();
-        }
+        std::vector<std::reference_wrapper<Renderer>> &renderers = m_rendererManager.getRenderers();
+        int n_light = std::min(static_cast<int>(lights.size()), 8); // add a MAX_LIGHTS in the future
+        std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers;
 
-        std::vector<std::reference_wrapper<MeshRenderer>> in_frustrum_renderers;
+        m_lightManager.clearObjects();
         for (auto &renderer : renderers) {
             //if (!m_mainCamera.value().inFrustrum(renderer.get().getParent().getTransform())) {
             //    continue;
             //}
-            renderer.get().clearLights();
-            in_frustrum_renderers.push_back(renderer);
-            for (int i = 0; i < n_light; ++i) {
-                renderer.get().addLight(lights[i].get());
-                lights[i].get().getShadowMap().addObject(renderer.get().getParent());
+            switch (renderer.get().getType())
+            {
+                case RendererType::MeshRenderer: {
+                    MeshRenderer &meshRenderer = static_cast<MeshRenderer &>(renderer.get());
+                    meshRenderer.clearLights();
+                    for (int i = 0; i < n_light; ++i) {
+                        meshRenderer.addLight(lights[i].get());
+                    }
+                    in_frustrum_renderers.push_back(renderer);
+                    break;
+                }
+                default:
+                    break;
             }
         }
+        return in_frustrum_renderers;
+    }
 
-        // render shadow maps
-
-        glViewport(0, 0, 4096, 4096); // low resolution shadow map
-        //glCullFace(GL_FRONT);
-        m_shadowShaderProgram.use();
-        for (int i = 0; i < lights.size(); ++i) {
-            lights[i].get().renderShadowMap(m_shadowShaderProgram);
+    void Scene::render(int winWidth, int winHeight)
+    {
+        std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers = setupInFrustrumRenderers();
+        m_lightManager.renderShadowMaps(winWidth, winHeight);
+        for (auto &renderer : in_frustrum_renderers) {
+            renderer.get().preRender();
         }
-        glViewport(0, 0, winWidth, winHeight); // reset viewport for rendering
-        //glCullFace(GL_BACK);
-
-        // render scene
         for (auto &renderer : in_frustrum_renderers) {
             renderer.get().render(m_mainCamera.value().get());
+        }
+        for (auto &renderer : in_frustrum_renderers) {
+            renderer.get().postRender();
         }
     }
 }

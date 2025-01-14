@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 #include <Strake/Component/Light/Light.hpp>
-#include <Strake/Component/MeshRenderer.hpp>
+#include <Strake/Component/Renderer/MeshRenderer.hpp>
 #include <Strake/Dispatcher/EventDispatcher.hpp>
 
 namespace Strake {
@@ -21,7 +21,11 @@ namespace Strake {
             void clear();
             [[nodiscard]] std::vector<std::reference_wrapper<Light>> &getLights();
 
+            void clearObjects();
+            void renderShadowMaps(int winWidth, int winHeight);
+
         private:
+            ShaderProgram m_shadowShaderProgram;
             std::vector<std::reference_wrapper<Light>> m_lights;
 
             EventDispatcher &m_eventDispatcher;

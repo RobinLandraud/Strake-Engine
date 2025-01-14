@@ -123,15 +123,6 @@ namespace Strake {
         }
     }
 
-    void GameObject::render(Camera &camera) {
-        for (auto &component : m_components) {
-            component.second->render(camera);
-        }
-        for (auto &child : m_children) {
-            child.second->render(camera);
-        }
-    }
-
     bool GameObject::isScript(std::type_index type) const {
         return std::type_index(typeid(Script)) == type;
     }
