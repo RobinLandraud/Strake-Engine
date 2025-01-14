@@ -1,4 +1,4 @@
-#include <ECS/Component.hpp>
+#include <ECS/Component/Component.hpp>
 
 namespace Strake {
     Component::Component(

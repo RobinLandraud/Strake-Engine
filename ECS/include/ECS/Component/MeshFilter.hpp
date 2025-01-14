@@ -2,7 +2,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS // for fopen, fscanf, etc.
 
-#include <ECS/Component.hpp>
+#include <ECS/Component/Component.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_Transform.hpp>
 #include <cstring>

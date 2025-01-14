@@ -1,10 +1,9 @@
-#include <ECS/GameLoop.hpp>
+#include <ECS/Application/GameLoop.hpp>
 #include <ECS/Manager/MaterialManager.hpp>
 #include <ECS/Manager/textureManager.hpp>
 #include <ECS/Manager/SceneManager.hpp>
-#include <ECS/Window.hpp>
+#include <ECS/Window/Window.hpp>
 #include <ECS/init.hpp>
-#include <ECS/EventDispatcher.hpp>
 
 namespace Strake {
     class Application {

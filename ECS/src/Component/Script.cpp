@@ -1,4 +1,4 @@
-#include <ECS/Script.hpp>
+#include <ECS/Script/Script.hpp>
 
 namespace Strake
 {

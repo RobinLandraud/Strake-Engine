@@ -1,4 +1,4 @@
-#include <ECS/Config.hpp>
+#include <ECS/Config/Config.hpp>
 
 namespace Strake {
     const std::string &Config::getVersion() {

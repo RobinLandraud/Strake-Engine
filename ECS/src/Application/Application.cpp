@@ -1,4 +1,4 @@
-#include <ECS/Application.hpp>
+#include <ECS/Application/Application.hpp>
 
 namespace Strake {
     Application::Application(std::string &&title, int width, int height, int fps) :

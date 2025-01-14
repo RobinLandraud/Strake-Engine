@@ -1,12 +1,13 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <ECS/EventDispatcher.hpp>
-#include <ECS/Component.hpp>
-#include <ECS/Component/MeshFilter.hpp>
+#include <ECS/Dispatcher/EventDispatcher.hpp>
+#include <ECS/Dispatcher/EventData.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_Transform.hpp>
-#include <ECS/Material.hpp>
+#include <ECS/Material/Material.hpp>
+#include <ECS/Component/Component.hpp>
+#include <ECS/Component/MeshFilter.hpp>
 #include <ECS/Component/Camera.hpp>
 #include <ECS/Component/Transform.hpp>
 #include <ECS/Component/Light/Light.hpp>

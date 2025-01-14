@@ -1,19 +1,16 @@
+#include <ECS/Config/Config.hpp>
+#include <ECS/Application/GameLoop.hpp>
+#include <ECS/Script/Script.hpp>
+#include <ECS/Material/Material.hpp>
+#include <ECS/Component/Component.hpp>
 #include <ECS/Component/Camera.hpp>
-#include <ECS/Component.hpp>
-#include <ECS/Config.hpp>
-#include <ECS/GameLoop.hpp>
-#include <ECS/Script.hpp>
-#include <ECS/Material.hpp>
 #include <ECS/Component/Transform.hpp>
 #include <ECS/Component/MeshFilter.hpp>
 #include <ECS/Component/MeshRenderer.hpp>
+#include <ECS/Scene/Scene.hpp>
+#include <ECS/Window/EventHandler.hpp>
+#include <ECS/Application/Application.hpp>
 #include <ECS/init.hpp>
-#include <ECS/Scene.hpp>
-#include <ECS/EventHandler.hpp>
-#include <ECS/Application.hpp>
-#include <array>
-#include <iostream>
-#include <memory>
 
 class Rotator : public Strake::Script
 {

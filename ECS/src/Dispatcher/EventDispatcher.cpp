@@ -1,16 +1,6 @@
-#include <ECS/EventDispatcher.hpp>
-#include <iostream>
+#include <ECS/Dispatcher/EventDispatcher.hpp>
 
 namespace Strake {
-
-    Event::Event(std::string &&eventType) :
-        m_eventType(std::move(eventType))
-    {}
-
-    const std::string& Event::getEventType() const {
-        return m_eventType;
-    }
-
     EventDispatcher::EventID EventDispatcher::subscribe(const std::string& eventType, Callback callback) {
         std::lock_guard<std::mutex> lock(mtx);
         m_subscribers[eventType].push_back(std::pair(currentID++, callback));

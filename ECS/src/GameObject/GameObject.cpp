@@ -1,7 +1,7 @@
-#include <ECS/Component.hpp>
-#include <ECS/GameObject.hpp>
-#include <ECS/Scene.hpp>
-#include <ECS/Script.hpp>
+#include <ECS/Component/Component.hpp>
+#include <ECS/GameObject/GameObject.hpp>
+#include <ECS/Scene/Scene.hpp>
+#include <ECS/Script/Script.hpp>
 #include <ECS/Component/Transform.hpp>
 
 namespace Strake {

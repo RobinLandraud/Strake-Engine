@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ECS/Material.hpp>
+#include <ECS/Material/Material.hpp>
 
 namespace Strake {
     class MaterialManager {

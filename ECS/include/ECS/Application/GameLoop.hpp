@@ -1,8 +1,8 @@
 #pragma once
-#include <ECS/EventHandler.hpp>
-#include <ECS/Time.hpp>
+#include <ECS/Window/EventHandler.hpp>
+#include <ECS/Time/Time.hpp>
 #include <ECS/Component/Camera.hpp>
-#include <ECS/Scene.hpp>
+#include <ECS/Scene/Scene.hpp>
 #include <chrono>
 #include <iostream>
 #include <cmath>

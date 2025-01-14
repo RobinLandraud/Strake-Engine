@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory>
 #include <optional>
 #include <string>
@@ -7,7 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
-#include <ECS/EventDispatcher.hpp>
+#include <ECS/Dispatcher/EventDispatcher.hpp>
 
 namespace Strake {
     class Component;

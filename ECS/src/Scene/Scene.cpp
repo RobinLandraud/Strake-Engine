@@ -1,4 +1,4 @@
-#include <ECS/Scene.hpp>
+#include <ECS/Scene/Scene.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

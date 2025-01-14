@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ECS/Scene.hpp>
+#include <ECS/Scene/Scene.hpp>
 
 namespace Strake {
     class SceneManager {

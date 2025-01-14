@@ -1,4 +1,4 @@
-#include <ECS/EventHandler.hpp>
+#include <ECS/Window/EventHandler.hpp>
 #include <iostream>
 
 namespace Strake

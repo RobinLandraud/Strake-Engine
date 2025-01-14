@@ -4,7 +4,7 @@
 #include <functional>
 #include <ECS/Component/Light/Light.hpp>
 #include <ECS/Component/MeshRenderer.hpp>
-#include <ECS/EventDispatcher.hpp>
+#include <ECS/Dispatcher/EventDispatcher.hpp>
 
 namespace Strake {
     class LightManager {

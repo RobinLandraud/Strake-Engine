@@ -1,7 +1,8 @@
 #pragma once
 
-#include <ECS/Component.hpp>
-#include <ECS/EventDispatcher.hpp>
+#include <ECS/Component/Component.hpp>
+#include <ECS/Dispatcher/EventDispatcher.hpp>
+#include <ECS/Dispatcher/EventData.hpp>
 #include <ECS/Component/Light/ShadowMap.hpp>
 #include <ECS/Component/Light/LightType.hpp>
 #include <ECS/Shader/ShaderProgram.hpp>

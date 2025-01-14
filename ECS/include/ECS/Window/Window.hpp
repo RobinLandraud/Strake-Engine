@@ -1,5 +1,5 @@
 #pragma once
-#include <ECS/Config.hpp>
+#include <ECS/Config/Config.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <memory>

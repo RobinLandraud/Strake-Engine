@@ -1,5 +1,5 @@
 #pragma once
-#include <ECS/GameObject.hpp>
+#include <ECS/GameObject/GameObject.hpp>
 #include <memory>
 #include <optional>
 #include <string>

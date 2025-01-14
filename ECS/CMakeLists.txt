@@ -38,6 +38,7 @@ add_library(Application STATIC
     src/Application/Application.cpp
 )
 add_library(Dispatcher STATIC
+    src/Dispatcher/Event.cpp
     src/Dispatcher/EventDispatcher.cpp
 )
 add_library(Window STATIC

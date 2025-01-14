@@ -1,6 +1,6 @@
-#include <ECS/Window.hpp>
-#include <ECS/EventHandler.hpp>
-#include <ECS/Time.hpp>
+#include <ECS/Window/Window.hpp>
+#include <ECS/Window/EventHandler.hpp>
+#include <ECS/Time/Time.hpp>
 
 namespace Strake
 {

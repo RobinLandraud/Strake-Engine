@@ -1,4 +1,4 @@
-#include <ECS/Time.hpp>
+#include <ECS/Time/Time.hpp>
 
 namespace Strake {
     Time::Time() : 

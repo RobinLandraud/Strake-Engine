@@ -1,7 +1,7 @@
 #pragma once
 
-#include <ECS/Component.hpp>
-#include <ECS/GameObject.hpp>
+#include <ECS/Component/Component.hpp>
+#include <ECS/GameObject/GameObject.hpp>
 #include <ECS/Component/Camera.hpp>
 #include <ECS/Manager/LightManager.hpp>
 #include <ECS/Manager/RendererManager.hpp>
@@ -10,11 +10,9 @@
 #include <ECS/Component/MeshFilter.hpp>
 #include <ECS/Shader/ShaderProgram.hpp>
 
-
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
 
 namespace Strake {
     class Scene {

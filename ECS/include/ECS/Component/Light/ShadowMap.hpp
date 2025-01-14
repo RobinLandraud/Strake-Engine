@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ECS/GameObject.hpp>
+#include <ECS/GameObject/GameObject.hpp>
 #include <glm/gtc/matrix_Transform.hpp>
 #include <GL/glew.h>
 

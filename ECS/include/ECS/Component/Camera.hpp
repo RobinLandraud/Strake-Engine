@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ECS/Component.hpp>
+#include <ECS/Component/Component.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_Transform.hpp>
 

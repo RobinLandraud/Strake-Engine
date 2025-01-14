@@ -1,4 +1,4 @@
-#include <ECS/GameLoop.hpp>
+#include <ECS/Application/GameLoop.hpp>
 
 namespace Strake {
     GameLoop::GameLoop(int fps)
