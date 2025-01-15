@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Strake/Script/Script.hpp>
+#include <Strake/Component/Script.hpp>
 
 namespace Strake {
     class ScriptManager {

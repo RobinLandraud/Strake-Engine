@@ -32,6 +32,7 @@ namespace Strake {
 
         private:
             const ShaderProgram m_shaderProgram;
+            //TO DO: remove optional here
             std::unordered_map<std::string, std::optional<std::reference_wrapper<Texture>>> m_textures;
             float m_alphaThreshold = 0.01f;
             float m_shininess = 32.0f;

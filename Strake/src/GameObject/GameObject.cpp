@@ -1,7 +1,7 @@
 #include <Strake/Component/Component.hpp>
 #include <Strake/GameObject/GameObject.hpp>
 #include <Strake/Scene/Scene.hpp>
-#include <Strake/Script/Script.hpp>
+#include <Strake/Component/Script.hpp>
 #include <Strake/Component/Transform.hpp>
 
 namespace Strake {

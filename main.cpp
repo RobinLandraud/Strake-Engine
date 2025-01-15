@@ -9,7 +9,7 @@
 #include <Strake/Component/Transform.hpp>
 #include <Strake/Component/MeshFilter.hpp>
 #include <Strake/Component/Renderer/MeshRenderer.hpp>
-#include <Strake/Script/Script.hpp>
+#include <Strake/Component/Script.hpp>
 #include <Strake/init.hpp>
 
 class Rotator : public Strake::Script
