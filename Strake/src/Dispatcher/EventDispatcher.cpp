@@ -3,20 +3,22 @@
 namespace Strake {
     EventDispatcher::EventID EventDispatcher::subscribe(const std::string& eventType, Callback callback) {
         std::lock_guard<std::mutex> lock(mtx);
-        m_subscribers[eventType].push_back(std::pair(currentID++, callback));
+        m_subscribers[eventType][currentID] = callback;
         return currentID - 1;
     }
 
     void EventDispatcher::unsubscribe(const std::string& eventType, EventID id) {
         std::lock_guard<std::mutex> lock(mtx);
-        auto it = m_subscribers.find(eventType);
-        if (it != m_subscribers.end()) {
-            it->second.erase(std::remove_if(it->second.begin(), it->second.end(), [id](const std::pair<EventID, Callback>& pair) {
-                return pair.first == id;
-            }), it->second.end());
+        auto subs = m_subscribers.find(eventType);
+        if (subs == m_subscribers.end()) {
+            return;
         }
-        if (it->second.empty()) {
-            m_subscribers.erase(it);
+        auto it = subs->second.find(id);
+        if (it != subs->second.end()) {
+            subs->second.erase(it);
+            if (subs->second.empty()) {
+                m_subscribers.erase(subs);
+            }
         }
     }
 

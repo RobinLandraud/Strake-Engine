@@ -18,7 +18,7 @@ namespace Strake {
             void broadcast(const Event& event);
 
         private:
-            std::unordered_map<std::string, std::vector<std::pair<EventID, Callback>>> m_subscribers;
+            std::unordered_map<std::string, std::unordered_map<EventID, Callback>> m_subscribers;
             mutable std::mutex mtx;
             std::atomic<EventID> currentID;
     };

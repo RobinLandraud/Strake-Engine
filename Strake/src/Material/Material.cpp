@@ -26,14 +26,10 @@ namespace Strake {
         getShaderProgram().use();
         int textureUnit = 0;
         for (const auto &pair : m_textures) {
-            if (!pair.second.has_value()) {
-                textureUnit++;
-                continue;
-            }
             // Set the texture unit
             glActiveTexture(GL_TEXTURE0 + textureUnit);
             // Bind the texture to the texture unit
-            pair.second.value().get().bind();
+            pair.second.get().bind();
             // Set the uniform to the texture unit
             m_shaderProgram.setUniform(pair.first, textureUnit);
             textureUnit++;
@@ -45,19 +41,14 @@ namespace Strake {
         int textureUnit = 0;
         for (const auto &pair : m_textures) {
             glActiveTexture(GL_TEXTURE0 + textureUnit);
-            if (!pair.second.has_value()) {
-                glBindTexture(GL_TEXTURE_2D, 0);
-                textureUnit++;
-                continue;
-            }
-            pair.second.value().get().unbind();
+            pair.second.get().unbind();
             textureUnit++;
         }
         getShaderProgram().unuse(); // only for debug
     }
 
     void Material::addTexture(Texture &texture, const std::string &uniformName) {
-        m_textures[uniformName] = std::ref(texture);
+        m_textures.emplace(uniformName, std::ref(texture));
     }
 
     void Material::setAlphaThreshold(float alphaThreshold) {
