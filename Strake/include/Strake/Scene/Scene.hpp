@@ -3,8 +3,11 @@
 #include <Strake/Component/Component.hpp>
 #include <Strake/GameObject/GameObject.hpp>
 #include <Strake/Component/Camera.hpp>
+
 #include <Strake/Manager/LightManager.hpp>
 #include <Strake/Manager/RendererManager.hpp>
+#include <Strake/Manager/ScriptManager.hpp>
+
 #include <functional>
 #include <optional>
 #include <Strake/Component/MeshFilter.hpp>
@@ -50,6 +53,7 @@ namespace Strake {
             //render pipeline
             LightManager m_lightManager;
             RendererManager m_rendererManager;
+            ScriptManager m_scriptManager;
 
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_gameObjects;
             std::optional<std::reference_wrapper<Camera>> m_mainCamera;

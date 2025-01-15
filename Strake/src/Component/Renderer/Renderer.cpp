@@ -5,6 +5,7 @@ namespace Strake {
         Component(parent),
         m_type(type)
     {
+        setDerivedType(typeid(Renderer));
         EventData<Renderer> eventData(*this, "addRenderer");
         parent.getEventDispatcher().broadcast(eventData);
     }

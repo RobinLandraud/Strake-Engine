@@ -8,12 +8,6 @@ namespace Strake {
     {
     }
 
-    void Component::awake() {}
-    void Component::start() {}
-    void Component::update() {}
-    void Component::fixedUpdate() {}
-    void Component::lateUpdate() {}
-
     void Component::setDerivedType(const std::type_index &type) {
         m_derivedType = type;
     }

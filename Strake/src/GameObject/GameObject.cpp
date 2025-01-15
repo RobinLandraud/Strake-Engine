@@ -78,51 +78,6 @@ namespace Strake {
         return *m_parent;
     }
 
-    void GameObject::awake() {
-        for (auto &component : m_components) {
-            component.second->awake();
-        }
-        for (auto &child : m_children) {
-            child.second->awake();
-        }
-    }
-
-    void GameObject::start() {
-        for (auto &component : m_components) {
-            component.second->start();
-        }
-        for (auto &child : m_children) {
-            child.second->start();
-        }
-    }
-
-    void GameObject::update() {
-        for (auto &component : m_components) {
-            component.second->update();
-        }
-        for (auto &child : m_children) {
-            child.second->update();
-        }
-    }
-
-    void GameObject::fixedUpdate() {
-        for (auto &component : m_components) {
-            component.second->fixedUpdate();
-        }
-        for (auto &child : m_children) {
-            child.second->fixedUpdate();
-        }
-    }
-
-    void GameObject::lateUpdate() {
-        for (auto &component : m_components) {
-            component.second->lateUpdate();
-        }
-        for (auto &child : m_children) {
-            child.second->lateUpdate();
-        }
-    }
-
     bool GameObject::isScript(std::type_index type) const {
         return std::type_index(typeid(Script)) == type;
     }

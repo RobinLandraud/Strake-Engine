@@ -144,12 +144,6 @@ namespace Strake {
             [[nodiscard]] bool hasParent() const;
             [[nodiscard]] GameObject &getParent() const;
 
-            void awake();
-            void start();
-            void update();
-            void fixedUpdate();
-            void lateUpdate();
-
             EventDispatcher &getEventDispatcher();
 
         private:

@@ -102,6 +102,7 @@ add_library(Managers STATIC
     src/Manager/MaterialManager.cpp
     src/Manager/TextureManager.cpp
     src/Manager/SceneManager.cpp
+    src/Manager/ScriptManager.cpp
 )
 
 # dependencies for the libraries

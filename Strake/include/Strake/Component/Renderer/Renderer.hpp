@@ -17,7 +17,7 @@ namespace Strake {
             Renderer(GameObject &parent, RendererType type);
             ~Renderer();
 
-            virtual void preRender(); // like lateUpdate
+            virtual void preRender();
             virtual void render(Camera &camera);
             virtual void postRender();
 

@@ -8,7 +8,8 @@ namespace Strake {
     Scene::Scene() :
         m_eventDispatcher(),
         m_lightManager(m_eventDispatcher),
-        m_rendererManager(m_eventDispatcher)
+        m_rendererManager(m_eventDispatcher),
+        m_scriptManager(m_eventDispatcher)
     {
     }
 
@@ -83,45 +84,38 @@ namespace Strake {
 
     void Scene::awake()
     {
-        for (auto &gameObject : m_gameObjects) {
-            gameObject.second->awake();
-        }
+        m_scriptManager.awake();
     }
 
     void Scene::start()
     {
-        for (auto &gameObject : m_gameObjects) {
-            gameObject.second->start();
-        }
+        m_scriptManager.start();
     }
 
     void Scene::update()
     {
-        for (auto &gameObject : m_gameObjects) {
-            gameObject.second->update();
-        }
+        m_scriptManager.update();
     }
 
     void Scene::fixedUpdate()
     {
-        for (auto &gameObject : m_gameObjects) {
-            gameObject.second->fixedUpdate();
-        }
+        m_scriptManager.fixedUpdate();
     }
 
     void Scene::lateUpdate()
     {
-        for (auto &gameObject : m_gameObjects) {
-            gameObject.second->lateUpdate();
-        }
+        m_scriptManager.lateUpdate();
     }
 
-    std::vector<std::reference_wrapper<Renderer>> Scene::setupInFrustrumRenderers()
+    std::vector<std::reference_wrapper<Renderer>> Scene::setupInFrustrumRenderers() // cullling pipeline
     {
         std::vector<std::reference_wrapper<Light>> &lights = m_lightManager.getLights();
         std::vector<std::reference_wrapper<Renderer>> &renderers = m_rendererManager.getRenderers();
         int n_light = std::min(static_cast<int>(lights.size()), 8); // add a MAX_LIGHTS in the future
         std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers;
+
+        Camera &mainCamera = getMainCamera();
+        mainCamera.updateFrustrum();
 
         m_lightManager.clearObjects();
         for (auto &renderer : renderers) {
@@ -146,7 +140,7 @@ namespace Strake {
         return in_frustrum_renderers;
     }
 
-    void Scene::render(int winWidth, int winHeight)
+    void Scene::render(int winWidth, int winHeight) // render pipeline
     {
         std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers = setupInFrustrumRenderers();
         m_lightManager.renderShadowMaps(winWidth, winHeight);

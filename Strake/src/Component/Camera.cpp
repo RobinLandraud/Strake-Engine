@@ -9,13 +9,18 @@ namespace Strake {
         setDerivedType(typeid(Camera));
     }
 
-    void Camera::lateUpdate()
+    void Camera::updateFrustrum()
     {
         if (m_projectionNeedUpdate) {
             updateProjectionMatrix();
             m_projectionNeedUpdate = false;
             m_hasChangedProjection = true;
         }
+    }
+
+    bool Camera::isInFrustrum(const glm::vec3 &center, float radius)
+    {
+        return true;
     }
 
     void Camera::setProjection(float fov, float aspect, float near, float far)

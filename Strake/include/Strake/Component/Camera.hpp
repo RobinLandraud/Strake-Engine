@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Strake/Component/Component.hpp>
+#include <Strake/Component/Renderer/Renderer.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_Transform.hpp>
 
@@ -10,7 +11,8 @@ namespace Strake {
         public:
             Camera(GameObject &parent);
 
-            void lateUpdate() final; // update matrix
+            void updateFrustrum(); // update matrix and cull objects in the view frustum
+            bool isInFrustrum(const glm::vec3 &center, float radius); // check if the object is in the view frustum
 
             void setProjection(float fov, float aspect, float near, float far);
 

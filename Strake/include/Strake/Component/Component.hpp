@@ -8,19 +8,12 @@
 #include <glm/glm.hpp>
 
 namespace Strake {
-
-    class Camera;
     class Component {
         public:
             explicit Component(
                 GameObject &parent
             );
             virtual ~Component() = default;
-            virtual void awake();
-            virtual void start();
-            virtual void update();
-            virtual void fixedUpdate();
-            virtual void lateUpdate();
 
             [[nodiscard]] GameObject &getParent() const;
             [[nodiscard]] std::type_index getDerivedType() const;
