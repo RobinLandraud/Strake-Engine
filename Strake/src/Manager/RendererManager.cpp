@@ -51,4 +51,27 @@ namespace Strake {
     {
         return m_renderers;
     }
+
+    std::vector<std::reference_wrapper<Renderer>> RendererManager::updateLightings(std::vector<std::reference_wrapper<Light>> &lights)
+    {
+        int n_light = std::min(static_cast<int>(lights.size()), 8); // add a MAX_LIGHTS in the future
+        std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers;
+        for (auto &renderer : m_renderers) {
+            switch (renderer.get().getType())
+            {
+                case RendererType::MeshRenderer: {
+                    MeshRenderer &meshRenderer = static_cast<MeshRenderer &>(renderer.get());
+                    meshRenderer.clearLights();
+                    for (int i = 0; i < n_light; ++i) {
+                        meshRenderer.addLight(lights[i].get());
+                    }
+                    in_frustrum_renderers.push_back(renderer);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        return in_frustrum_renderers;
+    }
 }

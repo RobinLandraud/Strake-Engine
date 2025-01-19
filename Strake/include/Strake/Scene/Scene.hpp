@@ -57,8 +57,5 @@ namespace Strake {
 
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_gameObjects;
             std::optional<std::reference_wrapper<Camera>> m_mainCamera;
-            
-            //method for rendering
-            std::vector<std::reference_wrapper<Renderer>> setupInFrustrumRenderers();
     };
 }

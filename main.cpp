@@ -15,43 +15,46 @@
 class Rotator : public Strake::Script
 {
     public:
-        Rotator(Strake::GameObject &parent, float speed) :
-            Strake::Script(parent),
-            m_speed(speed)
-        {
+        using Strake::Script::Script;
 
-        }
         void awake() override {
+            m_speed = 0.2f;
             r_transform = getParent().getTransform();
         }
+
         void fixedUpdate() override {
-            r_transform->get().rotateLocal(glm::vec3(0.0f, 0.0f, m_speed));
+            getTransform().rotateLocal(glm::vec3(0.0f, 0.0f, m_speed));
         }
+
     private:
         std::optional<std::reference_wrapper<Strake::Transform>> r_transform;
+        Strake::Transform &getTransform() { return r_transform.value().get(); }
+
         float m_speed;
 };
 
 class Scaler : public Strake::Script
 {
     public:
-        using Strake::Script::Script;
-        void awake() override {
-            r_transform = getParent().getTransform();
+        Scaler(Strake::GameObject &parent) :
+            Script(parent),
+            r_transform(parent.getTransform())
+        {
         }
+
         void fixedUpdate() override {
-            Strake::Transform &transform = r_transform.value();
-            if (transform.getLocalScale().x > 2.0f) {
+            if (r_transform.getLocalScale().x > 2.0f) {
                 m_scaleFactor = 0.999f;
             }
-            if (transform.getLocalScale().x < 0.5f) {
+            if (r_transform.getLocalScale().x < 0.5f) {
                 m_scaleFactor = 1.001f;
             }
-            transform.scaleLocal(glm::vec3(m_scaleFactor, 1.000f, m_scaleFactor));
+            r_transform.scaleLocal(glm::vec3(m_scaleFactor, 1.000f, m_scaleFactor));
         }
+
     private:
         float m_scaleFactor = 1.001f;
-        std::optional<std::reference_wrapper<Strake::Transform>> r_transform;
+        Strake::Transform &r_transform;
 };
 
 class CharacterController: public Strake::Script
@@ -64,10 +67,8 @@ class CharacterController: public Strake::Script
         void update() override {
             const Strake::mouse_t &mouse = Strake::EventHandler::getMouse();
             Strake::Transform &transform = this->transform.value();
-            //std::cout << "Mouse: " << mouse.x << " " << mouse.y << std::endl;
             if (Strake::EventHandler::isKeyHeld(Strake::Key::W)) {
                 transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed * Strake::Time::getDeltaTime()));
-                //std::cout << "Z key pressed" << std::endl;
             } else if (Strake::EventHandler::isKeyHeld(Strake::Key::S)) {
                 transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed * Strake::Time::getDeltaTime()));
             }
@@ -81,7 +82,6 @@ class CharacterController: public Strake::Script
             } else if (Strake::EventHandler::isKeyHeld(Strake::Key::LeftShift)) {
                 transform.translateLocal(glm::vec3(0.0f, -m_speed * Strake::Time::getDeltaTime(), 0.0f));
             }
-            //look at mouse
             float yaw = mouse.x;
             float roll = mouse.y;
             transform.setLocalRotation(glm::vec3(-roll, -yaw, 0.0f));
@@ -192,7 +192,7 @@ int game()
 
     Strake::GameObject &Moon = scene.addGameObject("Moon");
     Moon.getTransform().setLocalRotation(glm::vec3(0.0f, 0.0f, 180.0f));
-    Moon.addComponent<Rotator>(0.2f);
+    Moon.addComponent<Rotator>();
 
     Strake::GameObject &light = Moon.addChild("Light");
     light.addComponent<Strake::PointLight>();
@@ -201,7 +201,7 @@ int game()
     light.getComponent<Strake::PointLight>().setColor(glm::vec3(0.1f, 0.1f, 1.0f));
 
     Strake::GameObject &sun = scene.addGameObject("Sun");
-    sun.addComponent<Rotator>(0.2f);
+    sun.addComponent<Rotator>();
     sun.addComponent<Strake::DirectionalLight>();
     sun.getComponent<Strake::DirectionalLight>().setIntensity(1.0f);
     sun.getComponent<Strake::DirectionalLight>().setColor(glm::vec3(1.0f, 1.0f, 0.1f));

@@ -3,6 +3,7 @@
 #include <vector>
 #include <functional>
 #include <Strake/Component/Renderer/Renderer.hpp>
+#include <Strake/Component/Renderer/MeshRenderer.hpp>
 
 namespace Strake {
     class RendererManager {
@@ -18,6 +19,7 @@ namespace Strake {
             void removeRenderer(Renderer &renderer);
             void clear();
             [[nodiscard]] std::vector<std::reference_wrapper<Renderer>> &getRenderers();
+            std::vector<std::reference_wrapper<Renderer>> updateLightings(std::vector<std::reference_wrapper<Light>> &lights);
 
         private:
             std::vector<std::reference_wrapper<Renderer>> m_renderers;

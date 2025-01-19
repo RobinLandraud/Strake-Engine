@@ -24,7 +24,9 @@ namespace Strake {
             explicit Collider(GameObject &parent, ColliderType type); // is Discrete by default
             ~Collider() = default;
 
+            virtual void physicsUpdate() = 0;
             [[nodiscard]] virtual bool isColliding(Collider &other) const = 0;
+            
             [[nodiscard]] ColliderType getType() const;
             [[nodiscard]] CollisionMode getMode() const;
 

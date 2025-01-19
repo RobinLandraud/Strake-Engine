@@ -107,42 +107,11 @@ namespace Strake {
         m_scriptManager.lateUpdate();
     }
 
-    std::vector<std::reference_wrapper<Renderer>> Scene::setupInFrustrumRenderers() // cullling pipeline
-    {
-        std::vector<std::reference_wrapper<Light>> &lights = m_lightManager.getLights();
-        std::vector<std::reference_wrapper<Renderer>> &renderers = m_rendererManager.getRenderers();
-        int n_light = std::min(static_cast<int>(lights.size()), 8); // add a MAX_LIGHTS in the future
-        std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers;
-
-        Camera &mainCamera = getMainCamera();
-        mainCamera.updateFrustrum();
-
-        m_lightManager.clearObjects();
-        for (auto &renderer : renderers) {
-            //if (!m_mainCamera.value().inFrustrum(renderer.get().getParent().getTransform())) {
-            //    continue;
-            //}
-            switch (renderer.get().getType())
-            {
-                case RendererType::MeshRenderer: {
-                    MeshRenderer &meshRenderer = static_cast<MeshRenderer &>(renderer.get());
-                    meshRenderer.clearLights();
-                    for (int i = 0; i < n_light; ++i) {
-                        meshRenderer.addLight(lights[i].get());
-                    }
-                    in_frustrum_renderers.push_back(renderer);
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-        return in_frustrum_renderers;
-    }
-
     void Scene::render(int winWidth, int winHeight) // render pipeline
     {
-        std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers = setupInFrustrumRenderers();
+        Camera &mainCamera = getMainCamera();
+        mainCamera.updateFrustrum();
+        std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers = m_rendererManager.updateLightings(m_lightManager.getLights());
         m_lightManager.renderShadowMaps(winWidth, winHeight);
         for (auto &renderer : in_frustrum_renderers) {
             renderer.get().preRender();
