@@ -164,5 +164,5 @@ target_link_libraries(Strake PUBLIC
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set the path to the resources
-add_compile_definitions(RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/src")
-message(STATUS "RESOURCES_PATH set to ${CMAKE_CURRENT_SOURCE_DIR}/src")
+add_compile_definitions(RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/resources")
+message(STATUS "RESOURCES_PATH set to ${CMAKE_CURRENT_SOURCE_DIR}/resources")

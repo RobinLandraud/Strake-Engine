@@ -3,8 +3,8 @@
 namespace Strake {
     LightManager::LightManager(EventDispatcher &eventDispatcher) :
         m_shadowShaderProgram(
-            std::string(RESOURCES_PATH) + "/Shader/glsl/shadow/vertex.glsl",
-            std::string(RESOURCES_PATH) + "/Shader/glsl/shadow/fragment.glsl"),
+            std::string(RESOURCES_PATH) + "/Shaders/shadow/vertex.glsl",
+            std::string(RESOURCES_PATH) + "/Shaders/shadow/fragment.glsl"),
         m_eventDispatcher(eventDispatcher)
     {
         m_subscriptions[m_eventDispatcher.subscribe("addLight", [this](const Event &event) {

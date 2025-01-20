@@ -3,8 +3,8 @@
 namespace Strake {
     Material::Material() :
         Material(
-            std::string(RESOURCES_PATH) + "/Shader/glsl/texture2D/vertex.glsl",
-            std::string(RESOURCES_PATH) + "/Shader/glsl/texture2D/fragment.glsl"
+            std::string(RESOURCES_PATH) + "/Shaders/texture/vertex.glsl",
+            std::string(RESOURCES_PATH) + "/Shaders/texture/fragment.glsl"
         )
     {
     }
