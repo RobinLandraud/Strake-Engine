@@ -20,13 +20,13 @@ namespace Strake {
         return *m_gameObjects[name];
     }
 
-    GameObject &Scene::loadFromFile(const std::string &path) {
+    std::pair<GameObject &, std::vector<std::reference_wrapper<GameObject>>> Scene::loadFromFile(const std::string &path) {
         std::string name = path.substr(path.find_last_of('/') + 1);
         name = name.substr(0, name.find_last_of('.'));
         GameObject &mainObj = addGameObject(name);
         mainObj.addComponent<MeshFilter>();
-        mainObj.getComponent<MeshFilter>().loadFromFile(path);
-        return mainObj;
+        std::cout << "Loading " << name << std::endl;
+        return std::make_pair(std::ref(mainObj), mainObj.getComponent<MeshFilter>().loadFromFile(path));
     }
 
     void Scene::removeGameObject(const std::string &name)
@@ -91,6 +91,7 @@ namespace Strake {
     {
         Camera &mainCamera = getMainCamera();
         mainCamera.updateFrustrum();
+        m_lightManager.clearObjects();
         std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers = m_rendererManager.updateLightings(m_lightManager.getLights());
         m_lightManager.renderShadowMaps(winWidth, winHeight);
         for (auto &renderer : in_frustrum_renderers) {
