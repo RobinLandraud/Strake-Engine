@@ -1,6 +1,6 @@
 set windows-shell := ["powershell.exe", "-Command"]
 set shell := ["sh", "-c"]
-vcpkg := "C:/Users/robin/Documents/Prog/Strake-Engine/vcpkg"
+vcpkg := "C:/Users/robin/source/repos/Strake-Engine/vcpkg"
 
 # Linux
 build:

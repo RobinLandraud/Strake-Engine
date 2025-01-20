@@ -9,7 +9,8 @@ namespace Strake {
         m_eventDispatcher(),
         m_lightManager(m_eventDispatcher),
         m_rendererManager(m_eventDispatcher),
-        m_scriptManager(m_eventDispatcher)
+        m_scriptManager(m_eventDispatcher),
+        m_physicsManager(m_eventDispatcher)
     {
     }
 

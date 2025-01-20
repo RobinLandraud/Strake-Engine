@@ -2,6 +2,8 @@
 
 #include <Strake/Component/Collider/Collider.hpp>
 #include <Strake/Component/Collider/SphereCollider.hpp>
+#include <Strake/Dispatcher/EventDispatcher.hpp>
+#include <Strake/Dispatcher/EventData.hpp>
 
 namespace Strake {
     class ColliderManager {

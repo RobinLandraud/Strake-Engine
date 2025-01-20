@@ -103,6 +103,8 @@ add_library(Managers STATIC
     src/Manager/TextureManager.cpp
     src/Manager/SceneManager.cpp
     src/Manager/ScriptManager.cpp
+    src/Manager/PhysicsManager/PhysicsManager.cpp
+    src/Manager/PhysicsManager/ColliderManager.cpp
 )
 
 # dependencies for the libraries

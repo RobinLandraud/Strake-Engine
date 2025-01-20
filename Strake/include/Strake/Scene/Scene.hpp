@@ -7,6 +7,7 @@
 #include <Strake/Manager/LightManager.hpp>
 #include <Strake/Manager/RendererManager.hpp>
 #include <Strake/Manager/ScriptManager.hpp>
+#include <Strake/Manager/PhysicsManager/PhysicsManager.hpp>
 
 #include <functional>
 #include <optional>
@@ -54,6 +55,7 @@ namespace Strake {
             LightManager m_lightManager;
             RendererManager m_rendererManager;
             ScriptManager m_scriptManager;
+            PhysicsManager m_physicsManager; // handle all physics managers
 
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_gameObjects;
             std::optional<std::reference_wrapper<Camera>> m_mainCamera;
