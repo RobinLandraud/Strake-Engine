@@ -1,6 +1,8 @@
 # build folder
 build/
 vcpkg/
+Debug/
+Release/
 # assets/
 
 # tests forlder (is a sandbox)

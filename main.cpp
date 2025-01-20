@@ -125,7 +125,7 @@ int game()
 
     const int WIN_WIDTH = 1400;
     const int WIN_HEIGHT = 900;
-    const int FPS = 144;
+    const int FPS = 60;
 
     std::cout << Strake::Config::getVersion() << std::endl;
     std::cout << Strake::Config::getGLFWVersion() << std::endl;
@@ -139,21 +139,21 @@ int game()
 
     Strake::Scene &scene = app.getSceneManager().addScene("Main Scene");
 
-    Strake::Texture &barelTexture = app.getTextureManager().addTexture<Strake::Texture2D>("barel", "assets/map.png");
+    Strake::Texture &barelTexture = app.getTextureManager().addTexture<Strake::Texture2D>("barel", "../assets/map.png");
     Strake::Material &barelMaterial = app.getMaterialManager().addMaterial("barel");
     barelMaterial.addTexture(barelTexture, "textureSampler");
 
-    Strake::Texture &metalTexture = app.getTextureManager().addTexture<Strake::Texture2D>("metal", "assets/metal.png");
+    Strake::Texture &metalTexture = app.getTextureManager().addTexture<Strake::Texture2D>("metal", "../assets/metal.png");
     Strake::Material &metalMaterial = app.getMaterialManager().addMaterial("metal");
     metalMaterial.addTexture(metalTexture, "textureSampler");
     metalMaterial.setShininess(256.0f);
 
-    Strake::Texture &grassTexture = app.getTextureManager().addTexture<Strake::Texture2D>("grass", "assets/grass.png");
+    Strake::Texture &grassTexture = app.getTextureManager().addTexture<Strake::Texture2D>("grass", "../assets/grass.png");
     Strake::Material &grassMaterial = app.getMaterialManager().addMaterial("grass");
     grassMaterial.addTexture(grassTexture, "textureSampler");
     grassMaterial.setShininess(10.0f);
 
-    Strake::Texture &treeTexture = app.getTextureManager().addTexture<Strake::Texture2D>("tree", "assets/tree/textures/tree.png");
+    Strake::Texture &treeTexture = app.getTextureManager().addTexture<Strake::Texture2D>("tree", "../assets/tree/textures/tree.png");
     Strake::Material &treeMaterial = app.getMaterialManager().addMaterial("tree");
     treeMaterial.addTexture(treeTexture, "textureSampler");
 
@@ -174,12 +174,12 @@ int game()
     //Strake::GameObject &barrel = scene.addGameObject("Barrel");
     //barrel.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
     //barrel.addComponent<Strake::MeshFilter>();
-    //std::vector<std::reference_wrapper<Strake::GameObject>> nodes = barrel.getComponent<Strake::MeshFilter>().loadFromFile("assets/barrel.obj"); // load all mesh as children nodes
+    //std::vector<std::reference_wrapper<Strake::GameObject>> nodes = barrel.getComponent<Strake::MeshFilter>().loadFromFile("../assets/barrel.obj"); // load all mesh as children nodes
     //for (auto &node : nodes) {
     //    node.get().addComponent<Strake::MeshRenderer>(barelMaterial);
     //}
 
-    std::pair<Strake::GameObject &, std::vector<std::reference_wrapper<Strake::GameObject>>> objects = scene.loadFromFile("assets/barrel.obj");
+    std::pair<Strake::GameObject &, std::vector<std::reference_wrapper<Strake::GameObject>>> objects = scene.loadFromFile("../assets/barrel.obj");
     objects.first.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
     for (auto &node : objects.second) {
         std::cout << "Adding mesh renderer to " << node.get().getName() << std::endl;
@@ -189,7 +189,7 @@ int game()
     Strake::GameObject &barrel2 = scene.addGameObject("Barrel2");
     barrel2.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.0f, -4.0f));
     barrel2.addComponent<Strake::MeshFilter>();
-    barrel2.getComponent<Strake::MeshFilter>().loadFromFile("assets/barrel.obj", 0); // load the first mesh directly in the game object
+    barrel2.getComponent<Strake::MeshFilter>().loadFromFile("../assets/barrel.obj", 0); // load the first mesh directly in the game object
     barrel2.addComponent<Strake::MeshRenderer>(barelMaterial);
 
     Strake::GameObject &metalBox = scene.addGameObject("Metal Box");
@@ -216,7 +216,7 @@ int game()
     Strake::GameObject &tree = scene.addGameObject("Tree");
     tree.addComponent<Strake::MeshFilter>();
     std::cout << "Loading tree" << std::endl;
-    tree.getComponent<Strake::MeshFilter>().loadFromFile("assets/tree/source/tree.obj"); // auto detect as one mesh (no children)
+    tree.getComponent<Strake::MeshFilter>().loadFromFile("../assets/tree/source/tree.obj"); // auto detect as one mesh (no children)
     std::cout << "Tree loaded" << std::endl;
     tree.addComponent<Strake::MeshRenderer>(treeMaterial);
 

@@ -8,7 +8,8 @@
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "RESOURCES_PATH=\"${workspaceFolder}/src\""
             ],
             "windowsSdkVersion": "10.0.22621.0",
             "compilerPath": "cl.exe",

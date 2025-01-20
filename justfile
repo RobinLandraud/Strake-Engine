@@ -16,4 +16,6 @@ tidy:
 install-windows:
     - powershell.exe -Command "{{ vcpkg }}/vcpkg.exe install glfw3 glm glew assimp"
 build-windows:
-    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -GNinja -DVCPKG_ROOT='{{ vcpkg }}'; ninja; cd .."
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DVCPKG_ROOT='{{ vcpkg }}'; cmake --build . --config Release; cd .."
+build-windows-debug:
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DVCPKG_ROOT='{{ vcpkg }}'; cmake --build . --config Debug; cd .."
