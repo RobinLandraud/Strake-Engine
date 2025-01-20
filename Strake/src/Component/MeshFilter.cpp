@@ -140,6 +140,7 @@ namespace Strake
     {
         std::vector<std::reference_wrapper<Strake::GameObject>> objects;
         Assimp::Importer importer;
+        std::reference_wrapper<Strake::GameObject> obj = getParent();
         const aiScene* scene = importer.ReadFile(path,
             aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
 
@@ -160,8 +161,10 @@ namespace Strake
             std::vector<unsigned int> indices;
 
             std::string name = static_cast<std::string>(scene->mMeshes[i]->mName.C_Str());
-            Strake::GameObject &obj = getParent().addChild(name);
-            obj.addComponent<Strake::MeshFilter>();
+            if (scene->mNumMeshes != 1) {
+                obj = getParent().addChild(name);
+                obj.get().addComponent<Strake::MeshFilter>();
+            }
 
             // Extract vertices
             for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
@@ -184,16 +187,18 @@ namespace Strake
                 }
             }
 
-            obj.getComponent<Strake::MeshFilter>().setVertices(vertices);
-            obj.getComponent<Strake::MeshFilter>().setNormals(normals);
-            obj.getComponent<Strake::MeshFilter>().setUVs(uvs);
-            obj.getComponent<Strake::MeshFilter>().setIndices(indices);
+            obj.get().getComponent<Strake::MeshFilter>().setVertices(vertices);
+            obj.get().getComponent<Strake::MeshFilter>().setNormals(normals);
+            obj.get().getComponent<Strake::MeshFilter>().setUVs(uvs);
+            obj.get().getComponent<Strake::MeshFilter>().setIndices(indices);
 
-            obj.getComponent<Strake::MeshFilter>().setUpdated(true);
+            obj.get().getComponent<Strake::MeshFilter>().setUpdated(true);
 
             objects.push_back(obj);
         }
-        getParent().removeComponent<MeshFilter>();
+        if (scene->mNumMeshes != 1) {
+            getParent().removeComponent<MeshFilter>();
+        }
 
         return objects;
     }

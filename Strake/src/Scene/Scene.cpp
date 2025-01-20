@@ -21,32 +21,11 @@ namespace Strake {
     }
 
     GameObject &Scene::loadFromFile(const std::string &path) {
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path,
-            aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
-
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            throw std::runtime_error("Failed to load mesh file: " + path);
-        }
-
-        if (scene->mNumMeshes == 0) {
-            throw std::runtime_error("No meshes found in file: " + path);
-        }
-        std::cout << "path: " << path << std::endl;
-        std::cout << "num meshes: " << scene->mNumMeshes << std::endl;
-
-        std::string pathName = path.substr(path.find_last_of('/') + 1);
-        pathName = pathName.substr(0, pathName.find_last_of('.'));
-
-        Strake::GameObject &mainObj = addGameObject(pathName);
-
-        for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
-            std::string name = static_cast<std::string>(scene->mMeshes[i]->mName.C_Str());
-            Strake::GameObject &obj = mainObj.addChild(name);
-            obj.addComponent<Strake::MeshFilter>();
-            obj.getComponent<Strake::MeshFilter>().loadFromFile(path, i);
-        }
-
+        std::string name = path.substr(path.find_last_of('/') + 1);
+        name = name.substr(0, name.find_last_of('.'));
+        GameObject &mainObj = addGameObject(name);
+        mainObj.addComponent<MeshFilter>();
+        mainObj.getComponent<MeshFilter>().loadFromFile(path);
         return mainObj;
     }
 
