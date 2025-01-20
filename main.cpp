@@ -125,7 +125,7 @@ int game()
 
     const int WIN_WIDTH = 1400;
     const int WIN_HEIGHT = 900;
-    const int FPS = 60;
+    const int FPS = 120;
 
     std::cout << Strake::Config::getVersion() << std::endl;
     std::cout << Strake::Config::getGLFWVersion() << std::endl;

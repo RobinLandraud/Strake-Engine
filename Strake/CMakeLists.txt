@@ -55,42 +55,19 @@ add_library(GameObject STATIC
 # Component librarie
 add_library(Component STATIC
     src/Component/Component.cpp
-)
-add_library(Transform STATIC
     src/Component/Transform.cpp
-)
-add_library(Camera STATIC
     src/Component/Camera.cpp
-)
-add_library(Script STATIC
     src/Component/Script.cpp
-)
-add_library(MeshFilter STATIC
     src/Component/MeshFilter.cpp
     src/Component/Cube.cpp
-)
-add_library(Renderer STATIC
     src/Component/Renderer/Renderer.cpp
     src/Component/Renderer/MeshRenderer.cpp
-)
-add_library(Light STATIC
     src/Component/Light/Light.cpp
     src/Component/Light/DirectionalLight.cpp
     src/Component/Light/PointLight.cpp
     src/Component/Light/ShadowMap.cpp
-)
-add_library(Collider STATIC
     src/Component/Collider/Collider.cpp
     src/Component/Collider/BoxCollider.cpp
-)
-
-target_link_libraries(Component PUBLIC
-    Transform
-    Camera
-    Script
-    MeshFilter
-    Renderer
-    Light
 )
 
 # ////////////////////////////////////////////////////////////////////////
@@ -114,22 +91,12 @@ target_link_libraries(Application PUBLIC Time)
 target_link_libraries(Application PUBLIC Scene)
 target_link_libraries(EventHandler PUBLIC Window)
 target_link_libraries(Component PUBLIC GameObject)
-
 target_link_libraries(Scene PUBLIC GameObject)
 target_link_libraries(Scene PUBLIC Component)
-target_link_libraries(Scene PUBLIC Camera)
-target_link_libraries(Scene PUBLIC Transform)
 target_link_libraries(Scene PUBLIC Managers)
-
-target_link_libraries(GameObject PUBLIC Script)
+target_link_libraries(GameObject PUBLIC Component)
 target_link_libraries(GameObject PUBLIC Scene)
-
-target_link_libraries(Transform PUBLIC Component)
-target_link_libraries(Camera PUBLIC Component)
-target_link_libraries(Camera PUBLIC Transform)
-target_link_libraries(Script PUBLIC Component)
-target_link_libraries(MeshFilter PUBLIC Component)
-target_link_libraries(Material PUBLIC Texture)
+target_link_libraries(Component PUBLIC Texture)
 
 target_link_libraries(Application PUBLIC
     Threads::Threads
@@ -159,10 +126,23 @@ target_link_libraries(Strake PUBLIC
     Application
 )
 
-
 # enable compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Set the path to the resources
-add_compile_definitions(RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/resources")
-message(STATUS "RESOURCES_PATH set to ${CMAKE_CURRENT_SOURCE_DIR}/resources")
+# Set the path to the resources (Release/Debug folder depending on the build type)
+if (WIN32)
+    add_compile_definitions(RESOURCES_PATH="resources")
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+        set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Release/resources")
+    else()
+        set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Debug/resources")
+    endif()
+    message("[X] RESOURCES_PATH set to: resources")
+    add_custom_command(TARGET Strake POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_PATH}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/resources
+        ${RESOURCES_PATH}
+        COMMENT "[X] Copying resources directory to ${RESOURCES_PATH}"
+    )
+endif()

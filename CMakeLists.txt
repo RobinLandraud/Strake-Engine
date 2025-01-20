@@ -15,14 +15,14 @@ SET(CMAKE_BUILD_TYPE "Release")
 
 # Set compiler flags for Release build
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    message("Release build")
+    message("[X] Release build")
     if (MSVC)
         set(CMAKE_CXX_FLAGS_RELEASE "/O2")
     else()
         set(CMAKE_CXX_FLAGS_RELEASE "-O3")
     endif()
 else()
-    message("Debug build")
+    message("[X] Debug build")
     if (MSVC)
         set(CMAKE_CXX_FLAGS_DEBUG "/Od")
     else()
@@ -41,7 +41,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Strake/include)
 cmake_policy(SET CMP0072 NEW) # FindOpenGL prefers GLVND by default when available
 
 # find_package(Threads REQUIRED)
-message("Finding Packages")
+message("[X] Finding Packages")
 
 if (WIN32)
     if (NOT DEFINED VCPKG_ROOT)
@@ -60,8 +60,9 @@ find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(assimp REQUIRED)
 
-message("Found Packages")
+message("[X] Packages Found")
 
+message("[X] Adding library: Strake Engine")
 add_subdirectory(Strake)
 
 # Add executable target with source files listed in SOURCE_FILES variable
@@ -71,44 +72,33 @@ ADD_EXECUTABLE(
 )
 
 if (WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/glfw3.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    set(DLLS
+        "glfw3.dll"
+        "assimp-vc143-mt.dll"
+        "minizip.dll"
+        "zlib1.dll"
+        "pugixml.dll"
+        "poly2tri.dll"
     )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/assimp-vc143-mt.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/minizip.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/zlib1.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/pugixml.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/poly2tri.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
+    foreach(dll ${DLLS})
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo  "[X] Copying ${dll} to $<TARGET_FILE_DIR:${PROJECT_NAME}>"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${VCPKG_ROOT}/installed/x64-windows/bin/${dll}"
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        )
+    endforeach()
+
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo  "[X] Copying glew32.dll to $<TARGET_FILE_DIR:${PROJECT_NAME}>"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${VCPKG_ROOT}/installed/x64-windows/bin/glew32.dll"
             $<TARGET_FILE_DIR:${PROJECT_NAME}>
         )
     else()
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo  "[X] Copying glew32d.dll to $<TARGET_FILE_DIR:${PROJECT_NAME}>"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${VCPKG_ROOT}/installed/x64-windows/debug/bin/glew32d.dll"
             $<TARGET_FILE_DIR:${PROJECT_NAME}>
