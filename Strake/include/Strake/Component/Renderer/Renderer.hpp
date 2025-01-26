@@ -8,7 +8,8 @@
 namespace Strake {
     enum class RendererType {
         None,
-        MeshRenderer
+        MeshRenderer,
+        WireFrameRenderer
     };
 
     class Renderer : public Component

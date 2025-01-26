@@ -63,6 +63,7 @@ add_library(Component STATIC
     src/Component/MeshFilter/Sphere.cpp
     src/Component/Renderer/Renderer.cpp
     src/Component/Renderer/MeshRenderer.cpp
+    src/Component/Renderer/WireFrameRenderer.cpp
     src/Component/Light/Light.cpp
     src/Component/Light/DirectionalLight.cpp
     src/Component/Light/PointLight.cpp

@@ -11,6 +11,7 @@
 #include <Strake/Component/MeshFilter/Cube.hpp>
 #include <Strake/Component/MeshFilter/Sphere.hpp>
 #include <Strake/Component/Renderer/MeshRenderer.hpp>
+#include <Strake/Component/Renderer/WireFrameRenderer.hpp>
 #include <Strake/Component/Script.hpp>
 #include <Strake/Component/Collider/SphereCollider.hpp>
 #include <Strake/init.hpp>
@@ -178,17 +179,20 @@ int game()
     objects.first.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
     objects.first.addComponent<Strake::MeshRenderer>(barelMaterial);
     objects.first.addComponent<Strake::SphereCollider>();
+    objects.first.addComponent<Strake::WireFrameRenderer>(objects.first.getComponent<Strake::SphereCollider>());
 
     Strake::GameObject &barrel2 = scene.addGameObject("Barrel2");
     barrel2.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.0f, -4.0f));
     barrel2.addComponent<Strake::MeshFilter>();
     barrel2.getComponent<Strake::MeshFilter>().loadFromFile("../assets/barrel.obj", 0); // load the first mesh directly in the game object
     barrel2.addComponent<Strake::MeshRenderer>(barelMaterial);
+    barrel2.addComponent<Strake::WireFrameRenderer>(objects.first.getComponent<Strake::MeshFilter>());
 
     Strake::GameObject &sphere = scene.addGameObject("Sphere");
     sphere.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.5f, 4.0f));
     sphere.addComponent<Strake::Sphere>();
     sphere.addComponent<Strake::MeshRenderer>(metalMaterial);
+    //sphere.addComponent<Strake::WireFrameRenderer>();
 
     Strake::GameObject &metalBox = scene.addGameObject("Metal Box");
     metalBox.getTransform().setLocalPosition(glm::vec3(4.0f, 0.5f, -3.0f));

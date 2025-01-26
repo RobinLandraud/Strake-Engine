@@ -68,6 +68,10 @@ namespace Strake {
                     in_frustrum_renderers.push_back(renderer);
                     break;
                 }
+                case RendererType::WireFrameRenderer: {
+                    in_frustrum_renderers.push_back(renderer);
+                    break;
+                }
                 default:
                     break;
             }
