@@ -9,7 +9,7 @@ namespace Strake {
         None,
         OBB,
         AABB,
-        Sphere,
+        CSphere,
         Mesh
     };
 

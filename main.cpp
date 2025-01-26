@@ -9,6 +9,7 @@
 #include <Strake/Component/Transform.hpp>
 #include <Strake/Component/MeshFilter/MeshFilter.hpp>
 #include <Strake/Component/MeshFilter/Cube.hpp>
+#include <Strake/Component/MeshFilter/Sphere.hpp>
 #include <Strake/Component/Renderer/MeshRenderer.hpp>
 #include <Strake/Component/Script.hpp>
 #include <Strake/Component/Collider/SphereCollider.hpp>
@@ -183,6 +184,11 @@ int game()
     barrel2.addComponent<Strake::MeshFilter>();
     barrel2.getComponent<Strake::MeshFilter>().loadFromFile("../assets/barrel.obj", 0); // load the first mesh directly in the game object
     barrel2.addComponent<Strake::MeshRenderer>(barelMaterial);
+
+    Strake::GameObject &sphere = scene.addGameObject("Sphere");
+    sphere.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.5f, 4.0f));
+    sphere.addComponent<Strake::Sphere>();
+    sphere.addComponent<Strake::MeshRenderer>(metalMaterial);
 
     Strake::GameObject &metalBox = scene.addGameObject("Metal Box");
     metalBox.getTransform().setLocalPosition(glm::vec3(4.0f, 0.5f, -3.0f));
