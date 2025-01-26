@@ -2,6 +2,7 @@
 #include <Strake/Manager/MaterialManager.hpp>
 #include <Strake/Manager/textureManager.hpp>
 #include <Strake/Manager/SceneManager.hpp>
+#include <Strake/Manager/PhysicsManager/PhysicsManager.hpp>
 #include <Strake/Window/Window.hpp>
 #include <Strake/init.hpp>
 

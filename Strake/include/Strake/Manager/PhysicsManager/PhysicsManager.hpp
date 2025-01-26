@@ -13,6 +13,8 @@ namespace Strake {
             PhysicsManager &operator=(const PhysicsManager &other) = delete;
             PhysicsManager &operator=(PhysicsManager &&other) = delete;
 
+            void physicsUpdate();
+
         private:
             ColliderManager m_colliderManager;
     };

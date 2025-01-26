@@ -68,6 +68,7 @@ add_library(Component STATIC
     src/Component/Light/ShadowMap.cpp
     src/Component/Collider/Collider.cpp
     src/Component/Collider/BoxCollider.cpp
+    src/Component/Collider/SphereCollider.cpp
 )
 
 # ////////////////////////////////////////////////////////////////////////

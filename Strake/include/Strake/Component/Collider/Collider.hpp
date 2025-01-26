@@ -2,6 +2,7 @@
 
 #include <Strake/Component/Component.hpp>
 #include <Strake/Component/Transform.hpp>
+#include <Strake/Dispatcher/EventData.hpp>
 
 namespace Strake {
     enum ColliderType {
@@ -22,7 +23,7 @@ namespace Strake {
         public:
             Collider(GameObject &parent, ColliderType type, CollisionMode mode);
             explicit Collider(GameObject &parent, ColliderType type); // is Discrete by default
-            ~Collider() = default;
+            ~Collider();
 
             virtual void physicsUpdate() = 0;
             [[nodiscard]] virtual bool isColliding(Collider &other) const = 0;

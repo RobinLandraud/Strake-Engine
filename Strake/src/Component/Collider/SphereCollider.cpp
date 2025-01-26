@@ -2,7 +2,11 @@
 
 namespace Strake {
     SphereCollider::SphereCollider(GameObject &parent) :
-        Collider(parent, ColliderType::Sphere)
+        Collider(parent, ColliderType::Sphere),
+        meshCenter(0.0f),
+        center(0.0f),
+        meshRadius(0.0f),
+        radius(0.0f)
     {
         std::optional<std::reference_wrapper<MeshFilter>> meshFilter = parent.findComponent<MeshFilter>();
         if (!meshFilter.has_value()) {
@@ -33,6 +37,9 @@ namespace Strake {
         glm::vec4 localCenter = glm::vec4(meshCenter, 1.0f);        // Homogeneous coordinates
         glm::vec4 worldCenter = r_transform.getWorldMatrix() * localCenter;            // Transform to world space
         center = glm::vec3(worldCenter);                            // Extract the 3D position
+
+        std::cout << "Center: " << center.x << ", " << center.y << ", " << center.z << std::endl;
+        std::cout << "Radius: " << radius << std::endl;
     }
 
     bool SphereCollider::isColliding(Collider &other) const

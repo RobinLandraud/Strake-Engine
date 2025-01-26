@@ -42,4 +42,10 @@ namespace Strake {
     std::vector<std::reference_wrapper<Collider>> &ColliderManager::getColliders() {
         return m_colliders;
     }
+
+    void ColliderManager::physicsUpdate() {
+        for (auto &collider : m_colliders) {
+            collider.get().physicsUpdate();
+        }
+    }
 }

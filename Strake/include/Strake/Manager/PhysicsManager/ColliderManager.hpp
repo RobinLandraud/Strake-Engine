@@ -20,6 +20,8 @@ namespace Strake {
             void clear();
             [[nodiscard]] std::vector<std::reference_wrapper<Collider>> &getColliders();
 
+            void physicsUpdate();
+
         private:
             std::vector<std::reference_wrapper<Collider>> m_colliders;
 

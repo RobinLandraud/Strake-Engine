@@ -79,6 +79,7 @@ namespace Strake {
 
     void Scene::fixedUpdate()
     {
+        m_physicsManager.physicsUpdate();
         m_scriptManager.fixedUpdate();
     }
 

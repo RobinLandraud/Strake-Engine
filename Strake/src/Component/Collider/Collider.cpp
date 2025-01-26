@@ -7,6 +7,14 @@ namespace Strake {
         m_type(type),
         m_mode(mode)
     {
+        setDerivedType(typeid(Collider));
+        EventData<Collider> eventData(*this, "addCollider");
+        parent.getEventDispatcher().broadcast(eventData);
+    }
+
+    Collider::~Collider() {
+        EventData<Collider> eventData(*this, "removeCollider");
+        getParent().getEventDispatcher().broadcast(eventData);
     }
 
     Collider::Collider(GameObject &parent, ColliderType type) :

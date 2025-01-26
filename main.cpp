@@ -10,6 +10,7 @@
 #include <Strake/Component/MeshFilter.hpp>
 #include <Strake/Component/Renderer/MeshRenderer.hpp>
 #include <Strake/Component/Script.hpp>
+#include <Strake/Component/Collider/SphereCollider.hpp>
 #include <Strake/init.hpp>
 
 class Rotator : public Strake::Script
@@ -171,20 +172,10 @@ int game()
     player.addComponent<CharacterController>();
     scene.setMainCamera(cam);
 
-    //Strake::GameObject &barrel = scene.addGameObject("Barrel");
-    //barrel.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
-    //barrel.addComponent<Strake::MeshFilter>();
-    //std::vector<std::reference_wrapper<Strake::GameObject>> nodes = barrel.getComponent<Strake::MeshFilter>().loadFromFile("../assets/barrel.obj"); // load all mesh as children nodes
-    //for (auto &node : nodes) {
-    //    node.get().addComponent<Strake::MeshRenderer>(barelMaterial);
-    //}
-
     std::pair<Strake::GameObject &, std::vector<std::reference_wrapper<Strake::GameObject>>> objects = scene.loadFromFile("../assets/barrel.obj");
     objects.first.getTransform().setLocalPosition(glm::vec3(3.0f, 0.0f, 4.0f));
-    for (auto &node : objects.second) {
-        std::cout << "Adding mesh renderer to " << node.get().getName() << std::endl;
-        node.get().addComponent<Strake::MeshRenderer>(barelMaterial);
-    }
+    objects.first.addComponent<Strake::MeshRenderer>(barelMaterial);
+    objects.first.addComponent<Strake::SphereCollider>();
 
     Strake::GameObject &barrel2 = scene.addGameObject("Barrel2");
     barrel2.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.0f, -4.0f));

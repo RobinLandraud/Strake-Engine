@@ -5,4 +5,9 @@ namespace Strake {
         m_colliderManager(eventDispatcher)
     {
     }
+
+    void PhysicsManager::physicsUpdate()
+    {
+        m_colliderManager.physicsUpdate();
+    }
 }
