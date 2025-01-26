@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_Transform.hpp>
 #include <Strake/Material/Material.hpp>
 #include <Strake/Component/Renderer/Renderer.hpp>
-#include <Strake/Component/MeshFilter.hpp>
+#include <Strake/Component/MeshFilter/MeshFilter.hpp>
 #include <Strake/Component/Camera.hpp>
 #include <Strake/Component/Transform.hpp>
 #include <Strake/Component/Light/Light.hpp>

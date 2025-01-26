@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Strake/Component/Collider/Collider.hpp>
-#include <Strake/Component/MeshFilter.hpp>
+#include <Strake/Component/MeshFilter/MeshFilter.hpp>
 
 namespace Strake {
     class SphereCollider : public Collider

@@ -7,7 +7,8 @@
 #include <Strake/Texture/Texture.hpp>
 #include <Strake/Component/Camera.hpp>
 #include <Strake/Component/Transform.hpp>
-#include <Strake/Component/MeshFilter.hpp>
+#include <Strake/Component/MeshFilter/MeshFilter.hpp>
+#include <Strake/Component/MeshFilter/Cube.hpp>
 #include <Strake/Component/Renderer/MeshRenderer.hpp>
 #include <Strake/Component/Script.hpp>
 #include <Strake/Component/Collider/SphereCollider.hpp>

@@ -46,10 +46,4 @@ namespace Strake
             std::vector<glm::vec2> m_uvs; // texture coordinates
             std::vector<unsigned int> m_indices; // indices of the vertices
     };
-
-    class Cube : public MeshFilter
-    {
-        public:
-            Cube(GameObject &parent);
-    };
 }

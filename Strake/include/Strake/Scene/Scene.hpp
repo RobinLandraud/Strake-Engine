@@ -11,7 +11,7 @@
 
 #include <functional>
 #include <optional>
-#include <Strake/Component/MeshFilter.hpp>
+#include <Strake/Component/MeshFilter/MeshFilter.hpp>
 #include <Strake/Shader/ShaderProgram.hpp>
 #include <Strake/Component/Renderer/MeshRenderer.hpp>
 

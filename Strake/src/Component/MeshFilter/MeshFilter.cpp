@@ -1,4 +1,4 @@
-#include <Strake/Component/MeshFilter.hpp>
+#include <Strake/Component/MeshFilter/MeshFilter.hpp>
 #include <iostream>
 
 namespace Strake

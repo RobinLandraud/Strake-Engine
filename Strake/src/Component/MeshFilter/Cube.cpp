@@ -1,4 +1,4 @@
-#include <Strake/Component/MeshFilter.hpp>
+#include <Strake/Component/MeshFilter/Cube.hpp>
 
 namespace Strake {
     Cube::Cube(GameObject &parent)
