@@ -33,6 +33,16 @@ namespace Strake {
         m_mesh = Sphere(getParent(), m_meshRadius);
     }
 
+    SphereCollider::SphereCollider(GameObject &parent, float radius, glm::vec3 offset) :
+        Collider(parent, ColliderType::CSphere, CollisionMode::Discrete, offset),
+        m_center(0.0f),
+        m_meshRadius(radius),
+        m_radius(radius)
+    {
+        m_mesh = Sphere(getParent(), m_meshRadius);
+        physicsUpdate();
+    }
+
     void SphereCollider::physicsUpdate()
     {
         glm::vec4 localCenter = glm::vec4(m_meshCenter, 1.0f);        // Homogeneous coordinates

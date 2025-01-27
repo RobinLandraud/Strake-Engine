@@ -23,7 +23,7 @@ namespace Strake {
     class Collider : public Component
     {
         public:
-            Collider(GameObject &parent, ColliderType type, CollisionMode mode);
+            Collider(GameObject &parent, ColliderType type, CollisionMode mode, glm::vec3 offset = glm::vec3(0.0f));
             explicit Collider(GameObject &parent, ColliderType type); // is Discrete by default
             ~Collider();
 

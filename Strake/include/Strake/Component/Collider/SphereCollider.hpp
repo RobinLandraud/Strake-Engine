@@ -8,6 +8,7 @@ namespace Strake {
     {
         public:
             explicit SphereCollider(GameObject &parent);
+            SphereCollider(GameObject &parent, float radius, glm::vec3 m_offset = glm::vec3(0.0f));
             ~SphereCollider() = default;
 
             virtual void physicsUpdate() final;

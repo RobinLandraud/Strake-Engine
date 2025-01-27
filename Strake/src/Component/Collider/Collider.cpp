@@ -1,10 +1,10 @@
 #include <Strake/Component/Collider/Collider.hpp>
 
 namespace Strake {
-    Collider::Collider(GameObject &parent, ColliderType type, CollisionMode mode) :
+    Collider::Collider(GameObject &parent, ColliderType type, CollisionMode mode, glm::vec3 offset) :
         Component(parent),
         r_transform(parent.getTransform()),
-        m_meshCenter(0.0f),
+        m_meshCenter(offset),
         m_type(type),
         m_mode(mode),
         m_mesh(std::nullopt)

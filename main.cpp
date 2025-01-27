@@ -173,6 +173,8 @@ int game()
     cam.setProjection(45.0f, static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT), 0.1f, 100.0f);
     player.getTransform().setLocalPosition(glm::vec3(0.0f, 2.0f, 5.0f));
     player.addComponent<CharacterController>();
+    player.addComponent<Strake::SphereCollider>(1.0f);
+    player.addComponent<Strake::WireFrameRenderer>(player.getComponent<Strake::SphereCollider>());
     scene.setMainCamera(cam);
 
     std::pair<Strake::GameObject &, std::vector<std::reference_wrapper<Strake::GameObject>>> objects = scene.loadFromFile("../assets/barrel.obj");
