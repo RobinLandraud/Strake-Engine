@@ -1,6 +1,7 @@
 #include <Strake/Window/Window.hpp>
 #include <Strake/Window/EventHandler.hpp>
 #include <Strake/Time/Time.hpp>
+#include <iostream>
 
 namespace Strake
 {
@@ -11,28 +12,47 @@ namespace Strake
         m_height(height),
         m_cursorEnabled(false)
     {
+        GLint majorVersion, minorVersion;
+
         if (glfwInit() == 0) {
+            std::cout << "Failed to initialize GLFW" << std::endl;
             throw std::runtime_error("Failed to initialize GLFW");
         }
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ECS_GLFW_VERSION_MAJOR);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ECS_GLFW_VERSION_MINOR);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        m_window.reset(glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr));
+
+        m_window.reset(glfwCreateWindow(m_width, m_height, title.c_str(), nullptr, nullptr));
         if (!m_window)
         {
+            std::cout << "Failed to create window" << std::endl;
             glfwTerminate();
             throw std::runtime_error("Failed to create window");
         }
         glfwMakeContextCurrent(m_window.get());
+        glfwSwapInterval(0); // Disable VSync
+        
         glewExperimental = GL_TRUE;
         if (glewInit() != GLEW_OK)
         {
+            std::cout << "Failed to initialize GLEW" << std::endl;
+            glfwTerminate();
             throw std::runtime_error("Failed to initialize GLEW");
         }
-        glfwGetFramebufferSize(m_window.get(), &width, &height);
-        glViewport(0, 0, width, height);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glGetIntegerv(GL_MAJOR_VERSION, &majorVersion);
+        glGetIntegerv(GL_MINOR_VERSION, &minorVersion);
+        if (majorVersion < ECS_GLFW_VERSION_MAJOR || (majorVersion == ECS_GLFW_VERSION_MAJOR && minorVersion < ECS_GLFW_VERSION_MINOR))
+        {
+            std::cout << "OpenGL version is not supported" << std::endl;
+            std::cout << "OpenGL version: " << majorVersion << "." << minorVersion << std::endl;
+            std::cout << "Supported version: " << ECS_GLFW_VERSION_MAJOR << "." << ECS_GLFW_VERSION_MINOR << std::endl;
+            glfwTerminate();
+            throw std::runtime_error("OpenGL version is not supported");
+        }
+
+        glfwGetFramebufferSize(m_window.get(), &m_width, &m_height);
+        glViewport(0, 0, m_width, m_height);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 

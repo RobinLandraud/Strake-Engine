@@ -1,4 +1,5 @@
 #include <Strake/init.hpp>
+#include <Strake/Config/Config.hpp>
 
 #define GL_CHECK(stmt) do { \
     stmt; \
@@ -51,17 +52,16 @@ void GLAPIENTRY OpenGLDebugCallback(GLenum source, GLenum type, GLuint id,
 
 int Strake::init() {
     GL_CHECK(glEnable(GL_DEPTH_TEST)); // Enable depth testing for 3D rendering (occlusion culling)
-    GL_CHECK(glDepthFunc(GL_LESS)); // Set depth function to less than or equal to
+    GL_CHECK(glDepthFunc(GL_LEQUAL)); // Set depth function to less than or equal to
     GL_CHECK(glEnable(GL_BLEND)); // Enable blending
     GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); // Set blending function to use alpha values
     GL_CHECK(glFrontFace(GL_CCW)); // Front faces are counter-clockwise
     GL_CHECK(glEnable(GL_CULL_FACE)); // Enable face culling
     GL_CHECK(glCullFace(GL_BACK)); // Cull back faces
     GL_CHECK(glClearColor(0.0f, 0.0f, 0.0f, 1.0f)); // Set the clear color to black
-    // Enable debug output
-    GL_CHECK(glEnable(GL_DEBUG_OUTPUT));
-    GL_CHECK(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
-    GL_CHECK(glDebugMessageCallback(OpenGLDebugCallback, nullptr));
+    GL_CHECK(glEnable(GL_DEBUG_OUTPUT)); // Enable debug output
+    GL_CHECK(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS)); // Make sure that the callback function is called synchronously
+    GL_CHECK(glDebugMessageCallback(OpenGLDebugCallback, nullptr)); // Set the debug callback function
     return 0;
 }
 
