@@ -40,7 +40,7 @@
 
 With this project, I aimed to develop a comprehensive  GameObject Component System using Open Graphics Library (OpenGL). The goal is to create more stable and maintainable projects/games through a well-structured hierarchy that is both readable and easily modifiable.
 
-Inspired by Unity, this ECS optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
+Inspired by severals engines, this ECS optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
 
 ### Built With
 
@@ -89,39 +89,34 @@ Additionally, ensure you have:
    ```
 
 2. **Install Dependencies**
-
    Ensure all prerequisite libraries are installed before compiling the project.
 
    - **On Linux**:
    Libraries are typically managed through your package manager and located via the `PATH` environment variable. Ensure all required libraries are properly installed and accessible.
 
    - **On Windows**:
-   Dependencies are managed using **vcpkg**. You need to update the `vcpkg` variable in the `justfile` located in the root directory of the project. Set this variable to the path of your vcpkg installation to handle the prerequisite libraries. For example:
+   Dependencies are managed using **vcpkg**. You need to update the `VCPKG_PATH` variable in your environmentby setting it to the path of your vcpkg installation.
+   Here an example of **.env** file:
      ```bash
-     vcpkg := "C:/path/to/vcpkg"
+     VCPKG_PATH="C:/path/to/vcpkg"
      ```
      If prerequisites are not yet installed, use the command:
      ```bash
-     just install-windows
+     just install
      ```
 
 3. **Compile the Project**
+</br>
+   > 💡 **Note:** Ensure all dependencies are installed before proceeding with the compilation.
 
-   Once the dependencies are installed, you can proceed to compile the engine:
+   Open a terminal, navigate to the project directory, and build the project with this justfile command:
+   ```bash
+   just build
+   ```
 
-   - **On Linux**:  
-     Open a terminal, navigate to the project directory, and build the project with justfile:
-     ```bash
-     just build
-     ```
-     After the build is complete, the executable will be available at the root of the project under the name **Strake.out**
-
-   - **On Windows**:  
-     Open a terminal or command prompt, navigate to the project directory, and build the project with justfile:
-     ```bash
-     just build-windows
-     ```
-     After the build is complete, the executable will be available at the root of the project under the name **Strake.exe**
+   Once the build process completes, the executable will be located in the **Release** folder:
+   - **Strake.out** (Unix)
+   - **Strake.exe** (Windows)
 ---
 
 These steps will ensure the engine is properly compiled and ready to run on your platform.
@@ -217,30 +212,56 @@ app.run();
 
 ## Roadmap
 
-### Current Features
-
-### Current Features
-
 - **Core Systems**:
-  - **Event Handler**: Centralized system to manage and dispatch events.
-  - **Shader Programs and Shaders**: Customizable shader pipeline to enhance visual effects.
-  - **Materials**: Supports textures for customizable appearances.
-  - **Scenes**: Manages hierarchical game objects and components.
-  - **GameObjects and Components**: Core structure for building and organizing entities in the engine.
-  - **Application**: Manages key systems for application functionality:
-    - **Window**: Handles display management and user interactions.
-    - **Material Manager**: Manages creation and reuse of materials.
-    - **Texture Manager**: Loads, stores, and retrieves textures efficiently.
-    - **Scene Manager**: Switches and manages active scenes seamlessly.
-
-- **Components**:
-  - **Camera**: Fully functional component for rendering scenes.
-  - **Transforms**: Supports local and global space transformations.
-  - **Lights**: Includes point lights (with plans to add more types in the future).
-  - **MeshFilter**: Handles 3D meshes, including default primitives (e.g., cubes) and support for OBJ file loading.
-  - **MeshRenderer**: Renders 3D meshes with materials and lighting.
-  - **Script Component**: Allows users to attach custom scripts to GameObjects as components.
-
+  - [X] **Application**: Manages application run state
+  - [X] **Game Loop**: Manage calls for pipelines for each frames
+  - [X] **Window**: Handles display management.
+  - [X] **Event Handler**: Centralized system to manage and dispatch events.
+  - [X] **Config**: Manages OpenGL ans Strake engine versions
+  - [X] **Dispatcher**: Used to wrap engine callbacks
+  - [X] **Shader Programs and Shaders**: Customizable shader pipeline to enhance visual effects.
+  - [X] **Materials and Textures**: Supports materials and textures for customizable appearances.
+  - [X] **Scenes**: Manages hierarchical game objects and components.
+  - [X] **GameObjects**: Core structure for building and organizing entities in the engine.
+  - [X] **Time**: Used to manage frame and delta times.
+  - [X] **Components**:
+    - [X] **Camera**: Fully functional component for rendering scenes.
+      - [X] **vpMatrix**: Use of camera view and projection for rendering.
+      - [ ] **Frustrum**: Avoid rendering object outside camera frustrum.
+    - [X] **Transforms**: Supports local and global space transformations.
+      - [X] **Local Tranform**: Update objects in local space
+      - [ ] **World Tranform**: Update objects in world space 
+    - [X] **Lights**: Includes lightnings
+      - [X] **Directional Light**: manage directional lights
+        - [X] **Lighting**: add lighting on scene objects
+        - [X] **Shadow Map**: add shadows of scene objects
+      - [X] **Point Light**: manage directional lights
+        - [X] **Lighting**: add lighting on scene objects
+        - [ ] **Shadow Map**: add shadows of scene objects
+      - [ ] **Spot Light**: manage directional lights
+        - [ ] **Lighting**: add lighting on scene objects
+        - [ ] **Shadow Map**: add shadows of scene objects
+    - [X] **Meshs**: Handles 3D meshes, including default primitives (e.g., cubes) and support for OBJ file loading.
+      - [X] **MeshFilter**: Handle Mesh and allow to load object files.
+      - [X] **Cube**: Default prefab for Cube mesh
+      - [X] **Sphere**: Default prefab for Sphere mesh
+    - [X] **Renderers**: Renders objects on Scenes
+      - [X] **MeshRenderer**: Renders meshes with materials and lighting.
+      - [X] **WireFrameRenderer**: Renders only wire frames from meshes or colliders
+    - [X] **Scripts**: Allows users to attach custom scripts to GameObjects as components.
+    - [X] **Colliders** Used to detect collisions between GameObjects
+      - [ ] **BoxCollider** Boxed colliders (OBB and AABB)
+      - [X] **SphereCollider** Spherical Collider with center and radius
+  - [X] **Managers** system that centralizes control of a specific type of resource or component.
+    - [X] **PhysicsManager** Manages all physics system
+      - [X] **ColliderManager** - Manages Colliders and handles collision detection.
+    - [X] **RendererManager** Manages Renderers and their rendering operations.  
+    - [X] **LightManager** - Manages Lights and their influence on the scene.  
+    - [X] **SceneManager** - Manages scene transitions and object hierarchies.  
+    - [X] **TextureManager** - Manages Textures and optimizes their usage.  
+    - [X] **MaterialManager** - Manages Materials, shaders, and surface properties.  
+    - [X] **ScriptManager** - Manages and executes scripts for game logic.  
+</br>
 - **Entity Component System (ECS)**:
   - Modular architecture with a game loop that includes the following lifecycle methods:
     - `awake()`: Called when a component is created or initialized.
