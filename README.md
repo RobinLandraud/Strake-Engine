@@ -249,18 +249,18 @@ app.run();
       - [X] **MeshRenderer**: Renders meshes with materials and lighting.
       - [X] **WireFrameRenderer**: Renders only wire frames from meshes or colliders
     - [X] **Scripts**: Allows users to attach custom scripts to GameObjects as components.
-    - [X] **Colliders** Used to detect collisions between GameObjects
-      - [ ] **BoxCollider** Boxed colliders (OBB and AABB)
-      - [X] **SphereCollider** Spherical Collider with center and radius
-  - [X] **Managers** system that centralizes control of a specific type of resource or component.
-    - [X] **PhysicsManager** Manages all physics system
-      - [X] **ColliderManager** - Manages Colliders and handles collision detection.
-    - [X] **RendererManager** Manages Renderers and their rendering operations.  
-    - [X] **LightManager** - Manages Lights and their influence on the scene.  
-    - [X] **SceneManager** - Manages scene transitions and object hierarchies.  
-    - [X] **TextureManager** - Manages Textures and optimizes their usage.  
-    - [X] **MaterialManager** - Manages Materials, shaders, and surface properties.  
-    - [X] **ScriptManager** - Manages and executes scripts for game logic.  
+    - [X] **Colliders**: Used to detect collisions between GameObjects
+      - [ ] **BoxCollider**: Boxed colliders (OBB and AABB)
+      - [X] **SphereCollider**: Spherical Collider with center and radius
+  - [X] **Managers**: system that centralizes control of a specific type of resource or component.
+    - [X] **PhysicsManager**: Manages all physics system
+      - [X] **ColliderManager**: - Manages Colliders and handles collision detection.
+    - [X] **RendererManager**: Manages Renderers and their rendering operations.  
+    - [X] **LightManager**: - Manages Lights and their influence on the scene.  
+    - [X] **SceneManager**: - Manages scene transitions and object hierarchies.  
+    - [X] **TextureManager**: - Manages Textures and optimizes their usage.  
+    - [X] **MaterialManager**: - Manages Materials, shaders, and surface properties.  
+    - [X] **ScriptManager**: - Manages and executes scripts for game logic.  
 </br>
 - **Entity Component System (ECS)**:
   - Modular architecture with a game loop that includes the following lifecycle methods:
