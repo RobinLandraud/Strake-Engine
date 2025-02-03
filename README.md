@@ -269,7 +269,7 @@ app.run();
     - `update()`: Runs every frame for dynamic behaviors.
     - `fixedUpdate()`: Runs at a fixed interval for physics or time-sensitive updates.
     - `lateUpdate()`: Called after all `update()` calls, ensuring post-update adjustments.
-    - `render()`: Responsible for rendering components such as meshes, lights, and cameras each frame.
+    - `render()`: Responsible for rendering components such as meshes and lights each frame.
 
 ### Upcoming Features
 
