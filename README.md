@@ -260,8 +260,8 @@ app.run();
     - [X] **SceneManager**: - Manages scene transitions and object hierarchies.  
     - [X] **TextureManager**: - Manages Textures and optimizes their usage.  
     - [X] **MaterialManager**: - Manages Materials, shaders, and surface properties.  
-    - [X] **ScriptManager**: - Manages and executes scripts for game logic.  
-</br>
+    - [X] **ScriptManager**: - Manages and executes scripts for game logic.
+
 - **Entity Component System (ECS)**:
   - Modular architecture with a game loop that includes the following lifecycle methods:
     - `awake()`: Called when a component is created or initialized.
