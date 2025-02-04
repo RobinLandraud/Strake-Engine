@@ -106,7 +106,7 @@ Additionally, ensure you have:
      ```
 
 3. **Compile the Project**
-</br>
+
    > 💡 **Note:** Ensure all dependencies are installed before proceeding with the compilation.
 
    Open a terminal, navigate to the project directory, and build the project with this justfile command:
