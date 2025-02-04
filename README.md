@@ -279,7 +279,8 @@ app.run();
 - **Enhanced Transform API**: Improve the `Transform` class to provide better support for world space transformations and related methods.
 
 ### Milestones
-- **v0.1**: Initial stable release with ECS and basic rendering
+- **v0.1**: Initial stable release with ECS and basic rendering.
+Last release is **0.1.5**.
 
 ### License
 
