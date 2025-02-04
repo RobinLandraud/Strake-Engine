@@ -275,7 +275,7 @@ app.run();
 
 - **Basic Physics Engine**: Implement a simple physics engine for rigidbody movement and gravity.
 - **CollisionBox**: Add collision detection with basic bounding boxes for handling physical interactions.
-- **Lighting**: Expand lighting system to support shadows for each light types such as point lights and spotlights.
+- **Lighting**: Expand lighting system to support shadows for each light types such as point lights and spot lights.
 - **Enhanced Transform API**: Improve the `Transform` class to provide better support for world space transformations and related methods.
 
 ### Milestones
