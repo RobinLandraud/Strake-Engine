@@ -253,7 +253,7 @@ app.run();
       - [ ] **BoxCollider**: Boxed colliders (OBB and AABB)
       - [X] **SphereCollider**: Spherical Collider with center and radius
   - [X] **Managers**: system that centralizes control of a specific type of resource or component.
-    - [X] **PhysicsManager**: Manages all physics system
+    - [X] **PhysicsManager**: Manages all physics systems.
       - [X] **ColliderManager**: - Manages Colliders and handles collision detection.
     - [X] **RendererManager**: Manages Renderers and their rendering operations.  
     - [X] **LightManager**: - Manages Lights and their influence on the scene.  
@@ -273,9 +273,9 @@ app.run();
 
 ### Upcoming Features
 
-- **Basic Physics Engine**: Implement a simple physics engine for rigidbody movement, gravity, and collisions.
+- **Basic Physics Engine**: Implement a simple physics engine for rigidbody movement and gravity.
 - **CollisionBox**: Add collision detection with basic bounding boxes for handling physical interactions.
-- **Lighting**: Expand lighting system to support additional light types such as directional lights and spotlights.
+- **Lighting**: Expand lighting system to support shadows for each light types such as point lights and spotlights.
 - **Enhanced Transform API**: Improve the `Transform` class to provide better support for world space transformations and related methods.
 
 ### Milestones
