@@ -60,7 +60,9 @@ add_library(Component STATIC
     src/Component/Script.cpp
     src/Component/MeshFilter/MeshFilter.cpp
     src/Component/MeshFilter/Cube.cpp
+    src/Component/MeshFilter/Plane.cpp
     src/Component/MeshFilter/Sphere.cpp
+    src/Component/MeshFilter/Capsule.cpp
     src/Component/Renderer/Renderer.cpp
     src/Component/Renderer/MeshRenderer.cpp
     src/Component/Renderer/WireFrameRenderer.cpp

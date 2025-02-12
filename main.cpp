@@ -9,7 +9,9 @@
 #include <Strake/Component/Transform.hpp>
 #include <Strake/Component/MeshFilter/MeshFilter.hpp>
 #include <Strake/Component/MeshFilter/Cube.hpp>
+#include <Strake/Component/MeshFilter/Plane.hpp>
 #include <Strake/Component/MeshFilter/Sphere.hpp>
+#include <Strake/Component/MeshFilter/Capsule.hpp>
 #include <Strake/Component/Renderer/MeshRenderer.hpp>
 #include <Strake/Component/Renderer/WireFrameRenderer.hpp>
 #include <Strake/Component/Script.hpp>
@@ -129,7 +131,7 @@ int game()
 
     const int WIN_WIDTH = 1400;
     const int WIN_HEIGHT = 900;
-    const int FPS = 244;
+    const int FPS = 60;
 
     std::cout << Strake::Config::getVersion() << std::endl;
     std::cout << Strake::Config::getGLFWVersion() << std::endl;
@@ -162,8 +164,8 @@ int game()
     treeMaterial.addTexture(treeTexture, "textureSampler");
 
     Strake::GameObject &floor = scene.addGameObject("Floor");
-    floor.addComponent<Strake::Cube>();
-    floor.getTransform().setLocalScale(glm::vec3(20.0f, 0.1f, 20.0f));
+    floor.addComponent<Strake::Plane>();
+    floor.getTransform().setLocalScale(glm::vec3(20.0f, 1.0f, 20.0f));
     floor.getTransform().setLocalPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     floor.addComponent<Strake::MeshRenderer>(grassMaterial);
 
@@ -173,8 +175,8 @@ int game()
     cam.setProjection(45.0f, static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT), 0.1f, 100.0f);
     player.getTransform().setLocalPosition(glm::vec3(0.0f, 2.0f, 5.0f));
     player.addComponent<CharacterController>();
-    player.addComponent<Strake::SphereCollider>(1.0f);
-    player.addComponent<Strake::WireFrameRenderer>(player.getComponent<Strake::SphereCollider>());
+    //player.addComponent<Strake::SphereCollider>(1.0f);
+    //player.addComponent<Strake::WireFrameRenderer>(player.getComponent<Strake::SphereCollider>());
     scene.setMainCamera(cam);
 
     std::pair<Strake::GameObject &, std::vector<std::reference_wrapper<Strake::GameObject>>> objects = scene.loadFromFile("../assets/barrel.obj");
@@ -195,6 +197,11 @@ int game()
     sphere.addComponent<Strake::Sphere>();
     sphere.addComponent<Strake::MeshRenderer>(metalMaterial);
     //sphere.addComponent<Strake::WireFrameRenderer>();
+
+    Strake::GameObject &capsule = scene.addGameObject("Capsule");
+    capsule.getTransform().setLocalPosition(glm::vec3(-5.0f, 1.0f, 5.0f));
+    capsule.addComponent<Strake::Capsule>();
+    capsule.addComponent<Strake::MeshRenderer>(metalMaterial);
 
     Strake::GameObject &metalBox = scene.addGameObject("Metal Box");
     metalBox.getTransform().setLocalPosition(glm::vec3(4.0f, 0.5f, -3.0f));
