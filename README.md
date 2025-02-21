@@ -223,6 +223,7 @@ app.run();
   - [X] **Materials and Textures**: Supports materials and textures for customizable appearances.
   - [X] **Scenes**: Manages hierarchical game objects and components.
   - [X] **GameObjects**: Core structure for building and organizing entities in the engine.
+  - [X] **Layer**: A system that organizes and groups GameObjects for the purpose of managing rendering.
   - [X] **Time**: Used to manage frame and delta times.
   - [X] **Components**:
     - [X] **Camera**: Fully functional component for rendering scenes.
@@ -261,6 +262,7 @@ app.run();
     - [X] **TextureManager**: - Manages Textures and optimizes their usage.  
     - [X] **MaterialManager**: - Manages Materials, shaders, and surface properties.  
     - [X] **ScriptManager**: - Manages and executes scripts for game logic.
+    - [X] **LayerManager**: - Organizes and manages layers.
 
 - **Entity Component System (ECS)**:
   - Modular architecture with a game loop that includes the following lifecycle methods:
@@ -279,7 +281,7 @@ app.run();
 - **Enhanced Transform API**: Improve the `Transform` class to provide better support for world space transformations and related methods.
 
 ### Milestones
-- **v0.1**: Initial stable release with ECS and basic rendering (**pre-release version**).
+- **v0.1**: Initial stable version with ECS and basic rendering (**pre-release version**).
   - **0.6.0 (Beta)**:
     - Add Layers
     - Add LayersManager
