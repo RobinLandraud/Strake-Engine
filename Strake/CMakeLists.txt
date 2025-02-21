@@ -50,6 +50,10 @@ add_library(EventHandler STATIC
 add_library(GameObject STATIC
     src/GameObject/GameObject.cpp
 )
+add_library(Layer STATIC
+    src/Layer/Layer.cpp
+    src/Layer/CullingMask.cpp
+)
 
 # ////////////////////////////////////////////////////////////////////////
 # Component librarie
@@ -73,12 +77,15 @@ add_library(Component STATIC
     src/Component/Collider/Collider.cpp
     src/Component/Collider/BoxCollider.cpp
     src/Component/Collider/SphereCollider.cpp
+    src/Component/UI/UI.cpp
+    src/Component/UI/Image.cpp
 )
 
 # ////////////////////////////////////////////////////////////////////////
 
 add_library(Scene STATIC src/Scene/Scene.cpp)
 add_library(Managers STATIC
+    src/Manager/LayerManager.cpp
     src/Manager/LightManager.cpp
     src/Manager/RendererManager.cpp
     src/Manager/MaterialManager.cpp
@@ -129,6 +136,7 @@ target_link_libraries(Strake PUBLIC
     GameObject
     Dispatcher
     Application
+    Layer 
 )
 
 # enable compile_commands.json

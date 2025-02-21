@@ -34,8 +34,7 @@ namespace Strake {
             [[nodiscard]] const MeshFilter &getMeshFilter() const;
             [[nodiscard]] const Material &getMaterial() const;
 
-            void addLight(Light &light);
-            void clearLights();
+            void updateLights(std::vector<std::reference_wrapper<Light>> &lights);
             std::vector<std::reference_wrapper<const Light>> &getLights();
 
         private:

@@ -32,4 +32,11 @@ namespace Strake {
     {
         return m_type;
     }
+
+    void Renderer::updateLayer(int oldLayer)
+    {
+        std::pair<int, Renderer &> pair = {oldLayer, *this};
+        EventData<std::pair<int, Renderer &>> eventData(pair, "moveRenderer");
+        getParent().getEventDispatcher().broadcast(eventData);
+    }
 }

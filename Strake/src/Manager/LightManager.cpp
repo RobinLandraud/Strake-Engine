@@ -20,6 +20,11 @@ namespace Strake {
         m_subscriptions[m_eventDispatcher.subscribe("clearLights", [this](const Event &event) {
             clear();
         })] = "clearLights";
+
+        m_subscriptions[m_eventDispatcher.subscribe("moveLight", [this](const Event &event) {
+            std::pair<int, Light &> &data = static_cast<const EventData<std::pair<int, Light &>> &>(event).getValue();
+            moveLight(data.second, data.first);
+        })] = "moveLight";
     }
 
     LightManager::~LightManager()
@@ -31,18 +36,32 @@ namespace Strake {
 
     void LightManager::addLight(Light &light)
     {
-        m_lights.push_back(light);
+        m_lights[light.getParent().getLayer().getPriority()].push_back(light);
     }
 
     void LightManager::removeLight(Light &light)
     {
-        auto it = std::find_if(m_lights.begin(), m_lights.end(),
+        int layer = light.getParent().getLayer().getPriority();
+        auto it = std::find_if(m_lights[layer].begin(), m_lights[layer].end(),
             [&light](const std::reference_wrapper<const Light>& ref) {
                 return &ref.get() == &light;
             }
         );
-        if (it != m_lights.end()) {
-            m_lights.erase(it);
+        if (it != m_lights[layer].end()) {
+            m_lights[layer].erase(it);
+        }
+    }
+
+    void LightManager::moveLight(Light &light, int oldLayer)
+    {
+        auto it = std::find_if(m_lights[oldLayer].begin(), m_lights[oldLayer].end(),
+            [&light](const std::reference_wrapper<const Light>& ref) {
+                return &ref.get() == &light;
+            }
+        );
+        if (it != m_lights[oldLayer].end()) {
+            m_lights[oldLayer].erase(it);
+            m_lights[light.getParent().getLayer().getPriority()].push_back(light);
         }
     }
 
@@ -51,23 +70,23 @@ namespace Strake {
         m_lights.clear();
     }
 
-    std::vector<std::reference_wrapper<Light>> &LightManager::getLights()
+    std::vector<std::reference_wrapper<Light>> &LightManager::getLights(int layer)
     {
-        return m_lights;
+        return m_lights[layer];
     }
 
-    void LightManager::clearObjects()
+    void LightManager::clearObjects(int layer)
     {
-        for (auto &light : m_lights) {
+        for (auto &light : m_lights[layer]) {
             light.get().getShadowMap().clearObjects();
         }
     }
 
-    void LightManager::renderShadowMaps(int winWidth, int winHeight)
+    void LightManager::renderShadowMaps(int layer, int winWidth, int winHeight)
     {
         glViewport(0, 0, 4096, 4096);
         m_shadowShaderProgram.use();
-        for (auto &light : m_lights) {
+        for (auto &light : m_lights[layer]) {
             light.get().renderShadowMap(m_shadowShaderProgram);
         }
         glViewport(0, 0, winWidth, winHeight);

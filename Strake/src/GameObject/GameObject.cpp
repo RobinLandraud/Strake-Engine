@@ -6,9 +6,10 @@
 
 namespace Strake {
 
-    GameObject::GameObject(std::string name, EventDispatcher &eventDispatcher) :
+    GameObject::GameObject(std::string name, EventDispatcher &eventDispatcher, Layer &layer) :
         m_name(std::move(name)),
-        m_eventDispatcher(eventDispatcher)
+        m_eventDispatcher(eventDispatcher),
+        r_layer(layer)
     {
         m_components[typeid(Transform)] = std::make_unique<Transform>(*this);
         m_transform = static_cast<Transform &>(*m_components[typeid(Transform)]);
@@ -31,7 +32,7 @@ namespace Strake {
         if (m_children.find(name) != m_children.end()) {
             throw std::runtime_error("Child already exists: " + name);
         }
-        m_children[name] = std::make_unique<GameObject>(name, m_eventDispatcher);
+        m_children[name] = std::make_unique<GameObject>(name, m_eventDispatcher, r_layer);
         m_children[name].get()->m_parent = *this;
         return *m_children[name];
     }
@@ -84,5 +85,44 @@ namespace Strake {
 
     EventDispatcher &GameObject::getEventDispatcher() {
         return m_eventDispatcher;
+    }
+
+    void GameObject::setLayer(std::string &&name) {
+        int oldLayer = r_layer.get().getPriority();
+        std::pair<std::string, GameObject &> pair = {name, *this};
+        EventData<std::pair<std::string, GameObject &>> eventData(pair, "setLayerByName");
+        m_eventDispatcher.broadcast(eventData);
+        updateLayers(oldLayer);
+    }
+
+    void GameObject::setLayer(int priority) {
+        int oldLayer = r_layer.get().getPriority();
+        std::pair<int, GameObject &> pair = {priority, *this};
+        EventData<std::pair<int, GameObject &>> eventData(pair, "setLayerByPriority");
+        m_eventDispatcher.broadcast(eventData);
+        updateLayers(oldLayer);
+    }
+
+    void GameObject::setLayer(Layer &layer, bool update) {
+        int oldLayer = r_layer.get().getPriority();
+        r_layer = layer;
+        if (update) {
+            updateLayers(oldLayer);
+        }
+    }
+
+    void GameObject::updateLayers(int oldLayer) {
+        std::optional<std::reference_wrapper<Renderer>> renderer = findComponent<Renderer>();
+        std::optional<std::reference_wrapper<Light>> light = findComponent<Light>();
+        if (renderer.has_value()) {
+            renderer.value().get().updateLayer(oldLayer);
+        }
+        if (light.has_value()) {
+            light.value().get().updateLayer(oldLayer);
+        }
+    }
+
+    Layer &GameObject::getLayer() const {
+        return r_layer.get();
     }
 }

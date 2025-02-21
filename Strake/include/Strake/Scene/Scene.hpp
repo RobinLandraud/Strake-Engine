@@ -5,6 +5,7 @@
 #include <Strake/Component/Camera.hpp>
 
 #include <Strake/Manager/LightManager.hpp>
+#include <Strake/Manager/LayerManager.hpp>
 #include <Strake/Manager/RendererManager.hpp>
 #include <Strake/Manager/ScriptManager.hpp>
 #include <Strake/Manager/PhysicsManager/PhysicsManager.hpp>
@@ -30,6 +31,9 @@ namespace Strake {
             Scene &operator=(Scene &&other) = delete;
 
             GameObject &addGameObject(const std::string &name);
+            GameObject &addGameObject(const std::string &name, Layer &layer);
+            GameObject &addGameObject(const std::string &name, int layer);
+            GameObject &addGameObject(const std::string &name, const std::string &layer);
             std::pair<GameObject &, std::vector<std::reference_wrapper<GameObject>>> loadFromFile(const std::string &path);
             void removeGameObject(const std::string &name);
             void removeGameObject(GameObject &gameObject);
@@ -38,6 +42,8 @@ namespace Strake {
 
             void setMainCamera(Camera &camera);
             [[nodiscard]] Camera &getMainCamera() const;
+
+            [[nodiscard]] LayerManager &getLayerManager();
 
             void awake();
             void start();
@@ -52,6 +58,7 @@ namespace Strake {
             EventDispatcher m_eventDispatcher;
 
             //render pipeline
+            LayerManager m_layerManager;
             LightManager m_lightManager;
             RendererManager m_rendererManager;
             ScriptManager m_scriptManager;

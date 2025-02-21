@@ -122,9 +122,9 @@ namespace Strake {
         m_material.getShaderProgram().setUniform("view", camera.getViewMatrix());
         m_material.getShaderProgram().setUniform("viewPos", camera.getPosition());
         m_material.getShaderProgram().setUniform("projection", camera.getProjectionMatrix());
+        m_material.getShaderProgram().setUniform("numLights", static_cast<int>(m_lights.size()));
         for (size_t i = 0; i < m_lights.size(); ++i) {
             const Light &light = m_lights[i].get();
-            m_material.getShaderProgram().setUniform("numLights", static_cast<int>(m_lights.size()));
             m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].type", static_cast<int>(light.getType()));
             m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].color", light.getColor());
             m_material.getShaderProgram().setUniform("lights[" + std::to_string(i) + "].intensity", light.getIntensity());
@@ -171,15 +171,14 @@ namespace Strake {
         return m_material;
     }
 
-    void MeshRenderer::addLight(Light &light)
+    void MeshRenderer::updateLights(std::vector<std::reference_wrapper<Light>> &lights)
     {
-        m_lights.push_back(light);
-        light.getShadowMap().addObject(getParent());
-    }
-
-    void MeshRenderer::clearLights()
-    {
+        int n_light = std::min(static_cast<int>(lights.size()), 8);
         m_lights.clear();
+        for (int i = 0; i < n_light; ++i) {
+            m_lights.push_back(lights[i]);
+            lights[i].get().getShadowMap().addObject(getParent());
+        }
     }
 
     std::vector<std::reference_wrapper<const Light>> &MeshRenderer::getLights()

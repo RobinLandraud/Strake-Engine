@@ -280,7 +280,28 @@ app.run();
 
 ### Milestones
 - **v0.1**: Initial stable release with ECS and basic rendering.
-Last release is **0.1.5**.
+  - **0.1.6 (Beta)**:
+    - Add of Plane Mesh
+    - Add of Capsules Mesh
+  - **0.1.5 (Latest Stable)**:
+    - Use of .env in justfile
+    - Fixes in OpenGL/GLFW initialisation
+    - Add of WireFrameRenderer
+    - Add of Sphere Collider
+    - Add of Sphere Mesh
+    - Use of Ressources folder in Releases
+    - Change of compiler (ninja to CMake)
+    - Upgrade Mesh Loader
+    - Add of Physics Manager
+    - Change of Compoment pipeline
+    - Change of Script pipeline
+  - **0.1.4**:
+    - Add of Percentage Closer Filtering for shadows
+    - Add of Shadow Maps for Directional Light
+    - ...
+  - **0.1.3**
+    - Add of internal event Dispatcher
+    - ...
 
 ### License
 

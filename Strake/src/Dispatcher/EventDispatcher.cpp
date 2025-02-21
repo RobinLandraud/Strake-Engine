@@ -1,4 +1,5 @@
 #include <Strake/Dispatcher/EventDispatcher.hpp>
+#include <iostream>
 
 namespace Strake {
     EventDispatcher::EventID EventDispatcher::subscribe(const std::string& eventType, Callback callback) {

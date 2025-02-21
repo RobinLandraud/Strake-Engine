@@ -59,4 +59,11 @@ namespace Strake {
     const ShadowMap &Light::getShadowMap() const {
         return m_shadowMap;
     }
+
+    void Light::updateLayer(int oldLayer) {
+        std::pair<int, Light &> pair = {oldLayer, *this};
+        EventData<std::pair<int, Light &>> eventData(pair, "moveLight");
+        EventDispatcher &dispatcher = getParent().getEventDispatcher();
+        dispatcher.broadcast(eventData);
+    }
 }

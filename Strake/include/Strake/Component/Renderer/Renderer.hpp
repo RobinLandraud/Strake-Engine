@@ -9,7 +9,8 @@ namespace Strake {
     enum class RendererType {
         None,
         MeshRenderer,
-        WireFrameRenderer
+        WireFrameRenderer,
+        UI
     };
 
     class Renderer : public Component
@@ -23,6 +24,7 @@ namespace Strake {
             virtual void postRender();
 
             [[nodiscard]] RendererType getType() const;
+            void updateLayer(int oldLayer);
 
         protected:
             RendererType m_type;

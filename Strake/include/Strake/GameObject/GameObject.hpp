@@ -9,6 +9,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <Strake/Dispatcher/EventDispatcher.hpp>
+#include <Strake/Layer/Layer.hpp>
 
 namespace Strake {
     class Component;
@@ -17,7 +18,7 @@ namespace Strake {
 
     class GameObject {
         public:
-            explicit GameObject(std::string name, EventDispatcher &eventDispatcher);
+            explicit GameObject(std::string name, EventDispatcher &eventDispatcher, Layer &layer);
             ~GameObject();
             GameObject(const GameObject&) = delete;
             GameObject& operator=(const GameObject&) = delete;
@@ -146,6 +147,12 @@ namespace Strake {
 
             EventDispatcher &getEventDispatcher();
 
+            void setLayer(std::string &&name);
+            void setLayer(int priority);
+            void setLayer(Layer &Layer, bool update = true);
+            void updateLayers(int oldLayer);
+            [[nodiscard]] Layer &getLayer() const;
+
         private:
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
             std::vector<std::type_index> m_derivedTypes;
@@ -154,6 +161,8 @@ namespace Strake {
             const std::string m_name;
             std::optional<std::reference_wrapper<Transform>> m_transform;
             std::optional<std::reference_wrapper<GameObject>> m_parent;
+            std::reference_wrapper<Layer> r_layer;
+            
             EventDispatcher &m_eventDispatcher;
     };
 }

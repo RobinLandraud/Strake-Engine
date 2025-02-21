@@ -7,6 +7,7 @@
 namespace Strake {
     Scene::Scene() :
         m_eventDispatcher(),
+        m_layerManager(m_eventDispatcher),
         m_lightManager(m_eventDispatcher),
         m_rendererManager(m_eventDispatcher),
         m_scriptManager(m_eventDispatcher),
@@ -16,7 +17,25 @@ namespace Strake {
 
     GameObject &Scene::addGameObject(const std::string &name)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher);
+        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, m_layerManager.getLayer(0));
+        return *m_gameObjects[name];
+    }
+
+    GameObject &Scene::addGameObject(const std::string &name, Layer &layer)
+    {
+        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, layer);
+        return *m_gameObjects[name];
+    }
+
+    GameObject &Scene::addGameObject(const std::string &name, int layer)
+    {
+        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, m_layerManager.getLayer(layer));
+        return *m_gameObjects[name];
+    }
+
+    GameObject &Scene::addGameObject(const std::string &name, const std::string &layer)
+    {
+        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, m_layerManager.getLayer(layer));
         return *m_gameObjects[name];
     }
 
@@ -62,6 +81,11 @@ namespace Strake {
         return m_mainCamera.value();
     }
 
+    LayerManager &Scene::getLayerManager()
+    {
+        return m_layerManager;
+    }
+
     void Scene::awake()
     {
         m_scriptManager.awake();
@@ -92,17 +116,17 @@ namespace Strake {
     {
         Camera &mainCamera = getMainCamera();
         mainCamera.updateFrustrum();
-        m_lightManager.clearObjects();
-        std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers = m_rendererManager.updateLightings(m_lightManager.getLights());
-        m_lightManager.renderShadowMaps(winWidth, winHeight);
-        for (auto &renderer : in_frustrum_renderers) {
-            renderer.get().preRender();
-        }
-        for (auto &renderer : in_frustrum_renderers) {
-            renderer.get().render(m_mainCamera.value().get());
-        }
-        for (auto &renderer : in_frustrum_renderers) {
-            renderer.get().postRender();
+        for (const auto & [layer, _] : m_rendererManager.getRenderers()) {
+            m_rendererManager.clearDepth();
+            m_lightManager.clearObjects(layer);
+            std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers = m_rendererManager.updateLightings(
+                layer,
+                m_lightManager.getLights(layer)
+            );
+            m_lightManager.renderShadowMaps(layer, winWidth, winHeight);
+            for (auto &renderer : in_frustrum_renderers) {
+                renderer.get().render(mainCamera);
+            }
         }
     }
 }

@@ -24,6 +24,8 @@ namespace Strake {
             [[nodiscard]] ShadowMap &getShadowMap();
             [[nodiscard]] const ShadowMap &getShadowMap() const;
 
+            void updateLayer(int oldLayer);
+
         protected:
 
             explicit Light(GameObject &parent, LightType type);

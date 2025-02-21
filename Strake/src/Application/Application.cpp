@@ -30,6 +30,10 @@ namespace Strake {
         return m_sceneManager;
     }
 
+    LayerManager &Application::getLayerManager() {
+        return m_sceneManager.getCurrentScene()->second.get().getLayerManager();
+    }
+
     Window &Application::getWindow() {
         return m_window;
     }

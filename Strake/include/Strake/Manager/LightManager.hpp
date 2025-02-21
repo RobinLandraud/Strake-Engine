@@ -18,15 +18,16 @@ namespace Strake {
 
             void addLight(Light &light);
             void removeLight(Light &light);
+            void moveLight(Light &light, int oldLayer);
             void clear();
-            [[nodiscard]] std::vector<std::reference_wrapper<Light>> &getLights();
+            [[nodiscard]] std::vector<std::reference_wrapper<Light>> &getLights(int layer);
 
-            void clearObjects();
-            void renderShadowMaps(int winWidth, int winHeight);
+            void clearObjects(int layer);
+            void renderShadowMaps(int layer, int winWidth, int winHeight);
 
         private:
             ShaderProgram m_shadowShaderProgram;
-            std::vector<std::reference_wrapper<Light>> m_lights;
+            std::map<int, std::vector<std::reference_wrapper<Light>>> m_lights;
 
             EventDispatcher &m_eventDispatcher;
             std::unordered_map<EventDispatcher::EventID, std::string> m_subscriptions;

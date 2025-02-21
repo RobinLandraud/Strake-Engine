@@ -17,6 +17,11 @@ namespace Strake {
         m_subscriptions[m_eventDispatcher.subscribe("clearRenderers", [this](const Event &event) {
             clear();
         })] = "clearRenderers";
+        
+        m_subscriptions[m_eventDispatcher.subscribe("moveRenderer", [this](const Event &event) {
+            std::pair<int, Renderer &> data = static_cast<const EventData<std::pair<int, Renderer &>> &>(event).getValue();
+            moveRenderer(data.second, data.first);
+        })] = "moveRenderer";
     }
 
     RendererManager::~RendererManager()
@@ -28,17 +33,33 @@ namespace Strake {
 
     void RendererManager::addRenderer(Renderer &renderer)
     {
-        m_renderers.push_back(renderer);
+        m_renderers[renderer.getParent().getLayer().getPriority()].push_back(renderer);
     }
 
     void RendererManager::removeRenderer(Renderer &renderer)
     {
-        auto it = std::find_if(m_renderers.begin(), m_renderers.end(), [&renderer](const Renderer &r) {
-            return &r == &renderer;
-        });
+        int layer = renderer.getParent().getLayer().getPriority();
+        auto it = std::find_if(m_renderers[layer].begin(), m_renderers[layer].end(),
+            [&renderer](Renderer &r) {
+                return &r == &renderer;
+            }
+        );
+        if (it != m_renderers[layer].end()) {
+            m_renderers[layer].erase(it);
+        }
+    }
 
-        if (it != m_renderers.end()) {
-            m_renderers.erase(it);
+    void RendererManager::moveRenderer(Renderer &renderer, int oldLayer)
+    {
+        int newLayer = renderer.getParent().getLayer().getPriority();
+        auto it = std::find_if(m_renderers[oldLayer].begin(), m_renderers[oldLayer].end(),
+            [&renderer](Renderer &r) {
+                return &r == &renderer;
+            }
+        );
+        if (it != m_renderers[oldLayer].end()) {
+            m_renderers[oldLayer].erase(it);
+            m_renderers[newLayer].push_back(renderer);
         }
     }
 
@@ -47,33 +68,31 @@ namespace Strake {
         m_renderers.clear();
     }
 
-    std::vector<std::reference_wrapper<Renderer>> &RendererManager::getRenderers()
+    void RendererManager::clearDepth() const {
+        glClear(GL_DEPTH_BUFFER_BIT);
+    }
+
+    std::vector<std::reference_wrapper<Renderer>> &RendererManager::getRenderers(int layer)
+    {
+        return m_renderers[layer];
+    }
+
+    std::map<int, std::vector<std::reference_wrapper<Renderer>>> &RendererManager::getRenderers()
     {
         return m_renderers;
     }
 
-    std::vector<std::reference_wrapper<Renderer>> RendererManager::updateLightings(std::vector<std::reference_wrapper<Light>> &lights)
+    std::vector<std::reference_wrapper<Renderer>> RendererManager::updateLightings(int layer, std::vector<std::reference_wrapper<Light>> &lights)
     {
-        int n_light = std::min(static_cast<int>(lights.size()), 8); // add a MAX_LIGHTS in the future
         std::vector<std::reference_wrapper<Renderer>> in_frustrum_renderers;
-        for (auto &renderer : m_renderers) {
-            switch (renderer.get().getType())
+        for (auto &renderer : m_renderers[layer]) {
+            in_frustrum_renderers.push_back(renderer);
+        }
+        for (auto &renderer : in_frustrum_renderers) {
+            if (renderer.get().getType() == RendererType::MeshRenderer)
             {
-                case RendererType::MeshRenderer: {
-                    MeshRenderer &meshRenderer = static_cast<MeshRenderer &>(renderer.get());
-                    meshRenderer.clearLights();
-                    for (int i = 0; i < n_light; ++i) {
-                        meshRenderer.addLight(lights[i].get());
-                    }
-                    in_frustrum_renderers.push_back(renderer);
-                    break;
-                }
-                case RendererType::WireFrameRenderer: {
-                    in_frustrum_renderers.push_back(renderer);
-                    break;
-                }
-                default:
-                    break;
+                MeshRenderer &meshRenderer = static_cast<MeshRenderer &>(renderer.get());
+                meshRenderer.updateLights(lights);
             }
         }
         return in_frustrum_renderers;
