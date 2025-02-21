@@ -279,11 +279,13 @@ app.run();
 - **Enhanced Transform API**: Improve the `Transform` class to provide better support for world space transformations and related methods.
 
 ### Milestones
-- **v0.1**: Initial stable release with ECS and basic rendering.
-  - **0.1.6 (Beta)**:
+- **v0.1**: Initial stable release with ECS and basic rendering (**pre-release version**).
+  - **0.6.0 (Beta)**:
+    - Add Layers
+    - Add LayersManager
     - Add of Plane Mesh
     - Add of Capsules Mesh
-  - **0.1.5 (Latest Stable)**:
+  - **0.5.0 (Latest Stable)**:
     - Use of .env in justfile
     - Fixes in OpenGL/GLFW initialisation
     - Add of WireFrameRenderer
@@ -295,11 +297,11 @@ app.run();
     - Add of Physics Manager
     - Change of Compoment pipeline
     - Change of Script pipeline
-  - **0.1.4**:
+  - **0.4.0**:
     - Add of Percentage Closer Filtering for shadows
     - Add of Shadow Maps for Directional Light
     - ...
-  - **0.1.3**
+  - **0.3.0**
     - Add of internal event Dispatcher
     - ...
 
