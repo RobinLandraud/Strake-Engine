@@ -283,8 +283,8 @@ app.run();
 ### Milestones
 - **v0.1**: Initial stable version with ECS and basic rendering (**pre-release version**).
   - **0.6.0 (Beta)**:
-    - Add Layers
-    - Add LayersManager
+    - Add of Layers
+    - Add of LayersManager
     - Add of Plane Mesh
     - Add of Capsules Mesh
   - **0.5.0 (Latest Stable)**:
