@@ -43,3 +43,4 @@ namespace Strake {
         m_shadowMap.unbind();
     }
 }
+

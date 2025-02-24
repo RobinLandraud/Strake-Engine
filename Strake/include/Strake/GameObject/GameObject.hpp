@@ -15,10 +15,12 @@ namespace Strake {
     class Component;
     class Camera;
     class Transform;
+    class Scene;
+    class LayerManager;
 
     class GameObject {
         public:
-            explicit GameObject(std::string name, EventDispatcher &eventDispatcher, Layer &layer);
+            explicit GameObject(std::string name, Scene &scene, EventDispatcher &eventDispatcher, Layer &layer);
             ~GameObject();
             GameObject(const GameObject&) = delete;
             GameObject& operator=(const GameObject&) = delete;
@@ -149,9 +151,11 @@ namespace Strake {
 
             void setLayer(std::string &&name);
             void setLayer(int priority);
-            void setLayer(Layer &Layer, bool update = true);
+            void setLayer(Layer &Layer);
+            [[nodiscard]] const LayerManager &getLayerManager() const;
+
             void updateLayers(int oldLayer);
-            [[nodiscard]] Layer &getLayer() const;
+            [[nodiscard]] const Layer &getLayer() const;
 
         private:
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
@@ -161,6 +165,7 @@ namespace Strake {
             const std::string m_name;
             std::optional<std::reference_wrapper<Transform>> m_transform;
             std::optional<std::reference_wrapper<GameObject>> m_parent;
+            Scene &r_scene;
             std::reference_wrapper<Layer> r_layer;
             
             EventDispatcher &m_eventDispatcher;

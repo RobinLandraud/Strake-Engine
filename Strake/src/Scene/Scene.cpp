@@ -17,25 +17,25 @@ namespace Strake {
 
     GameObject &Scene::addGameObject(const std::string &name)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, m_layerManager.getLayer(0));
+        m_gameObjects[name] = std::make_unique<GameObject>(name, *this, m_eventDispatcher, m_layerManager.getLayer(0));
         return *m_gameObjects[name];
     }
 
     GameObject &Scene::addGameObject(const std::string &name, Layer &layer)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, layer);
+        m_gameObjects[name] = std::make_unique<GameObject>(name, *this, m_eventDispatcher, layer);
         return *m_gameObjects[name];
     }
 
     GameObject &Scene::addGameObject(const std::string &name, int layer)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, m_layerManager.getLayer(layer));
+        m_gameObjects[name] = std::make_unique<GameObject>(name, *this,  m_eventDispatcher, m_layerManager.getLayer(layer));
         return *m_gameObjects[name];
     }
 
     GameObject &Scene::addGameObject(const std::string &name, const std::string &layer)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, m_eventDispatcher, m_layerManager.getLayer(layer));
+        m_gameObjects[name] = std::make_unique<GameObject>(name, *this, m_eventDispatcher, m_layerManager.getLayer(layer));
         return *m_gameObjects[name];
     }
 

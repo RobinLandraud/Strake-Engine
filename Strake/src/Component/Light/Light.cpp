@@ -10,11 +10,29 @@ namespace Strake {
         m_type(std::move(type)),
         m_color(1.0f), // white
         m_intensity(1.0f), // full intensity
-        m_minIntensity(0.0f) // no minimum intensity
+        m_minIntensity(0.0f), // no minimum intensity
+        m_cullingMask(parent.getLayerManager(), CullingMask::Everything)
     {
         setDerivedType(typeid(Light)); // a game object cannot have several lights
         EventData<Light> eventData(*this, "addLight");
         parent.getEventDispatcher().broadcast(eventData);
+
+        m_cullingMask.setOnMaskChanged([this](int priority, bool add) {
+            if (priority == -1 && !add) {
+                Event event("clearLights");
+                getParent().getEventDispatcher().broadcast(event);
+                return;
+            }
+
+            std::pair<Light &, int> pair(*this, priority);
+            if (add) {
+                EventData<std::pair<Light &, int>> eventData(pair, "addLight");
+                getParent().getEventDispatcher().broadcast(eventData);
+            } else {
+                EventData<std::pair<Light &, int>> eventData(pair, "removeLight");
+                getParent().getEventDispatcher().broadcast(eventData);
+            }
+        });
     }
 
     Light::~Light() {
@@ -60,10 +78,7 @@ namespace Strake {
         return m_shadowMap;
     }
 
-    void Light::updateLayer(int oldLayer) {
-        std::pair<int, Light &> pair = {oldLayer, *this};
-        EventData<std::pair<int, Light &>> eventData(pair, "moveLight");
-        EventDispatcher &dispatcher = getParent().getEventDispatcher();
-        dispatcher.broadcast(eventData);
+    CullingMask &Light::getCullingMask() {
+        return m_cullingMask;
     }
 }

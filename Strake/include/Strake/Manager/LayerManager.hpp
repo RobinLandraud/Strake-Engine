@@ -14,8 +14,10 @@ namespace Strake {
     public:
         LayerManager(EventDispatcher &eventDispatcher);
         ~LayerManager();
-        Layer &getLayer(const std::string &name);
-        Layer &getLayer(int priority);
+        [[nodiscard]] Layer &getLayer(const std::string &name);
+        [[nodiscard]] Layer &getLayer(int priority);
+        [[nodiscard]] const Layer &getLayer(const std::string &name) const;
+        [[nodiscard]] const Layer &getLayer(int priority) const;
 
     private:
         std::array<Layer, 32> m_layers;

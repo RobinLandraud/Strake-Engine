@@ -203,9 +203,14 @@ int game()
     barrel2.addComponent<Strake::MeshFilter>();
     barrel2.getComponent<Strake::MeshFilter>().loadFromFile("../assets/barrel.obj", 0); // load the first mesh directly in the game object
     barrel2.addComponent<Strake::MeshRenderer>(barelMaterial);
-    barrel2.addComponent<Strake::WireFrameRenderer>(objects.first.getComponent<Strake::MeshFilter>());
+    Strake::GameObject &wires = barrel2.addChild("WireFrame");
+    wires.setLayer("UI");
+    wires.addComponent<Strake::WireFrameRenderer>(barrel2.getComponent<Strake::MeshFilter>());
+    Strake::WireFrameRenderer &renderer = wires.getComponent<Strake::WireFrameRenderer>();
+    renderer.setLineWidth(0.5f);
+    renderer.setLineColor(glm::vec3(1.0f, 0.0f, 0.0f));
 
-    Strake::GameObject &sphere = scene.addGameObject("Sphere", "UI");
+    Strake::GameObject &sphere = scene.addGameObject("Sphere", "World");
     sphere.getTransform().setLocalPosition(glm::vec3(-3.0f, 0.5f, 4.0f));
     sphere.addComponent<Strake::Sphere>();
     sphere.addComponent<Strake::MeshRenderer>(metalMaterial);
@@ -235,13 +240,12 @@ int game()
     sun.addComponent<Rotator>();
     sun.addComponent<Strake::DirectionalLight>();
     sun.getComponent<Strake::DirectionalLight>().setIntensity(1.0f);
+    sun.getComponent<Strake::DirectionalLight>().getCullingMask().removeLayer("UI");
     sun.getComponent<Strake::DirectionalLight>().setColor(glm::vec3(1.0f, 1.0f, 0.1f));
 
-    Strake::GameObject &tree = scene.addGameObject("Tree", "World");
+    Strake::GameObject &tree = scene.addGameObject("Tree", "UI");
     tree.addComponent<Strake::MeshFilter>();
-    std::cout << "Loading tree" << std::endl;
     tree.getComponent<Strake::MeshFilter>().loadFromFile("../assets/tree/source/tree.obj"); // auto detect as one mesh (no children)
-    std::cout << "Tree loaded" << std::endl;
     tree.addComponent<Strake::MeshRenderer>(treeMaterial);
 
     for (auto &go : scene.getGameObjects()) {

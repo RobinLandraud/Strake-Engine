@@ -8,23 +8,18 @@ namespace Strake {
         m_eventDispatcher(eventDispatcher)
     {
         m_subscriptions[m_eventDispatcher.subscribe("addLight", [this](const Event &event) {
-            Light &light = static_cast<const EventData<Light> &>(event).getValue();
-            addLight(light);
+            std::pair<Light &, int> &data = static_cast<const EventData<std::pair<Light &, int>> &>(event).getValue();
+            addLight(data.first, data.second);
         })] = "addLight";
 
         m_subscriptions[m_eventDispatcher.subscribe("removeLight", [this](const Event &event) {
-            Light &light = static_cast<const EventData<Light> &>(event).getValue();
-            removeLight(light);
+            std::pair<Light &, int> &data = static_cast<const EventData<std::pair<Light &, int>> &>(event).getValue();
+            removeLight(data.first, data.second);
         })] = "removeLight";
 
         m_subscriptions[m_eventDispatcher.subscribe("clearLights", [this](const Event &event) {
             clear();
         })] = "clearLights";
-
-        m_subscriptions[m_eventDispatcher.subscribe("moveLight", [this](const Event &event) {
-            std::pair<int, Light &> &data = static_cast<const EventData<std::pair<int, Light &>> &>(event).getValue();
-            moveLight(data.second, data.first);
-        })] = "moveLight";
     }
 
     LightManager::~LightManager()
@@ -34,14 +29,20 @@ namespace Strake {
         }
     }
 
-    void LightManager::addLight(Light &light)
+    void LightManager::addLight(Light &light, int layer)
     {
-        m_lights[light.getParent().getLayer().getPriority()].push_back(light);
+        auto it = std::find_if(m_lights[layer].begin(), m_lights[layer].end(),
+            [&light](const std::reference_wrapper<const Light>& ref) {
+                return &ref.get() == &light;
+            }
+        );
+        if (it == m_lights[layer].end()) {
+            m_lights[layer].push_back(light);
+        }
     }
 
-    void LightManager::removeLight(Light &light)
+    void LightManager::removeLight(Light &light, int layer)
     {
-        int layer = light.getParent().getLayer().getPriority();
         auto it = std::find_if(m_lights[layer].begin(), m_lights[layer].end(),
             [&light](const std::reference_wrapper<const Light>& ref) {
                 return &ref.get() == &light;
@@ -49,19 +50,6 @@ namespace Strake {
         );
         if (it != m_lights[layer].end()) {
             m_lights[layer].erase(it);
-        }
-    }
-
-    void LightManager::moveLight(Light &light, int oldLayer)
-    {
-        auto it = std::find_if(m_lights[oldLayer].begin(), m_lights[oldLayer].end(),
-            [&light](const std::reference_wrapper<const Light>& ref) {
-                return &ref.get() == &light;
-            }
-        );
-        if (it != m_lights[oldLayer].end()) {
-            m_lights[oldLayer].erase(it);
-            m_lights[light.getParent().getLayer().getPriority()].push_back(light);
         }
     }
 

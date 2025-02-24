@@ -16,9 +16,8 @@ namespace Strake {
             LightManager &operator=(const LightManager &other) = delete;
             LightManager &operator=(LightManager &&other) = delete;
 
-            void addLight(Light &light);
-            void removeLight(Light &light);
-            void moveLight(Light &light, int oldLayer);
+            void addLight(Light &light, int priority);
+            void removeLight(Light &light, int priority);
             void clear();
             [[nodiscard]] std::vector<std::reference_wrapper<Light>> &getLights(int layer);
 

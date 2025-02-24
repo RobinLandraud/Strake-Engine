@@ -6,6 +6,7 @@
 #include <Strake/Component/Light/ShadowMap.hpp>
 #include <Strake/Component/Light/LightType.hpp>
 #include <Strake/Shader/ShaderProgram.hpp>
+#include <Strake/Layer/CullingMask.hpp>
 
 namespace Strake {
     class Light: public Component
@@ -24,10 +25,11 @@ namespace Strake {
             [[nodiscard]] ShadowMap &getShadowMap();
             [[nodiscard]] const ShadowMap &getShadowMap() const;
 
-            void updateLayer(int oldLayer);
-
+            
+            [[nodiscard]] CullingMask &getCullingMask();
+            
         protected:
-
+            
             explicit Light(GameObject &parent, LightType type);
             ~Light() override;
 
@@ -38,5 +40,7 @@ namespace Strake {
             float m_minIntensity;
 
             ShadowMap m_shadowMap;
+
+            CullingMask m_cullingMask;
     };
 }
