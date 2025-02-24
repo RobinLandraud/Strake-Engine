@@ -283,6 +283,7 @@ app.run();
 ### Milestones
 - **v0.1**: Initial stable version with ECS and basic rendering (**pre-release version**).
   - **0.6.0 (Beta)**:
+    - Add of Culling Masks
     - Add of Layers
     - Add of LayersManager
     - Add of Plane Mesh
