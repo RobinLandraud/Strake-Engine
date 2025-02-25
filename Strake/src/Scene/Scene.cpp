@@ -86,6 +86,11 @@ namespace Strake {
         return m_layerManager;
     }
 
+    const LayerManager &Scene::getLayerManager() const
+    {
+        return m_layerManager;
+    }
+
     void Scene::awake()
     {
         m_scriptManager.awake();

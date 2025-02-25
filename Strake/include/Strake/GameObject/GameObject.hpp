@@ -20,7 +20,7 @@ namespace Strake {
 
     class GameObject {
         public:
-            explicit GameObject(std::string name, Scene &scene, EventDispatcher &eventDispatcher, Layer &layer);
+            explicit GameObject(std::string name, const Scene &scene, EventDispatcher &eventDispatcher, const Layer &layer);
             ~GameObject();
             GameObject(const GameObject&) = delete;
             GameObject& operator=(const GameObject&) = delete;
@@ -151,7 +151,7 @@ namespace Strake {
 
             void setLayer(std::string &&name);
             void setLayer(int priority);
-            void setLayer(Layer &Layer);
+            void setLayer(const Layer &Layer);
             [[nodiscard]] const LayerManager &getLayerManager() const;
 
             void updateLayers(int oldLayer);
@@ -165,8 +165,8 @@ namespace Strake {
             const std::string m_name;
             std::optional<std::reference_wrapper<Transform>> m_transform;
             std::optional<std::reference_wrapper<GameObject>> m_parent;
-            Scene &r_scene;
-            std::reference_wrapper<Layer> r_layer;
+            const Scene &r_scene; /// no right to modify scene because scene own this object
+            std::reference_wrapper<const Layer> r_layer;
             
             EventDispatcher &m_eventDispatcher;
     };

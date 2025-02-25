@@ -221,7 +221,7 @@ int game()
     capsule.addComponent<Strake::Capsule>();
     capsule.addComponent<Strake::MeshRenderer>(metalMaterial);
 
-    Strake::GameObject &metalBox = scene.addGameObject("Metal Box", "World");
+    Strake::GameObject &metalBox = scene.addGameObject("Metal Box", "UI");
     metalBox.getTransform().setLocalPosition(glm::vec3(4.0f, 0.5f, -3.0f));
     metalBox.addComponent<Strake::Cube>();
     metalBox.addComponent<Strake::MeshRenderer>(metalMaterial);
@@ -243,7 +243,7 @@ int game()
     sun.getComponent<Strake::DirectionalLight>().getCullingMask().removeLayer("UI");
     sun.getComponent<Strake::DirectionalLight>().setColor(glm::vec3(1.0f, 1.0f, 0.1f));
 
-    Strake::GameObject &tree = scene.addGameObject("Tree", "UI");
+    Strake::GameObject &tree = scene.addGameObject("Tree", "World");
     tree.addComponent<Strake::MeshFilter>();
     tree.getComponent<Strake::MeshFilter>().loadFromFile("../assets/tree/source/tree.obj"); // auto detect as one mesh (no children)
     tree.addComponent<Strake::MeshRenderer>(treeMaterial);

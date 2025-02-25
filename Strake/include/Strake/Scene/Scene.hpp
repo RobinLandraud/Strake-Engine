@@ -44,6 +44,7 @@ namespace Strake {
             [[nodiscard]] Camera &getMainCamera() const;
 
             [[nodiscard]] LayerManager &getLayerManager();
+            [[nodiscard]] const LayerManager &getLayerManager() const;
 
             void awake();
             void start();

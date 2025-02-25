@@ -7,7 +7,7 @@
 
 namespace Strake {
 
-    GameObject::GameObject(std::string name, Scene &scene, EventDispatcher &eventDispatcher, Layer &layer) :
+    GameObject::GameObject(std::string name, const Scene &scene, EventDispatcher &eventDispatcher, const Layer &layer) :
         m_name(std::move(name)),
         m_eventDispatcher(eventDispatcher),
         r_layer(layer),
@@ -97,7 +97,7 @@ namespace Strake {
         setLayer(r_scene.getLayerManager().getLayer(priority));
     }
 
-    void GameObject::setLayer(Layer &layer) {
+    void GameObject::setLayer(const Layer &layer) {
         int oldLayer = r_layer.get().getPriority();
         r_layer = layer;
         updateLayers(oldLayer);
