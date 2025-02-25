@@ -23,7 +23,7 @@
 namespace Strake {
     class Scene {
         public:
-            Scene();
+            Scene(const LayerManager &layerManager);
             ~Scene() = default;
             Scene(const Scene &other) = delete;
             Scene(Scene &&other) = delete;
@@ -43,7 +43,6 @@ namespace Strake {
             void setMainCamera(Camera &camera);
             [[nodiscard]] Camera &getMainCamera() const;
 
-            [[nodiscard]] LayerManager &getLayerManager();
             [[nodiscard]] const LayerManager &getLayerManager() const;
 
             void awake();
@@ -59,11 +58,11 @@ namespace Strake {
             EventDispatcher m_eventDispatcher;
 
             //render pipeline
-            LayerManager m_layerManager;
+            const LayerManager &r_layerManager;
             LightManager m_lightManager;
             RendererManager m_rendererManager;
             ScriptManager m_scriptManager;
-            PhysicsManager m_physicsManager; // handle all physics managers
+            PhysicsManager m_physicsManager; // handle all physics managers (collision, rigidbody, etc) for objects in the scene
 
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_gameObjects;
             std::optional<std::reference_wrapper<Camera>> m_mainCamera;

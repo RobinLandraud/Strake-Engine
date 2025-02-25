@@ -12,7 +12,7 @@
 namespace Strake {
     class LayerManager {
     public:
-        LayerManager(EventDispatcher &eventDispatcher);
+        LayerManager();
         ~LayerManager();
         [[nodiscard]] Layer &getLayer(const std::string &name);
         [[nodiscard]] Layer &getLayer(int priority);
@@ -22,7 +22,6 @@ namespace Strake {
     private:
         std::array<Layer, 32> m_layers;
 
-        EventDispatcher &m_eventDispatcher;
         std::unordered_map<EventDispatcher::EventID, std::string> m_subscriptions;
     };
 }

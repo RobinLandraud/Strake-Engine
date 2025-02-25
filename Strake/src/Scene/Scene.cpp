@@ -5,9 +5,9 @@
 #include <assimp/postprocess.h>
 
 namespace Strake {
-    Scene::Scene() :
+    Scene::Scene(const LayerManager &layerManager) :
         m_eventDispatcher(),
-        m_layerManager(m_eventDispatcher),
+        r_layerManager(layerManager),
         m_lightManager(m_eventDispatcher),
         m_rendererManager(m_eventDispatcher),
         m_scriptManager(m_eventDispatcher),
@@ -17,7 +17,7 @@ namespace Strake {
 
     GameObject &Scene::addGameObject(const std::string &name)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, *this, m_eventDispatcher, m_layerManager.getLayer(0));
+        m_gameObjects[name] = std::make_unique<GameObject>(name, *this, m_eventDispatcher, r_layerManager.getLayer(0));
         return *m_gameObjects[name];
     }
 
@@ -29,13 +29,13 @@ namespace Strake {
 
     GameObject &Scene::addGameObject(const std::string &name, int layer)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, *this,  m_eventDispatcher, m_layerManager.getLayer(layer));
+        m_gameObjects[name] = std::make_unique<GameObject>(name, *this,  m_eventDispatcher, r_layerManager.getLayer(layer));
         return *m_gameObjects[name];
     }
 
     GameObject &Scene::addGameObject(const std::string &name, const std::string &layer)
     {
-        m_gameObjects[name] = std::make_unique<GameObject>(name, *this, m_eventDispatcher, m_layerManager.getLayer(layer));
+        m_gameObjects[name] = std::make_unique<GameObject>(name, *this, m_eventDispatcher, r_layerManager.getLayer(layer));
         return *m_gameObjects[name];
     }
 
@@ -81,14 +81,9 @@ namespace Strake {
         return m_mainCamera.value();
     }
 
-    LayerManager &Scene::getLayerManager()
-    {
-        return m_layerManager;
-    }
-
     const LayerManager &Scene::getLayerManager() const
     {
-        return m_layerManager;
+        return r_layerManager;
     }
 
     void Scene::awake()

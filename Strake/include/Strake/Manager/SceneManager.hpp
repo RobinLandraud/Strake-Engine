@@ -5,7 +5,7 @@
 namespace Strake {
     class SceneManager {
         public:
-            SceneManager() = default;
+            SceneManager(const LayerManager &layerManager);
             ~SceneManager() = default;
             Scene &addScene(const std::string &name);
             void setCurrentScene(const std::string &name);
@@ -15,6 +15,7 @@ namespace Strake {
             void removeScene(const std::string &name);
             void clear();
         private:
+            const LayerManager &r_layerManager;
             std::unordered_map<std::string, std::unique_ptr<Scene>> m_scenes;
             std::optional<std::pair<std::string, std::reference_wrapper<Scene>>> m_currentScene;
     };

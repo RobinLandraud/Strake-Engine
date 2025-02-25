@@ -161,11 +161,11 @@ namespace Strake {
             std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
             std::vector<std::type_index> m_derivedTypes;
             std::unordered_map<std::string, std::unique_ptr<GameObject>> m_children;
-            [[nodiscard]] bool isScript(std::type_index type) const;
+            [[nodiscard]] bool isScript(std::type_index type) const; // Ensure definition is available at compile time (avoid unresolved type comparison)
             const std::string m_name;
             std::optional<std::reference_wrapper<Transform>> m_transform;
-            std::optional<std::reference_wrapper<GameObject>> m_parent;
-            const Scene &r_scene; /// no right to modify scene because scene own this object
+            std::optional<std::reference_wrapper<GameObject>> m_parent; /// allow to modify parent for script
+            const Scene &r_scene; /// no right to modify scene because scene own managers (must not be accessed by script)
             std::reference_wrapper<const Layer> r_layer;
             
             EventDispatcher &m_eventDispatcher;

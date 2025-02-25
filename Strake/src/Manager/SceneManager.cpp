@@ -1,8 +1,15 @@
 #include <Strake/Manager/SceneManager.hpp>
 
 namespace Strake {
+
+    SceneManager::SceneManager(const LayerManager &layerManager) :
+        r_layerManager(layerManager),
+        m_scenes(),
+        m_currentScene(std::nullopt)
+    {}
+
     Scene &SceneManager::addScene(const std::string &name) {
-        m_scenes.emplace(name, std::make_unique<Scene>());
+        m_scenes.emplace(name, std::make_unique<Scene>(r_layerManager));
         if (!m_currentScene.has_value()) {
             m_currentScene = std::make_pair(name, std::ref(*m_scenes.at(name)));
         }

@@ -125,11 +125,6 @@ void printComponent(Strake::GameObject &go, int depth)
     std::cout << "}" << std::endl;
 }
 
-Strake::Scene createScene(int width, int height)
-{
-    return Strake::Scene();
-}
-
 int game()
 {
     GLuint error = 0;
@@ -147,13 +142,13 @@ int game()
         FPS
     );
     app.getWindow().setBgColor(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f));
+    app.getLayerManager().getLayer(0).setName("Background");
+    app.getLayerManager().getLayer(1).setName("World");
+    app.getLayerManager().getLayer(2).setName("UI");
 
     //// SCENE ////
 
     Strake::Scene &scene = app.getSceneManager().addScene("Main Scene");
-    scene.getLayerManager().getLayer(0).setName("Background");
-    scene.getLayerManager().getLayer(1).setName("World");
-    scene.getLayerManager().getLayer(2).setName("UI");
 
     //// TEXTURES ////
 

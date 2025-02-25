@@ -24,6 +24,7 @@ namespace Strake {
             Window m_window;
             GameLoop m_gameLoop;
 
+            LayerManager m_layerManager;
             MaterialManager m_materialManager;
             TextureManager m_textureManager;
             SceneManager m_sceneManager;

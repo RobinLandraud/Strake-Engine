@@ -3,7 +3,11 @@
 namespace Strake {
     Application::Application(std::string &&title, int width, int height, int fps) :
         m_gameLoop(fps),
-        m_window(width, height, std::move(title))
+        m_window(width, height, std::move(title)),
+        m_layerManager(),
+        m_materialManager(),
+        m_textureManager(),
+        m_sceneManager(m_layerManager)
     {
         Strake::init();
         Strake::EventHandler::init(m_window);
@@ -31,7 +35,7 @@ namespace Strake {
     }
 
     LayerManager &Application::getLayerManager() {
-        return m_sceneManager.getCurrentScene()->second.get().getLayerManager();
+        return m_layerManager;
     }
 
     Window &Application::getWindow() {

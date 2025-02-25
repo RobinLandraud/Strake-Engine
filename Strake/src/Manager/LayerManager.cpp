@@ -2,9 +2,8 @@
 
 namespace Strake
 {
-    LayerManager::LayerManager(EventDispatcher &eventDispatcher) :
-        m_layers(),
-        m_eventDispatcher(eventDispatcher)
+    LayerManager::LayerManager() :
+        m_layers()
     {
         for (int i = 0; i < 32; i++)
         {
