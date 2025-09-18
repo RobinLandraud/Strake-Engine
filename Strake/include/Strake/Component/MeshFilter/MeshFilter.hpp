@@ -4,7 +4,7 @@
 
 #include <Strake/Component/Component.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_Transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <cstring>
 #include <map>
 

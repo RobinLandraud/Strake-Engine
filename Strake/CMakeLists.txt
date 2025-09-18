@@ -15,11 +15,18 @@ find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(assimp REQUIRED)
 
+add_library(Strake STATIC
+    "src/init.cpp"
+)
 add_library(Config STATIC
     src/Config/Config.cpp
 )
 add_library(Time STATIC
     src/Time/Time.cpp
+)
+add_library(Dispatcher STATIC
+    src/Dispatcher/Event.cpp
+    src/Dispatcher/EventDispatcher.cpp
 )
 add_library(Texture STATIC
     src/Texture/Texture.cpp
@@ -36,10 +43,6 @@ add_library(Shader STATIC
 add_library(Application STATIC
     src/Application/GameLoop.cpp
     src/Application/Application.cpp
-)
-add_library(Dispatcher STATIC
-    src/Dispatcher/Event.cpp
-    src/Dispatcher/EventDispatcher.cpp
 )
 add_library(Window STATIC
     src/Window/Window.cpp
@@ -97,18 +100,44 @@ add_library(Managers STATIC
 )
 
 # dependencies for the libraries
-target_link_libraries(Window PUBLIC Config)
-target_link_libraries(Application PUBLIC Window)
-target_link_libraries(Application PUBLIC Time)
-target_link_libraries(Application PUBLIC Scene)
+
+target_link_libraries(Application PUBLIC
+    Managers
+    Window
+    Time
+    Scene
+    Strake # use strake .cpp for init
+)
+
+target_link_libraries(Window PUBLIC Config) # Config have no dependency
 target_link_libraries(EventHandler PUBLIC Window)
-target_link_libraries(Component PUBLIC GameObject)
-target_link_libraries(Scene PUBLIC GameObject)
-target_link_libraries(Scene PUBLIC Component)
-target_link_libraries(Scene PUBLIC Managers)
-target_link_libraries(GameObject PUBLIC Component)
-target_link_libraries(GameObject PUBLIC Scene)
-target_link_libraries(Component PUBLIC Texture)
+
+target_link_libraries(Managers PUBLIC
+    Dispatcher
+    Component
+    GameObject
+    Layer
+    Material
+    Scene
+    Texture
+)
+target_link_libraries(Material PUBLIC
+    Shader # no dependency
+    Texture # no dependency
+)
+target_link_libraries(Scene PUBLIC
+    GameObject
+    Managers
+    Component
+)
+target_link_libraries(Component PUBLIC
+    GameObject
+    Dispatcher
+)
+target_link_libraries(GameObject PUBLIC
+    Dispatcher
+    Layer # don't have dependency
+)
 
 target_link_libraries(Application PUBLIC
     Threads::Threads
@@ -118,10 +147,6 @@ target_link_libraries(Application PUBLIC
     glfw
     assimp::assimp
 ) # Window depends on SFML
-
-add_library(Strake STATIC
-    "src/init.cpp"
-)
 
 target_link_libraries(Strake PUBLIC
     Config
@@ -143,19 +168,17 @@ target_link_libraries(Strake PUBLIC
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set the path to the resources (Release/Debug folder depending on the build type)
-if (WIN32)
-    add_compile_definitions(RESOURCES_PATH="resources")
-    if (CMAKE_BUILD_TYPE STREQUAL "Release")
-        set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Release/resources")
-    else()
-        set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Debug/resources")
-    endif()
-    message("[X] RESOURCES_PATH set to: resources")
-    add_custom_command(TARGET Strake POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_PATH}
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/resources
-        ${RESOURCES_PATH}
-        COMMENT "[X] Copying resources directory to ${RESOURCES_PATH}"
-    )
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Release/resources")
+else()
+    set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Debug/resources")
 endif()
+message("[X] RESOURCES_PATH set to: resources")
+add_custom_command(TARGET Strake POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_PATH}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources
+    ${RESOURCES_PATH}
+    COMMENT "[X] Copying resources directory to ${RESOURCES_PATH}"
+)
+add_compile_definitions(RESOURCES_PATH="resources")

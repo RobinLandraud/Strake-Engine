@@ -1,6 +1,12 @@
 #include <Strake/init.hpp>
 #include <Strake/Config/Config.hpp>
 
+#ifdef _MSC_VER
+#define DEBUG_BREAK() __debugbreak()
+#else
+#define DEBUG_BREAK() __builtin_trap()
+#endif
+
 #define GL_CHECK(stmt) do { \
     stmt; \
     if (glGetError() != GL_NO_ERROR) { \
@@ -46,7 +52,7 @@ void GLAPIENTRY OpenGLDebugCallback(GLenum source, GLenum type, GLuint id,
 
     // Optional: Break on critical errors
     if (severity == GL_DEBUG_SEVERITY_HIGH) {
-        __debugbreak(); // use '__debugbreak()' for MSVC and '__builtin_trap()' for GCC/Clang)
+        DEBUG_BREAK(); // use '__debugbreak()' for MSVC and '__builtin_trap()' for GCC/Clang)
     }
 }
 

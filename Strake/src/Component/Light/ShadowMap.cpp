@@ -1,5 +1,3 @@
-#pragma once
-
 #include <Strake/Component/Light/ShadowMap.hpp>
 
 namespace Strake {

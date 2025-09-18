@@ -1,5 +1,3 @@
-#pragma once
-
 #include <Strake/Component/Light/PointLight.hpp>
 
 namespace Strake {

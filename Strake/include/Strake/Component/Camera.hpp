@@ -3,7 +3,7 @@
 #include <Strake/Component/Component.hpp>
 #include <Strake/Component/Renderer/Renderer.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_Transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Strake {
     class Camera : public Component

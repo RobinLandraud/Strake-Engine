@@ -89,8 +89,8 @@ class CharacterController: public Strake::Script
             } else if (Strake::EventHandler::isKeyHeld(Strake::Key::LeftShift)) {
                 transform.translateLocal(glm::vec3(0.0f, -m_speed * Strake::Time::getDeltaTime(), 0.0f));
             }
-            float yaw = mouse.x;
-            float roll = mouse.y;
+            float yaw = mouse.x / 10.0f;
+            float roll = mouse.y / 10.0f;
             transform.setLocalRotation(glm::vec3(-roll, -yaw, 0.0f));
         }
     private:

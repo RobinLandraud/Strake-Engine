@@ -87,7 +87,7 @@ void main() {
             // Directional light
             lightDir = normalize(-lights[i].direction); // Direction is fixed
             vec4 fragPosLightSpace = lights[i].lightSpaceMatrix * vec4(FragPos, 1.0); // GOOD - Transform fragment position to light space
-            shadow = calculateShadow(fragPosLightSpace, shadowMaps[lights[i].shadowIndex], lightDir, normal); // Calculate shadow factor
+            shadow = calculateShadow(fragPosLightSpace, shadowMaps[0], lightDir, normal); // Calculate shadow factor
         } else if (lights[i].type == 1) {
             // Point light
             lightDir = normalize(lights[i].position - FragPos); // Direction from the light to the fragment

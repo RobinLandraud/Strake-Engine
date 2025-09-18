@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Strake/Material/Material.hpp>
+#include <memory>
 
 namespace Strake {
     class MaterialManager {

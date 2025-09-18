@@ -8,7 +8,6 @@ PROJECT("StrakeEngine" VERSION 0.1.0 LANGUAGES CXX)
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED True)
 SET(CMAKE_CXX_EXTENSIONS OFF)
-SET(CMAKE_BUILD_TYPE "Release")
 
 # Set compiler flags for Debug build
 #set(CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb -O0")
@@ -18,22 +17,24 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
     message("[X] Release build")
     if (MSVC)
         set(CMAKE_CXX_FLAGS_RELEASE "/O2")
+        set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
     else()
         set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+        set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Release)
     endif()
 else()
     message("[X] Debug build")
     if (MSVC)
         set(CMAKE_CXX_FLAGS_DEBUG "/Od")
+        set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
     else()
         set(CMAKE_CXX_FLAGS_DEBUG "-O0")
+        set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Debug)
     endif()
 endif()
 
 # Add the compile commands to the output
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add include directory for Strake
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Strake/include)
@@ -52,8 +53,11 @@ if (WIN32)
     include_directories("${VCPKG_ROOT}/installed/x64-windows/include")
     message(STATUS "CMAKE_TOOLCHAIN_FILE: ${CMAKE_TOOLCHAIN_FILE}")
     include_directories(${GLM_INCLUDE_DIRS})
+else()
+    find_package(Threads REQUIRED) # Windows does not need Threads package
 endif()
 
+# package management relative to all platforms
 find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)

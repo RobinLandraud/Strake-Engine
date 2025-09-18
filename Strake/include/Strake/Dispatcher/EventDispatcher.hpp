@@ -4,6 +4,7 @@
 #include <functional>
 #include <unordered_map>
 #include <mutex>
+#include <atomic>
 
 namespace Strake {
     class EventDispatcher {

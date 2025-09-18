@@ -2,7 +2,7 @@ set windows-shell := ["powershell.exe", "-Command"]
 set shell := ["sh", "-c"]
 
 set dotenv-load := true
-vcpkg := env_var("VCPKG_PATH") # only for windows
+vcpkg := env_var_or_default("VCPKG_PATH", "C:/dev/vcpkg")
 
 ###########################
 # Linux specific commands #

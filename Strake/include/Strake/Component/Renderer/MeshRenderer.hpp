@@ -4,7 +4,7 @@
 #include <Strake/Dispatcher/EventDispatcher.hpp>
 #include <Strake/Dispatcher/EventData.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_Transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <Strake/Material/Material.hpp>
 #include <Strake/Component/Renderer/Renderer.hpp>
 #include <Strake/Component/MeshFilter/MeshFilter.hpp>

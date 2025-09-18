@@ -1,4 +1,6 @@
 #include <Strake/Config/Config.hpp>
+#include <GL/glew.h>    // ou <GL/gl.h> si pas GLEW
+#include <iostream>
 
 namespace Strake {
     const std::string &Config::getVersion() {

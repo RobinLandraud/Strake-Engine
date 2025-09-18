@@ -1,6 +1,6 @@
 #include <Strake/Application/GameLoop.hpp>
 #include <Strake/Manager/MaterialManager.hpp>
-#include <Strake/Manager/textureManager.hpp>
+#include <Strake/Manager/TextureManager.hpp>
 #include <Strake/Manager/SceneManager.hpp>
 #include <Strake/Manager/LayerManager.hpp>
 #include <Strake/Manager/PhysicsManager/PhysicsManager.hpp>
