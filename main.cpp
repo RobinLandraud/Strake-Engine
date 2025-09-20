@@ -98,7 +98,7 @@ class CharacterController: public Strake::Script
         const float m_speed = 10.0f;
 };
 
-void printComponent(Strake::GameObject &go, int depth)
+void printObject(Strake::GameObject &go, int depth)
 {
     for (int i = 0; i < depth; i++) {
         std::cout << "\t";
@@ -117,7 +117,7 @@ void printComponent(Strake::GameObject &go, int depth)
     }
     auto &children = go.getChildren();
     for (auto &child : children) {
-        printComponent(*child.second, depth + 1);
+        printObject(*child.second, depth + 1);
     }
     for (int i = 0; i < depth; i++) {
         std::cout << "\t";
@@ -131,7 +131,7 @@ int game()
 
     const int WIN_WIDTH = 1400;
     const int WIN_HEIGHT = 900;
-    const int FPS = 60;
+    const int FPS = 120;
 
     std::cout << Strake::Config::getVersion() << std::endl;
     std::cout << Strake::Config::getGLFWVersion() << std::endl;
@@ -244,7 +244,7 @@ int game()
     tree.addComponent<Strake::MeshRenderer>(treeMaterial);
 
     for (auto &go : scene.getGameObjects()) {
-        printComponent(*go.second, 0);
+        printObject(*go.second, 0);
     }
     app.run(true);
     return 0;
