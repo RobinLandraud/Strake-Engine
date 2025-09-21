@@ -7,7 +7,7 @@ build/
 vcpkg/
 Debug/
 Release/
-Resources/
+/Resources/
 # assets/
 
 # tests forlder (is a sandbox)
