@@ -33,9 +33,9 @@ out vec4 FragColor;       // Output fragment color
 float calculateShadow(vec3 fragPosWorld, vec3 normal, vec4 fragPosLightSpace, mat4 lightSpaceMatrix, sampler2D shadowMap, vec3 lightDir) {
 
     int kernelSize = 2;               // PCF 5x5
-    float minBias = 0.001;            // Bias minimum
-    float maxBias = 0.005;            // Bias maximum
-    float normalOffsetScale = 0.002;  // Décalage le long de la normale pour peter-panning
+    float minBias = 0.00002;            // Bias minimum
+    float maxBias = 0.0002;            // Bias maximum
+    float normalOffsetScale = 0.04;  // Décalage le long de la normale pour peter-panning
 
     // Décalage le long de la normale
     vec3 offsetPos = fragPosWorld + normal * normalOffsetScale;
