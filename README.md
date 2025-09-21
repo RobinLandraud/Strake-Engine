@@ -95,10 +95,13 @@ Additionally, ensure you have:
    Libraries are typically managed through your package manager and located via the `PATH` environment variable. Ensure all required libraries are properly installed and accessible.
 
    - **On Windows**:
-   Dependencies are managed using **vcpkg**. You need to update the `VCPKG_PATH` variable in your environmentby setting it to the path of your vcpkg installation.
+   Dependencies are managed using **vcpkg**.
+   You need to update the `VCPKG_TOOLCHAIN` variable in your environmentby setting it to the path of your vcpkg.cmake installation.
+   You need to update the `VCPKG_BIN` variable in your environmentby setting it to the path of your vcpkg.exe installation.
    Here an example of **.env** file:
      ```bash
-     VCPKG_PATH="C:/path/to/vcpkg"
+     VCPKG_TOOLCHAIN="C:/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
+     VCPKG_BIN="C:/path/to/vcpkg/vcpkg.exe"
      ```
      If prerequisites are not yet installed, use the command:
      ```bash

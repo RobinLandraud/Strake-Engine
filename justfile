@@ -2,7 +2,6 @@ set windows-shell := ["powershell.exe", "-Command"]
 set shell := ["sh", "-c"]
 
 set dotenv-load := true
-vcpkg := env_var_or_default("VCPKG_PATH", "C:/dev/vcpkg")
 
 ###########################
 # Linux specific commands #
@@ -35,16 +34,16 @@ build-debug:
 # install dependencies with vcpkg
 [windows]
 install:
-    - powershell.exe -Command "{{ vcpkg }}/vcpkg.exe install glfw3 glm glew assimp"
+    - powershell.exe -Command "{{ env_var("VCPKG_BIN") }} install glfw3 glm glew assimp"
 
 
 # build the project as release
 [windows]
 build:
-    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ vcpkg }}'; cmake --build . --config Release; cd .."
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ env_var("VCPKG_TOOLCHAIN") }}'; cmake --build . --config Release; cd .."
 
 
 # build the project as debug
 [windows]
 build-debug:
-    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ vcpkg }}'; cmake --build . --config Debug; cd .."
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ env_var("VCPKG_TOOLCHAIN") }}'; cmake --build . --config Debug; cd .."
