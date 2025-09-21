@@ -1,6 +1,8 @@
 #pragma once
 
-#define _CRT_SECURE_NO_WARNINGS // for fopen, fscanf, etc.
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <Strake/Component/Component.hpp>
 #include <glm/glm.hpp>
