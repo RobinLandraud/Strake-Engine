@@ -1,6 +1,12 @@
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 20)
 cmake_minimum_required(VERSION 3.10)
+
+###############################################################
+### Policy settings
+###############################################################
+cmake_policy(SET CMP0072 NEW) # FindOpenGL prefers GLVND by default when available
+
 # Project name
 project(Strake)
 # Set the directory for Strake headers
@@ -8,12 +14,11 @@ include_directories(include)
 
 # find_package(Threads REQUIRED)
 
-set(CMAKE_TOOLCHAIN_FILE "./vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "vcpkg toolchain file")
-
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(assimp REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 add_library(Strake STATIC
     "src/init.cpp"
@@ -101,6 +106,18 @@ add_library(Managers STATIC
 
 # dependencies for the libraries
 
+target_link_libraries(Layer PUBLIC
+    glm::glm
+)
+
+target_link_libraries(Shader PUBLIC
+    GLEW::GLEW
+)
+
+target_link_libraries(Texture PUBLIC
+    GLEW::GLEW
+)
+
 target_link_libraries(Application PUBLIC
     Managers
     Window
@@ -109,7 +126,10 @@ target_link_libraries(Application PUBLIC
     Strake # use strake .cpp for init
 )
 
-target_link_libraries(Window PUBLIC Config) # Config have no dependency
+target_link_libraries(Window PUBLIC
+    Config
+    GLEW::GLEW
+) # Config have no dependency
 target_link_libraries(EventHandler PUBLIC Window)
 
 target_link_libraries(Managers PUBLIC
@@ -146,6 +166,7 @@ target_link_libraries(Application PUBLIC
     OpenGL::GLU
     glfw
     assimp::assimp
+    glm::glm
 ) # Window depends on SFML
 
 target_link_libraries(Strake PUBLIC
@@ -167,18 +188,9 @@ target_link_libraries(Strake PUBLIC
 # enable compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Set the path to the resources (Release/Debug folder depending on the build type)
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Release/resources")
-else()
-    set(RESOURCES_PATH "${CMAKE_SOURCE_DIR}/Debug/resources")
+if(NOT DEFINED STRAKE_RESOURCES)
+    message("[X] STRAKE_RESOURCES not defined, using default path")
+    set(STRAKE_RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/resources")
 endif()
-message("[X] RESOURCES_PATH set to: resources")
-add_custom_command(TARGET Strake POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_PATH}
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_CURRENT_SOURCE_DIR}/resources
-    ${RESOURCES_PATH}
-    COMMENT "[X] Copying resources directory to ${RESOURCES_PATH}"
-)
-add_compile_definitions(RESOURCES_PATH="resources")
+
+add_compile_definitions(RESOURCES_PATH="${STRAKE_RESOURCES}")

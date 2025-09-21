@@ -41,10 +41,10 @@ install:
 # build the project as release
 [windows]
 build:
-    - powershell.exe -Command "echo 'VCPKG_ROOT={{ vcpkg }}'; if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DVCPKG_ROOT='{{ vcpkg }}'; cmake --build . --config Release; cd .."
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ vcpkg }}'; cmake --build . --config Release; cd .."
 
 
 # build the project as debug
 [windows]
 build-debug:
-    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DVCPKG_ROOT='{{ vcpkg }}'; cmake --build . --config Debug; cd .."
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ vcpkg }}'; cmake --build . --config Debug; cd .."
