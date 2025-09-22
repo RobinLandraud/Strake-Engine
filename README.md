@@ -1,11 +1,11 @@
-<!-- SFML ECS README -->
+<!-- STRAKE README -->
 <!-- PROJECT TITLE -->
 <br />
 <div align="center">
   <h3 align="center">Strake Engine</h3>
   <img src="logo.png" alt="Circular Image" width="150" height="150" style="border-radius: 50%; overflow: hidden;">
   <p align="center">
-    A full designed GameObject Component System with OpenGL
+    A full designed GameObject Component-Based OOP with OpenGL
     <br />
     <a href="https://github.com/RobinLandraud/SFML_ECS"><strong>" Explore the docs "</strong></a>
   </p>
@@ -38,9 +38,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-With this project, I aimed to develop a comprehensive  GameObject Component System using Open Graphics Library (OpenGL). The goal is to create more stable and maintainable projects/games through a well-structured hierarchy that is both readable and easily modifiable.
+With this project, I aimed to develop a comprehensive  GameObject-Component System using Open Graphics Library (OpenGL). The goal is to create more stable and maintainable projects/games through a well-structured hierarchy that is both readable and easily modifiable.
 
-Inspired by severals engines, this ECS optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
+Inspired by severals engines, this Component-Based OOP optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
 
 ### Built With
 
@@ -126,7 +126,7 @@ These steps will ensure the engine is properly compiled and ready to run on your
 
 ## Usage
 
-To begin, we create a window and initialize the ECS system. You can set up your scene and add objects within it.
+To begin, we create a window and initialize the Engine. You can set up your scene and add objects within it.
 
 ### 1. Create the Application
 
@@ -267,7 +267,7 @@ app.run();
     - [X] **ScriptManager**: - Manages and executes scripts for game logic.
     - [X] **LayerManager**: - Organizes and manages layers.
 
-- **Entity Component System (ECS)**:
+- **Loop System**:
   - Modular architecture with a game loop that includes the following lifecycle methods:
     - `awake()`: Called when a component is created or initialized.
     - `start()`: Called before the first frame update.
@@ -284,7 +284,7 @@ app.run();
 - **Enhanced Transform API**: Improve the `Transform` class to provide better support for world space transformations and related methods.
 
 ### Milestones
-- **v0.1**: Initial stable version with ECS and basic rendering (**pre-release version**).
+- **v0.1**: Initial stable version with Component-Based OOP and basic rendering (**pre-release version**).
   - **0.6.0 (Beta)**:
     - Add of Culling Masks
     - Add of Layers
