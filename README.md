@@ -3,11 +3,11 @@
 <br />
 <div align="center">
   <h3 align="center">Strake Engine</h3>
-  <img src="logo.png" alt="Circular Image" width="150" height="150" style="border-radius: 50%; overflow: hidden;">
+  <img src=".github/images/logo.png" alt="Circular Image" width="150" height="150" style="border-radius: 50%; overflow: hidden;">
   <p align="center">
     A full designed GameObject Component-Based OOP with OpenGL
     <br />
-    <a href="https://github.com/RobinLandraud/SFML_ECS"><strong>" Explore the docs "</strong></a>
+    <a href="https://github.com/RobinLandraud/Strake-Engine"><strong>" Explore the docs "</strong></a>
   </p>
 </div>
 <!-- TABLE OF CONTENTS -->
@@ -28,6 +28,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#screenshot">Screenshot</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -212,6 +213,13 @@ player.addComponent<CharacterController>();
 ```bash
 app.run();
 ```
+
+## Screenshot
+
+<br />
+<div align="center">
+  <img src=".github/images/screenshot.png">
+</div>
 
 ## Roadmap
 
