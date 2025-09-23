@@ -1,13 +1,13 @@
-<!-- SFML ECS README -->
+<!-- STRAKE README -->
 <!-- PROJECT TITLE -->
 <br />
 <div align="center">
   <h3 align="center">Strake Engine</h3>
-  <img src="logo.png" alt="Circular Image" width="150" height="150" style="border-radius: 50%; overflow: hidden;">
+  <img src=".github/images/logo.png" alt="Circular Image" width="150" height="150" style="border-radius: 50%; overflow: hidden;">
   <p align="center">
-    A full designed GameObject Component System with OpenGL
+    A full designed GameObject Component-Based OOP with OpenGL
     <br />
-    <a href="https://github.com/RobinLandraud/SFML_ECS"><strong>" Explore the docs "</strong></a>
+    <a href="https://github.com/RobinLandraud/Strake-Engine"><strong>" Explore the docs "</strong></a>
   </p>
 </div>
 <!-- TABLE OF CONTENTS -->
@@ -28,6 +28,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#screenshot">Screenshot</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -38,9 +39,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-With this project, I aimed to develop a comprehensive  GameObject Component System using Open Graphics Library (OpenGL). The goal is to create more stable and maintainable projects/games through a well-structured hierarchy that is both readable and easily modifiable.
+With this project, I aimed to develop a comprehensive  GameObject-Component System using Open Graphics Library (OpenGL). The goal is to create more stable and maintainable projects/games through a well-structured hierarchy that is both readable and easily modifiable.
 
-Inspired by Unity, this ECS optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
+Inspired by severals engines, this Component-Based OOP optimizes games automatically by updating entities at multiple frequency scales, ensuring efficient performance.
 
 ### Built With
 
@@ -89,62 +90,60 @@ Additionally, ensure you have:
    ```
 
 2. **Install Dependencies**
-
    Ensure all prerequisite libraries are installed before compiling the project.
 
    - **On Linux**:
    Libraries are typically managed through your package manager and located via the `PATH` environment variable. Ensure all required libraries are properly installed and accessible.
 
    - **On Windows**:
-   Dependencies are managed using **vcpkg**. You need to update the `vcpkg` variable in the `justfile` located in the root directory of the project. Set this variable to the path of your vcpkg installation to handle the prerequisite libraries. For example:
+   Dependencies are managed using **vcpkg**.
+   You need to update the `VCPKG_TOOLCHAIN` variable in your environmentby setting it to the path of your vcpkg.cmake installation.
+   You need to update the `VCPKG_BIN` variable in your environmentby setting it to the path of your vcpkg.exe installation.
+   Here an example of **.env** file:
      ```bash
-     vcpkg := "C:/path/to/vcpkg"
+     VCPKG_TOOLCHAIN="C:/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
+     VCPKG_BIN="C:/path/to/vcpkg/vcpkg.exe"
      ```
      If prerequisites are not yet installed, use the command:
      ```bash
-     just install-windows
+     just install
      ```
 
 3. **Compile the Project**
 
-   Once the dependencies are installed, you can proceed to compile the engine:
+   > 💡 **Note:** Ensure all dependencies are installed before proceeding with the compilation.
 
-   - **On Linux**:  
-     Open a terminal, navigate to the project directory, and build the project with justfile:
-     ```bash
-     just build
-     ```
-     After the build is complete, the executable will be available at the root of the project under the name **Strake.out**
+   Open a terminal, navigate to the project directory, and build the project with this justfile command:
+   ```bash
+   just build
+   ```
 
-   - **On Windows**:  
-     Open a terminal or command prompt, navigate to the project directory, and build the project with justfile:
-     ```bash
-     just build-windows
-     ```
-     After the build is complete, the executable will be available at the root of the project under the name **Strake.exe**
+   Once the build process completes, the executable will be located in the **Release** folder:
+   - **Strake.out** (Unix)
+   - **Strake.exe** (Windows)
 ---
 
 These steps will ensure the engine is properly compiled and ready to run on your platform.
 
 ## Usage
 
-To begin, we create a window and initialize the ECS system. You can set up your scene and add objects within it.
+To begin, we create a window and initialize the Engine. You can set up your scene and add objects within it.
 
 ### 1. Create the Application
 
 ```bash
-ECS::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, FPS);
+Strake::Application app("Strake Engine V0.1.1", WIN_WIDTH, WIN_HEIGHT, FPS);
 ```
 
 ### 2. Create a texure
 ```bash
-ECS::Texture &metalTexture = app.getTextureManager().addTexture<ECS::Texture2D>("metal", "assets/metal.jpg");
+Strake::Texture &metalTexture = app.getTextureManager().addTexture<Strake::Texture2D>("metal", "assets/metal.jpg");
 ```
 
 ### 3. Create a material
 
 ```bash
-ECS::Material &metalicMaterial = app.getMaterialManager().addMaterial("metal");
+Strake::Material &metalicMaterial = app.getMaterialManager().addMaterial("metal");
 metalicMaterial.addTexture(metalTexture, "textureSampler");
 metalicMaterial.setShininess(256.0f);
 ```
@@ -159,18 +158,18 @@ app.getSceneManager().setCurrentScene("Main Scene");
 ### 5. Add a Gameobject with Mesh
 
 ```bash
-ECS::GameObject &object = scene.addGameObject("Cube");
+Strake::GameObject &object = scene.addGameObject("Cube");
 object.getTransform().setLocalPosition(glm::vec3(x, y, z));
-object.addComponent<ECS::Cube>();
-object.addComponent<ECS::MeshRenderer>(metalicMaterial);
+object.addComponent<Strake::Cube>();
+object.addComponent<Strake::MeshRenderer>(metalicMaterial);
 ```
 
 ### 6. Add a Camera
 
 ```bash
-ECS::GameObject &player = scene.addGameObject("Main Camera");
-player.addComponent<ECS::Camera>();
-ECS::Camera &cam = player.getComponent<ECS::Camera>();
+Strake::GameObject &player = scene.addGameObject("Main Camera");
+player.addComponent<Strake::Camera>();
+Strake::Camera &cam = player.getComponent<Strake::Camera>();
 cam.setProjection(45.0f, static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT), 0.1f, 100.0f);
 player.getTransform().setLocalPosition(glm::vec3(x, y, z));
 scene.setMainCamera(cam);
@@ -179,20 +178,20 @@ scene.setMainCamera(cam);
 ### 7. Create and add a Script
 
 ```bash
-class CharacterController: public ECS::Script
+class CharacterController: public Strake::Script
 {
     public:
-        using ECS::Script::Script;
+        using Strake::Script::Script;
         void awake() override {
             transform = getParent().getTransform();
         }
         void update() override {
-            const ECS::mouse_t &mouse = ECS::EventHandler::getMouse();
-            ECS::Transform &transform = this->transform.value();
-            if (ECS::EventHandler::isKeyHeld(ECS::Key::W)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed * ECS::Time::getDeltaTime()));
-            } else if (ECS::EventHandler::isKeyHeld(ECS::Key::S)) {
-                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed * ECS::Time::getDeltaTime()));
+            const Strake::mouse_t &mouse = Strake::EventHandler::getMouse();
+            Strake::Transform &transform = this->transform.value();
+            if (Strake::EventHandler::isKeyHeld(Strake::Key::W)) {
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, m_speed * Strake::Time::getDeltaTime()));
+            } else if (Strake::EventHandler::isKeyHeld(Strake::Key::S)) {
+                transform.translateLocal(glm::vec3(0.0f, 0.0f, -m_speed * Strake::Time::getDeltaTime()));
             }
             ...
             float yaw = mouse.x;
@@ -200,7 +199,7 @@ class CharacterController: public ECS::Script
             transform.setLocalRotation(glm::vec3(-roll, -yaw, 0.0f));
         }
     private:
-        std::optional<std::reference_wrapper<ECS::Transform>> transform;
+        std::optional<std::reference_wrapper<Strake::Transform>> transform;
         const float m_speed = 10.0f;
 };
 ```
@@ -215,50 +214,110 @@ player.addComponent<CharacterController>();
 app.run();
 ```
 
+## Screenshot
+
+<br />
+<div align="center">
+  <img src=".github/images/screenshot.png">
+</div>
+
 ## Roadmap
 
-### Current Features
-
-### Current Features
-
 - **Core Systems**:
-  - **Event Handler**: Centralized system to manage and dispatch events.
-  - **Shader Programs and Shaders**: Customizable shader pipeline to enhance visual effects.
-  - **Materials**: Supports textures for customizable appearances.
-  - **Scenes**: Manages hierarchical game objects and components.
-  - **GameObjects and Components**: Core structure for building and organizing entities in the engine.
-  - **Application**: Manages key systems for application functionality:
-    - **Window**: Handles display management and user interactions.
-    - **Material Manager**: Manages creation and reuse of materials.
-    - **Texture Manager**: Loads, stores, and retrieves textures efficiently.
-    - **Scene Manager**: Switches and manages active scenes seamlessly.
+  - [X] **Application**: Manages application run state
+  - [X] **Game Loop**: Manage calls for pipelines for each frames
+  - [X] **Window**: Handles display management.
+  - [X] **Event Handler**: Centralized system to manage and dispatch events.
+  - [X] **Config**: Manages OpenGL ans Strake engine versions
+  - [X] **Dispatcher**: Used to wrap engine callbacks
+  - [X] **Shader Programs and Shaders**: Customizable shader pipeline to enhance visual effects.
+  - [X] **Materials and Textures**: Supports materials and textures for customizable appearances.
+  - [X] **Scenes**: Manages hierarchical game objects and components.
+  - [X] **GameObjects**: Core structure for building and organizing entities in the engine.
+  - [X] **Layer**: A system that organizes and groups GameObjects for the purpose of managing rendering.
+  - [X] **Time**: Used to manage frame and delta times.
+  - [X] **Components**:
+    - [X] **Camera**: Fully functional component for rendering scenes.
+      - [X] **vpMatrix**: Use of camera view and projection for rendering.
+      - [ ] **Frustrum**: Avoid rendering object outside camera frustrum.
+    - [X] **Transforms**: Supports local and global space transformations.
+      - [X] **Local Tranform**: Update objects in local space
+      - [ ] **World Tranform**: Update objects in world space 
+    - [X] **Lights**: Includes lightnings
+      - [X] **Directional Light**: manage directional lights
+        - [X] **Lighting**: add lighting on scene objects
+        - [X] **Shadow Map**: add shadows of scene objects
+      - [X] **Point Light**: manage directional lights
+        - [X] **Lighting**: add lighting on scene objects
+        - [ ] **Shadow Map**: add shadows of scene objects
+      - [ ] **Spot Light**: manage directional lights
+        - [ ] **Lighting**: add lighting on scene objects
+        - [ ] **Shadow Map**: add shadows of scene objects
+    - [X] **Meshs**: Handles 3D meshes, including default primitives (e.g., cubes) and support for OBJ file loading.
+      - [X] **MeshFilter**: Handle Mesh and allow to load object files.
+      - [X] **Cube**: Default prefab for Cube mesh
+      - [X] **Sphere**: Default prefab for Sphere mesh
+    - [X] **Renderers**: Renders objects on Scenes
+      - [X] **MeshRenderer**: Renders meshes with materials and lighting.
+      - [X] **WireFrameRenderer**: Renders only wire frames from meshes or colliders
+    - [X] **Scripts**: Allows users to attach custom scripts to GameObjects as components.
+    - [X] **Colliders**: Used to detect collisions between GameObjects
+      - [ ] **BoxCollider**: Boxed colliders (OBB and AABB)
+      - [X] **SphereCollider**: Spherical Collider with center and radius
+  - [X] **Managers**: system that centralizes control of a specific type of resource or component.
+    - [X] **PhysicsManager**: Manages all physics systems.
+      - [X] **ColliderManager**: - Manages Colliders and handles collision detection.
+    - [X] **RendererManager**: Manages Renderers and their rendering operations.  
+    - [X] **LightManager**: - Manages Lights and their influence on the scene.  
+    - [X] **SceneManager**: - Manages scene transitions and object hierarchies.  
+    - [X] **TextureManager**: - Manages Textures and optimizes their usage.  
+    - [X] **MaterialManager**: - Manages Materials, shaders, and surface properties.  
+    - [X] **ScriptManager**: - Manages and executes scripts for game logic.
+    - [X] **LayerManager**: - Organizes and manages layers.
 
-- **Components**:
-  - **Camera**: Fully functional component for rendering scenes.
-  - **Transforms**: Supports local and global space transformations.
-  - **Lights**: Includes point lights (with plans to add more types in the future).
-  - **MeshFilter**: Handles 3D meshes, including default primitives (e.g., cubes) and support for OBJ file loading.
-  - **MeshRenderer**: Renders 3D meshes with materials and lighting.
-  - **Script Component**: Allows users to attach custom scripts to GameObjects as components.
-
-- **Entity Component System (ECS)**:
+- **Loop System**:
   - Modular architecture with a game loop that includes the following lifecycle methods:
     - `awake()`: Called when a component is created or initialized.
     - `start()`: Called before the first frame update.
     - `update()`: Runs every frame for dynamic behaviors.
     - `fixedUpdate()`: Runs at a fixed interval for physics or time-sensitive updates.
     - `lateUpdate()`: Called after all `update()` calls, ensuring post-update adjustments.
-    - `render()`: Responsible for rendering components such as meshes, lights, and cameras each frame.
+    - `render()`: Responsible for rendering components such as meshes and lights each frame.
 
 ### Upcoming Features
 
-- **Basic Physics Engine**: Implement a simple physics engine for rigidbody movement, gravity, and collisions.
+- **Basic Physics Engine**: Implement a simple physics engine for rigidbody movement and gravity.
 - **CollisionBox**: Add collision detection with basic bounding boxes for handling physical interactions.
-- **Lighting**: Expand lighting system to support additional light types such as directional lights and spotlights.
+- **Lighting**: Expand lighting system to support shadows for each light types such as point lights and spot lights.
 - **Enhanced Transform API**: Improve the `Transform` class to provide better support for world space transformations and related methods.
 
 ### Milestones
-- **v0.1**: Initial stable release with ECS and basic rendering
+- **v0.1**: Initial stable version with Component-Based OOP and basic rendering (**pre-release version**).
+  - **0.6.0 (Beta)**:
+    - Add of Culling Masks
+    - Add of Layers
+    - Add of LayersManager
+    - Add of Plane Mesh
+    - Add of Capsules Mesh
+  - **0.5.0 (Latest Stable)**:
+    - Use of .env in justfile
+    - Fixes in OpenGL/GLFW initialisation
+    - Add of WireFrameRenderer
+    - Add of Sphere Collider
+    - Add of Sphere Mesh
+    - Use of Ressources folder in Releases
+    - Change of compiler (ninja to CMake)
+    - Upgrade Mesh Loader
+    - Add of Physics Manager
+    - Change of Compoment pipeline
+    - Change of Script pipeline
+  - **0.4.0**:
+    - Add of Percentage Closer Filtering for shadows
+    - Add of Shadow Maps for Directional Light
+    - ...
+  - **0.3.0**
+    - Add of internal event Dispatcher
+    - ...
 
 ### License
 

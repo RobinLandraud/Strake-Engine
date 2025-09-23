@@ -1,7 +1,14 @@
+# environment
+
+.env
+
 # build folder
 build/
 vcpkg/
-assets/
+Debug/
+Release/
+/Resources/
+# assets/
 
 # tests forlder (is a sandbox)
 

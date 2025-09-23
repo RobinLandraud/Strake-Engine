@@ -1,19 +1,49 @@
 set windows-shell := ["powershell.exe", "-Command"]
 set shell := ["sh", "-c"]
-vcpkg := "C:/Users/robin/source/repos/Strake-Engine/vcpkg"
 
-# Linux
-build:
-    - mkdir -p ./build && rm -rf ./build/* && cd build; cmake .. -GNinja; ninja; cd ..
+set dotenv-load := true
+
+###########################
+# Linux specific commands #
+###########################
+
+# allow to run clang-format on all files
+[unix]
 format:
     - find . -type f -name "*.cpp" -o -name "*.h" | xargs clang-format -i
-build-prod:
-    - mkdir -p ./build && rm -rf ./build/* && cd build && cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release && ninja && cd ..    
+
+# run clang-tidy on all files
+[unix] 
 tidy:
     - run-clang-tidy -p="./build" -header-filter="^(?!.*third_party).*"
 
-# Windows
-install-windows:
-    - powershell.exe -Command "{{ vcpkg }}/vcpkg.exe install glfw3 glm glew assimp"
-build-windows:
-    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -GNinja -DVCPKG_ROOT='{{ vcpkg }}'; ninja; cd .."
+# build the project as release
+[unix]
+build:
+    - mkdir -p ./build && rm -rf ./build/* && cd build && cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release && ninja && cd ..
+
+# build the project as debug
+[unix]
+build-debug:
+    - mkdir -p ./build && rm -rf ./build/* && cd build && cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug && ninja && cd ..
+
+#############################
+# Windows specific commands #
+#############################
+
+# install dependencies with vcpkg
+[windows]
+install:
+    - powershell.exe -Command "{{ env_var("VCPKG_BIN") }} install glfw3 glm glew assimp"
+
+
+# build the project as release
+[windows]
+build:
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ env_var("VCPKG_TOOLCHAIN") }}'; cmake --build . --config Release; cd .."
+
+
+# build the project as debug
+[windows]
+build-debug:
+    - powershell.exe -Command "if (-Not (Test-Path ./build)) { New-Item -ItemType Directory -Path ./build }; Remove-Item -Recurse -Force ./build/*; cd build; cmake .. -A x64 -DCMAKE_TOOLCHAIN_FILE='{{ env_var("VCPKG_TOOLCHAIN") }}'; cmake --build . --config Debug; cd .."

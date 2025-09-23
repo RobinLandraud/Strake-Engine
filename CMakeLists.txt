@@ -1,68 +1,94 @@
-# Specify the minimum version for CMake
+###############################################################
+### CMake minimum version
+###############################################################
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
-# Project's name
-PROJECT("Strake" VERSION 0.1.0 LANGUAGES CXX)
+###############################################################
+### Project name
+###############################################################
+PROJECT("StrakeEngine" VERSION 0.1.0 LANGUAGES CXX)
 
-# Specify the C++ standard
+###############################################################
+### C++ standard
+###############################################################
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED True)
 SET(CMAKE_CXX_EXTENSIONS OFF)
-SET(CMAKE_BUILD_TYPE "Release")
 
-# Set compiler flags for Debug build
-#set(CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb -O0")
-
-# Set compiler flags for Release build
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    message("Release build")
-    if (MSVC)
-        set(CMAKE_CXX_FLAGS_RELEASE "/O2")
-    else()
-        set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-    endif()
+###############################################################
+### Output directories
+###############################################################
+if(WIN32)
+    # Multi-config Windows (Visual Studio)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/Debug)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/Release)
+    set(OUTPUT_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE}})
 else()
-    message("Debug build")
-    if (MSVC)
-        set(CMAKE_CXX_FLAGS_DEBUG "/Od")
-    else()
-        set(CMAKE_CXX_FLAGS_DEBUG "-O0")
+    # Linux / Makefile / Ninja
+    # Create a Build/Debug or Build/Release folder
+    if(NOT CMAKE_BUILD_TYPE)
+        set(CMAKE_BUILD_TYPE "Release")  # Default if not specified
     endif()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_BUILD_TYPE})
+    set(OUTPUT_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 endif()
 
-# Add the compile commands to the output
+message("[X] Output path: ${OUTPUT_PATH}")
+
+###############################################################
+### Compiler flags
+###############################################################
+# Debug
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS_DEBUG_INIT} ")
+if(WIN32)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi")
+else()
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
+endif()
+# Release
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS_RELEASE_INIT} ")
+if(WIN32)
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")
+else()
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+endif()
+
+
+###############################################################
+### Generate compile_commands.json
+###############################################################
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+###############################################################
+### Include Strake engine
+###############################################################
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Strake/include)
 
-# Add include directory for ECS
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ECS/include)
 
-cmake_policy(SET CMP0072 NEW) # FindOpenGL prefers GLVND by default when available
+###############################################################
+### Find packages
+###############################################################
+# Si VCPKG est dispo, configure le toolchain
+if(WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    message(FATAL_ERROR "Please provide -DCMAKE_TOOLCHAIN_FILE on Windows (vcpkg).")
+else()
 
-# find_package(Threads REQUIRED)
-message("Finding Packages")
-
-if (WIN32)
-    if (NOT DEFINED VCPKG_ROOT)
-        message(FATAL_ERROR "Please define VCPKG_ROOT environment variable")
-    endif()
-    set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "vcpkg toolchain file")
-    set(CMAKE_PREFIX_PATH "${VCPKG_ROOT}/installed/x64-windows/share")
-    include_directories("${VCPKG_ROOT}/installed/x64-windows/include")
-    message(STATUS "CMAKE_TOOLCHAIN_FILE: ${CMAKE_TOOLCHAIN_FILE}")
-    include_directories(${GLM_INCLUDE_DIRS})
 endif()
 
-find_package(glfw3 REQUIRED)
-find_package(glm REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(assimp REQUIRED)
+# Threads (Linux/macOS only, Windows n’en a pas besoin)
+if (NOT WIN32)
+    find_package(Threads REQUIRED)
+endif()
 
-message("Found Packages")
+# update resources path to executable output directory
+set("STRAKE_RESOURCES" "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+message("[X] Resources will be copied to: ${STRAKE_RESOURCES}")
+set(DEFAULT_STRAKE_RESOURCE "${CMAKE_CURRENT_SOURCE_DIR}/Strake/resources")
+file(COPY ${DEFAULT_STRAKE_RESOURCE}/. DESTINATION ${STRAKE_RESOURCES})
 
-add_subdirectory(ECS)
+
+message("[X] Adding library: Strake Engine")
+add_subdirectory(Strake)
 
 # Add executable target with source files listed in SOURCE_FILES variable
 ADD_EXECUTABLE(
@@ -70,50 +96,38 @@ ADD_EXECUTABLE(
     main.cpp
 )
 
-if (WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/glfw3.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+if(WIN32)
+    # vcpkg bin folder
+    get_filename_component(VCPKG_ROOT_DIR "${CMAKE_TOOLCHAIN_FILE}" DIRECTORY)
+    set(VCPKG_BIN_DIR "${VCPKG_ROOT_DIR}/../../installed/x64-windows/bin")
+    set(VCPKG_DEBUG_BIN_DIR "${VCPKG_ROOT_DIR}/../../installed/x64-windows/debug/bin")
+
+    # DLLs standard
+    set(DLLS
+        glfw3.dll
+        assimp-vc143-mt.dll
+        minizip.dll
+        zlib1.dll
+        pugixml.dll
+        poly2tri.dll
     )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/assimp-vc143-mt.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/minizip.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/zlib1.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/pugixml.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${VCPKG_ROOT}/installed/x64-windows/bin/poly2tri.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+
+    foreach(dll ${DLLS})
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "[X] Copying ${dll} to $<TARGET_FILE_DIR:${PROJECT_NAME}>"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${VCPKG_ROOT}/installed/x64-windows/bin/glew32.dll"
-            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+                "${VCPKG_BIN_DIR}/${dll}"
+                $<TARGET_FILE_DIR:${PROJECT_NAME}>
         )
-    else()
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${VCPKG_ROOT}/installed/x64-windows/debug/bin/glew32d.dll"
+    endforeach()
+
+    # Copy GLEW dll depending on build configuration
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "[X] Copying GLEW dll for $<CONFIG> configuration"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "$<IF:$<CONFIG:Debug>,${VCPKG_DEBUG_BIN_DIR}/glew32d.dll,${VCPKG_BIN_DIR}/glew32.dll>"
             $<TARGET_FILE_DIR:${PROJECT_NAME}>
-        )
-    endif()
+    )
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ECS)
+target_link_libraries(${PROJECT_NAME} PUBLIC Strake)

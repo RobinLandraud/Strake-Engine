@@ -96,6 +96,7 @@
         "bitset": "cpp",
         "codecvt": "cpp",
         "condition_variable": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "*.inc": "cpp"
     }
 }

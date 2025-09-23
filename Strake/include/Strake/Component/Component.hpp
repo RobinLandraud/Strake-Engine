@@ -1,0 +1,28 @@
+#pragma once
+#include <Strake/GameObject/GameObject.hpp>
+#include <memory>
+#include <optional>
+#include <string>
+#include <typeindex>
+#include <unordered_map>
+#include <glm/glm.hpp>
+
+namespace Strake {
+    class Component {
+        public:
+            explicit Component(
+                GameObject &parent
+            );
+            virtual ~Component() = default;
+
+            [[nodiscard]] GameObject &getParent() const;
+            [[nodiscard]] std::type_index getDerivedType() const;
+
+        protected:
+            void setDerivedType(const std::type_index &type);
+
+        private:
+            GameObject &r_parent;
+            std::type_index m_derivedType = typeid(Component);
+    };
+}
