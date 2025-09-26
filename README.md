@@ -98,7 +98,7 @@ Additionally, ensure you have:
    - **On Windows**:
    Dependencies are managed using **vcpkg**.
    You need to update the `VCPKG_TOOLCHAIN` variable in your environmentby setting it to the path of your vcpkg.cmake installation.
-   You need to update the `VCPKG_BIN` variable in your environmentby setting it to the path of your vcpkg.exe installation.
+   You need to update the `VCPKG_BIN` variable in your environment by setting it to the path of your vcpkg.exe installation.
    Here an example of **.env** file:
      ```bash
      VCPKG_TOOLCHAIN="C:/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
